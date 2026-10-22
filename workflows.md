@@ -75,27 +75,20 @@ Os 2 min 16 s são uma observação de uma execução, não um prazo garantido: 
 
 O README principal mantém a apresentação curta do projeto.
 
-## Releases automáticas
+## Releases automáticas — apenas Bundle ZIP
 
-A partir do [commit 3061933](https://github.com/Tunuino/Tunuino/commit/30619332d81b13d9a713be75258fe794c687642d), a pipeline publica os pacotes em [Tunuino Releases](https://github.com/Tunuino/Tunuino/releases), depois de todos os testes, dos builds ARM/Windows e da validação do kit sincronizado passarem.
+As [Releases](https://github.com/Tunuino/Tunuino/releases) passam a ter **um único anexo**, `tunuino_bundle_proteus_v07_f427_usb_bench.zip`. A [Release atual](https://github.com/Tunuino/Tunuino/releases/tag/nightly-2026-10-22-39835615234) contém a Console Windows x64 com Java, o firmware Proteus v0.7 F427, os manifestos e as instruções.
 
-A publicação é permitida apenas na master do repositório Tunuino/Tunuino. Pull requests, falhas, cancelamentos e builds parciais não publicam Releases. Os componentes continuam a ser selecionados pelas alterações para evitar recompilações desnecessárias. Quando um push produz firmware e Console juntos, publica também uma Release. Para gerar ambos de qualquer commit atual da master, usar **Tunuino CI → Run workflow**. A execução diária às **02:20 UTC** também produz e valida o conjunto completo; o GitHub pode atrasar a execução agendada.
+Dentro do ZIP: `console/`, `firmware/`, `kit-manifest.json`, `START-HERE.txt` e `SHA256SUMS.txt`. O ficheiro de checksums verifica os restantes ficheiros internos do Bundle. Extrair tudo e abrir `console/TunuinoConsole.exe`. Manter `.bin.properties` junto do `.bin`.
 
-O identificador é `nightly-AAAA-MM-DD-<ID da execução>`. Cada Release aponta para o commit exato dos seus pacotes e é marcada como **pre-release experimental**. O ID evita substituir silenciosamente os ficheiros de outra compilação do mesmo dia. Uma repetição da mesma execução preserva uma Release já publicada. Os ficheiros são enviados para um rascunho e a Release só fica pública depois do upload de todos os anexos.
+A revisão [72e49b8](https://github.com/Tunuino/Tunuino/commit/72e49b8af471a29c16ddd025f8fb1272b552bf75) publicou o Bundle e retirou os 15 anexos separados das três Releases anteriores. Os Bundles existentes foram preservados. A seleção da limpeza limita-se aos cinco nomes gerados anteriormente e exige um Bundle completo; não remove ficheiros com outros nomes, rascunhos ou releases fora do prefixo nightly. As notas antigas foram ajustadas para não recomendar os anexos retirados. Os downloads de código-fonte ZIP/TAR que o GitHub gera automaticamente não são anexos da pipeline e continuam disponíveis.
 
-| Ficheiro | Conteúdo |
-|---|---|
-| `tunuino_bundle_proteus_v07_f427_usb_bench.zip` | Kit conjunto com firmware, Console e instruções |
-| `tunuino_console_windows_x64.zip` | Console portátil Windows x64 com Java incluído |
-| `tunuino_firmware_proteus_v07_f427_usb_bench.zip` | Firmware Proteus v0.7 F427 com manifesto de gravação |
-| `kit-manifest.json` | Proveniência dos componentes e hashes internos |
-| `START-HERE.txt` | Instruções iniciais e limites do teste |
-| `SHA256SUMS.txt` | Checksums SHA256 dos outros cinco ficheiros |
+A publicação só corre na master de Tunuino/Tunuino, depois dos testes, dos builds ARM/Windows e da validação do commit e hashes do kit. Falhas e builds parciais não publicam. Alterações ao backend de gravação também constroem firmware e Console juntos. A execução manual **Tunuino CI → Run workflow** e a execução diária às **02:20 UTC** produzem o kit completo. A hora agendada pode sofrer atrasos no GitHub.
 
-Extrair o ZIP inteiro antes de executar a Console. No kit conjunto, abrir `console/TunuinoConsole.exe`; no ZIP separado da Console, abrir `TunuinoConsole/TunuinoConsole.exe`. Manter `.bin.properties` junto do `.bin`.
+Cada tag é `nightly-AAAA-MM-DD-<ID da execução>`, aponta para o commit exato e é marcada como pre-release experimental. Os anexos são carregados num rascunho antes da publicação.
 
-Os pacotes atuais destinam-se apenas a testes USB em bancada na Proteus v0.7 STM32F427. Não controlam um motor e não incluem uma imagem uaEFI nem F767. A gravação da imagem de bancada começa em `0x08000000` e substitui o bootloader instalado. A validação física continua pendente. As ferramentas STM32CubeProgrammer/BootCommander e os drivers não são incluídos automaticamente; consultar `console/tools/PROGRAMMERS.txt` no kit e a [documentação USB/DFU](console-firmware-usb.md).
+A Console incorpora o commit no manifesto do JAR e mostra-o no título e no registo de gravação. A pipeline repete os testes de manutenção **contra o JAR compilado que vai distribuir**, confirma o identificador desse JAR e abre a aplicação portátil Windows. O manifesto do kit mantém ambos os componentes no mesmo commit.
 
-Validação local da publicação: estrutura YAML e dependências dos jobs, sintaxe dos comandos Bash/Python, conteúdo e caminhos dos três ZIPs, checksums dos anexos e recusa de um kit com ID de execução diferente. Esta verificação usa dados de teste; a execução real é registada abaixo.
+Validação da alteração: teste local de um único ZIP com todos os componentes e checksums internos; seleção de limpeza com recusa de rascunhos, releases sem Bundle e ficheiros alheios; testes DFU com ferramentas simuladas. A [execução real 39835615234](https://github.com/Tunuino/Tunuino/actions/runs/39835615234) passou nos sete jobs e a API confirmou um único anexo em cada uma das quatro Releases.
 
-A [primeira execução real](https://github.com/Tunuino/Tunuino/actions/runs/39827214851) terminou com **success** nos sete jobs (incluindo os dois compiladores). A [primeira Release](https://github.com/Tunuino/Tunuino/releases/tag/nightly-2026-10-22-39827214851) está pública, marcada como pre-release, com os seis anexos completos. O kit conjunto ocupa 36616090 bytes. Os builds ARM e Windows, a verificação do runtime e a validação do kit passaram; não foi efetuada gravação ou teste físico numa ECU.
+O firmware continua destinado a testes USB em bancada, sem controlo de motor nem imagem uaEFI/F767. A imagem substitui o bootloader instalado ao ser gravada em `0x08000000`. A gravação e enumeração física na ECU do utilizador continuam por confirmar. Ver [USB e DFU](console-firmware-usb.md).

@@ -57,6 +57,20 @@ Os pacotes de bancada continuam experimentais e sem validação física. As bibl
 
 A sintaxe Python, shell e YAML foi verificada localmente, assim como a seleção de alterações de documentação, testes, código C, Console e placa. A montagem do kit foi exercitada com um pacote válido e com três recusas: commits diferentes, firmware corrompido e JAR da Console corrompido.
 
-A primeira execução real da pipeline é necessária para confirmar os downloads/cache, as dependências entre jobs e a geração do kit. Os resultados e tempos observados serão registados depois dessa execução, sem inferir aprovação a partir da configuração.
+A [primeira execução real](https://github.com/Tunuino/Tunuino/actions/runs/39798031342) concluiu com **success** e produziu o [kit sincronizado](https://github.com/Tunuino/Tunuino/actions/runs/39798031342/artifacts/12435280193).
+
+| Medida nesta execução | Resultado |
+|---|---:|
+| Pipeline, desde criação até conclusão | **2 min 16 s** |
+| Preparação da toolchain, sem cache anterior | **6 s** |
+| Compilar bibliotecas M4 e M7 | **2 s** |
+| Compilar/ligar e verificar imagem de bancada | **2 s** |
+| GCC/Clang, Console e verificação do kit | Aprovados |
+
+O primeiro download foi verificado pelo checksum publicado. A cache da toolchain e a cache Maven foram guardadas para execuções seguintes; ainda não se mediu uma segunda execução com acerto de cache.
+
+O manifesto comum foi validado para o commit beda9d056e637e61230652d6f6f9e33b5b9160b4 antes do upload. O kit contém firmware e Console desse mesmo commit. A imagem produzida pela distribuição xPack tem 16 412 bytes, com limites e vetores verificados. A diferença de tamanho face à primeira imagem, produzida pela toolchain Ubuntu, não é uma validação funcional adicional.
+
+Os 2 min 16 s são uma observação de uma execução, não um prazo garantido: as filas do GitHub e a rede podem aumentar o tempo total. O antigo atraso de 1193 s foi medido no passo de instalação apt, que deixou de existir nesta pipeline.
 
 O README principal mantém a apresentação curta do projeto.

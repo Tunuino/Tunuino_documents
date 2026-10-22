@@ -1,6 +1,6 @@
 # Tunuino Console — USB, DFU e gravação de firmware
 
-**[Descarregar Console e firmware juntos num só ZIP](https://github.com/Tunuino/Tunuino/releases/download/nightly-2026-10-22-39833470066/tunuino_bundle_proteus_v07_f427_usb_bench.zip)**. [Release com configuração VBUS para F427](https://github.com/Tunuino/Tunuino/releases/tag/nightly-2026-10-22-39833470066), commit [16caace](https://github.com/Tunuino/Tunuino/commit/16caace0731b0d6ec39ec64e78bfafd2a8128687). Testes GCC/Clang, compilação ARM, testes Windows, runtime e kit sincronizado passaram na [execução 39833470066](https://github.com/Tunuino/Tunuino/actions/runs/39833470066). O ensaio de enumeração USB na ECU do utilizador está pendente.
+**[Descarregar Console e firmware juntos num só ZIP](https://github.com/Tunuino/Tunuino/releases/download/nightly-2026-10-22-39835615234/tunuino_bundle_proteus_v07_f427_usb_bench.zip)**. A Console desta [Release](https://github.com/Tunuino/Tunuino/releases/tag/nightly-2026-10-22-39835615234) mostra **build 72e49b8** no título. Os testes passaram na [execução 39835615234](https://github.com/Tunuino/Tunuino/actions/runs/39835615234), incluindo testes contra o JAR distribuído. A gravação e a enumeração física nesta ECU ainda aguardam confirmação.
 
 Implementação inicial: [89724f6](https://github.com/Tunuino/Tunuino/commit/89724f6f09236078c839630d7098db8a393ba5c2). Revisão atual: [67ddd5a](https://github.com/Tunuino/Tunuino/commit/67ddd5aa02a30afd631fc2f3e32f5255577c94b8), diretamente na master.
 
@@ -89,3 +89,13 @@ A correção aplica esta configuração depois do reset do periférico e antes d
 Verificação: suite completa C/Java/KiCad local, ensaios de registos USB com estado de reset, cada bit inicial, preservação dos bits alheios e repetição da inicialização; posições dos bits comparadas com o cabeçalho CMSIS F427 da revisão fixada. Os testes nos dois compiladores e os builds reais ARM/Windows passaram no GitHub. Estes resultados não provam a enumeração física USB; a omissão é confirmada no código, mas a relação com o sintoma nesta ECU ainda é uma hipótese a testar.
 
 Para ensaiar: extrair o ZIP conjunto desta revisão para uma pasta nova, gravar o `.bin` com o respetivo `.bin.properties`, confirmar a mensagem de verificação positiva, repor BOOT0 em modo normal e cortar e restabelecer toda a alimentação. Verificar se surge uma porta COM. Se não surgir, registar o final da gravação e as propriedades/IDs de hardware do dispositivo USB que aparece ou desaparece ao ligar/desligar a ECU.
+
+## Mesmo erro de identificação voltou a ser reportado
+
+A nova fotografia volta a mostrar `Device ID : 0x0419` com recusa antes da escrita. Foi descarregado e inspecionado o Bundle da revisão 16caace: checksum do ZIP e do JAR corretos, manifesto da Console a apontar para 16caace e classe compilada a conter a correção de zeros iniciais. Isto confirma o conteúdo publicado; não permite identificar o executável aberto no computador do utilizador.
+
+O diagnóstico anterior juntava duas condições diferentes numa única mensagem: saída não zero do CubeProgrammer e ausência do ID esperado. A revisão [72e49b8](https://github.com/Tunuino/Tunuino/commit/72e49b8af471a29c16ddd025f8fb1272b552bf75) passa a registar o build, a ferramenta, o firmware escolhido e o **código de saída ST**. A recusa por saída não zero mostra esse código explicitamente. A recusa por ID inválido, diferente ou contraditório tem mensagem própria. Não foi removido o bloqueio de escrita quando a ferramenta falha.
+
+O parser compara o valor hexadecimal numérico e aceita zeros iniciais, saída CRLF, cores ANSI e preenchimento NUL. IDs diferentes, linhas inválidas e identificações contraditórias continuam a ser recusados. A suite verifica estas condições com ferramentas simuladas. A pipeline executou a mesma suite contra o JAR compilado e confirmou que o seu manifesto identifica o commit publicado.
+
+Extrair a nova pasta e verificar **build 72e49b8** no título antes de repetir a tentativa. Se continuar bloqueada, guardar a mensagem completa e o código de saída apresentado. Não se pode concluir, com a fotografia anterior, se a causa restante é uma versão antiga em execução, a saída da ferramenta ou uma diferença ainda não observada no texto devolvido. Não há confirmação de gravação física bem-sucedida.

@@ -110,8 +110,28 @@ O processo C dos testes integrados passa agora pela mailbox antes de atualizar o
 
 A suite completa `python3 tools/check_core.py` passou localmente. Os testes próprios cobrem cópia independente da entrada, substituição de amostras pendentes, releitura, expiração no limite exato, timestamps futuros e UINT64_MAX, máscaras inválidas, recuperação e reinicialização.
 
-O teste concorrente publicou 200 mil snapshots com campos correlacionados, verificou integridade e leituras sem recuo e forçou centenas de trocas de propriedade através de pontos de sincronização no teste. AddressSanitizer e UndefinedBehaviorSanitizer passaram; a deteção de fugas ficou desativada. ThreadSanitizer abortou internamente neste ambiente; o mesmo erro foi reproduzido num programa mínimo independente, com duas threads e um contador atómico. Não se declara aprovação por ThreadSanitizer.
+O teste concorrente publicou 200 mil snapshots com campos correlacionados, verificou integridade e leituras sem recuo e forçou mais de cem trocas de propriedade através de pontos de sincronização no teste. AddressSanitizer e UndefinedBehaviorSanitizer passaram; a deteção de fugas ficou desativada. ThreadSanitizer abortou internamente neste ambiente; o mesmo erro foi reproduzido num programa mínimo independente, com duas threads e um contador atómico. Não se declara aprovação por ThreadSanitizer.
 
 Os workflows do commit anterior cd042510b4ac15a5767ae5c31f9efb58014f55b7 concluíram com sucesso: Core checks e Windows console build. Os workflows deste novo commit são lançados pela publicação e devem ser consultados para o resultado remoto.
 
 Esta etapa acrescenta o mecanismo portátil e a sua integração no ambiente simulado. Continuam pendentes as tarefas e interrupções físicas STM32, a origem comum dos relógios, a frequência de publicação e a validação USB nas Proteus/uaEFI. O README principal mantém apenas a apresentação curta e o logótipo.
+
+## Verificação de frescura no pedido completo
+
+Implementado no [commit 864d55d](https://github.com/Tunuino/Tunuino/commit/864d55def5d1232b41cada4dddfc8245742a447c): nova inicialização opcional `tunuino_link_init_mailbox`.
+
+O ciclo de comunicação pode agora ser ligado diretamente à mailbox de aquisição. Antes de executar o dispatcher de cada pedido completo, lê a amostra mais recente para um snapshot interno e verifica a idade com o instante atual da comunicação. Um pacote iniciado com a amostra ainda fresca e concluído no limite de idade recebe NOT_READY para o pedido de telemetria. O limite de idade é positivo e configurável; o relógio da comunicação tem de ser monotónico e pertencer ao mesmo domínio temporal da aquisição.
+
+Nesta modalidade, o campo `context.live` fornecido à inicialização é ignorado. Identidade, mapas e capacidades mantêm o significado anterior. O ciclo torna-se o único consumidor da mailbox; a tarefa USB deve serializar todas as operações do ciclo e não chamar o leitor da mailbox por outro caminho. Providers e mailbox devem permanecer válidos durante a ligação. A inicialização ordinária continua disponível e remove a associação anterior à mailbox, respeitando a paragem do transporte exigida para reinicializar.
+
+A cópia usada para construir a resposta pertence ao ciclo. Uma publicação posterior não modifica os bytes já preparados para transmissão. Se a aquisição parar de publicar, os pedidos seguintes detetam a expiração, sem depender de uma nova publicação para invalidar a cópia anterior.
+
+### Resultados
+
+A suite completa C/Java/KiCad passou localmente. Os testes C verificaram mailbox vazia, expiração no instante exato em que termina um pedido fragmentado, publicação inválida durante uma resposta já construída, recuperação, timestamp futuro, expiração sem novas publicações, identificação e metadados dos mapas ainda disponíveis, argumentos/configuração inválidos e reinicialização na modalidade anterior.
+
+O teste entre processos, para as duas identidades simuladas, mantém as capturas de cambota ativas enquanto suspende intencionalmente a publicação. O primeiro pedido recebe dados válidos; os dois seguintes recebem NOT_READY; a publicação retoma e o quarto pedido recebe uma amostra nova. O gravador CSV preserva as duas amostras válidas e o intervalo de 21 ms entre elas, sem gravar as duas respostas expiradas nem reconectar.
+
+Os testes do ciclo passaram também com AddressSanitizer e UndefinedBehaviorSanitizer, com deteção de fugas desativada. Os workflows do commit anterior 6a2233f8ceef138d27d567d8c5225b1e1962b82e concluíram com sucesso: Core checks e Windows console build. Os resultados remotos desta alteração devem ser consultados nos workflows do novo commit.
+
+Esta é uma integração no núcleo portátil, exercitada com relógio e capturas simulados. Continuam pendentes o escalonamento real das tarefas STM32, os relógios físicos, os drivers USB e a validação nas Proteus/uaEFI. Não foi acrescentado controlo de injeção ou ignição.

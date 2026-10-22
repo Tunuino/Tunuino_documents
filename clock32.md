@@ -36,6 +36,28 @@ A suite completa `python3 tools/check_core.py` passou. Os testes específicos ve
 
 Os testes também passaram com AddressSanitizer e UndefinedBehaviorSanitizer.
 
+## Capturas atrasadas
+
+Atualização: [commit 7aaabda](https://github.com/Tunuino/Tunuino/commit/7aaabda40d0411e030c642dbef28822a3d01cb66).
+
+`tunuino_clock32_capture` associa o valor bruto de um registo de captura ao tempo de 64 bits da última observação do contador. Não avança nem recua o relógio. Calcula a idade modular e subtrai-a ao tempo observado; assim, uma captura anterior à volta do contador conserva o instante do impulso quando é lida depois da volta.
+
+O chamador primeiro retém a captura e depois observa um contador atual coerente do mesmo timer. Ambas as operações usam o mesmo chamador serializado. Não se deve fornecer o registo antigo a `observe`.
+
+O limite de idade aceite é de 1 a INT32_MAX microssegundos, inclusivo. Capturas cuja diferença indique idade acima do limite, um instante futuro ou tempo anterior à inicialização são recusadas com REJECTED e saída zero. Uma captura no mesmo tick é aceite. Uma recusa não altera nem bloqueia o relógio. Uma falha já retida no relógio continua a devolver FAULT.
+
+A comparação com a origem de inicialização impede timestamps anteriores ao início da época de software, mesmo quando essa origem tem um valor elevado. As chamadas inválidas não alteram o relógio.
+
+O driver continua responsável por comprovar que a captura é recente, que não houve reset/overcapture e que não se perderam voltas completas. Os bits brutos não distinguem uma captura atual de outra com o mesmo valor de uma volta anterior. Este módulo não reordena eventos nem invalida automaticamente a fila; o chamador não deve publicar capturas recusadas.
+
+### Testes acrescentados
+
+- Captura antes da volta do contador e observação depois, com verificação do timestamp exato.
+- Extremos de idade, futuro, captura anterior à inicialização, argumentos inválidos e falha retida.
+- Resolução junto de UINT64_MAX e 20 000 capturas com idade variável, comparadas com referência de 64 bits.
+- Oito cenários de cambota com a volta do contador em diferentes momentos, incluindo leitura atrasada de 0, 100 e 200 microssegundos. As RPM continuam a usar o instante do impulso, sem variar com esse atraso.
+- Suite completa `python3 tools/check_core.py` e execução específica com AddressSanitizer e UndefinedBehaviorSanitizer: passaram.
+
 ## Pendente
 
-Não existe ainda configuração de timer STM32, interrupção de overflow, associação de capturas atrasadas, gestão de prioridades de interrupções ou ensaio físico. O módulo não escolhe timers nem pinos para Proteus ou uaEFI. A validação da frequência real, do serviço periódico e da integração com a aquisição continua pendente.
+A resolução portátil de capturas atrasadas está implementada e testada acima. Não existe ainda configuração de timer STM32, leitura coerente dos registos físicos, tratamento de overcapture, interrupção de overflow, gestão de prioridades de interrupções ou ensaio físico. O módulo não escolhe timers nem pinos para Proteus ou uaEFI. A validação da frequência real, do serviço periódico e da integração com a aquisição continua pendente.

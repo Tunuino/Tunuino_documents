@@ -1,8 +1,8 @@
 # Tunuino Console — USB, DFU e gravação de firmware
 
-**[Descarregar Console e firmware juntos num só ZIP](https://github.com/Tunuino/Tunuino/releases/download/nightly-2026-10-22-39835615234/tunuino_bundle_proteus_v07_f427_usb_bench.zip)**. A Console desta [Release](https://github.com/Tunuino/Tunuino/releases/tag/nightly-2026-10-22-39835615234) mostra **build 72e49b8** no título. Os testes passaram na [execução 39835615234](https://github.com/Tunuino/Tunuino/actions/runs/39835615234), incluindo testes contra o JAR distribuído. A gravação e a enumeração física nesta ECU ainda aguardam confirmação.
+**[Descarregar Console e firmware juntos num só ZIP](https://github.com/Tunuino/Tunuino/releases/download/nightly-2026-10-22-39842387200/tunuino_bundle_proteus_v07_f427_usb_bench.zip)**. A Console desta [Release](https://github.com/Tunuino/Tunuino/releases/tag/nightly-2026-10-22-39842387200) mostra **build 65472d5** no título. Os testes passaram na [execução 39842387200](https://github.com/Tunuino/Tunuino/actions/runs/39842387200), incluindo testes contra o JAR distribuído. O utilizador já mostrou uma gravação verificada da imagem anterior, mas continua sem COM depois do reset. A enumeração desta nova imagem ChibiOS ainda aguarda confirmação.
 
-Implementação inicial: [89724f6](https://github.com/Tunuino/Tunuino/commit/89724f6f09236078c839630d7098db8a393ba5c2). Revisão atual: [67ddd5a](https://github.com/Tunuino/Tunuino/commit/67ddd5aa02a30afd631fc2f3e32f5255577c94b8), diretamente na master.
+Implementação inicial: [89724f6](https://github.com/Tunuino/Tunuino/commit/89724f6f09236078c839630d7098db8a393ba5c2). Revisão atual: [65472d5](https://github.com/Tunuino/Tunuino/commit/65472d5ec942eee82f8b8be3fb4be7c5d37c0d4a), diretamente na master.
 
 A interface tem os separadores **Dados e mapas** e **Firmware e USB**, com tamanho inicial adaptado ao ecrã.
 
@@ -29,7 +29,7 @@ A interface tem os separadores **Dados e mapas** e **Firmware e USB**, com taman
 6. Se o Windows indicar erro de driver, usar **Instalar drivers…** e selecionar `drivers/silent_st_drivers2.exe` do pacote rusEFI. Também pode instalar os drivers fornecidos com o CubeProgrammer oficial.
 7. Usar **Selecionar firmware** e escolher `firmware/tunuino-proteus-v07-f427-usb-bench.bin`. Manter o ficheiro `.bin.properties` ao lado. A Console valida ambos.
 8. Encerrar qualquer ligação COM antes de gravar, confirmar o dispositivo USB e usar **Gravar por DFU**. A confirmação mostra que a imagem substitui o bootloader na flash.
-9. Depois da verificação positiva, repor BOOT0 em arranque normal e reiniciar a ECU. Selecionar a COM, ligar e identificar a ECU.
+9. Depois da verificação positiva, repor BOOT0 em arranque normal e reiniciar a ECU. A aplicação esperada é **Proteus v0.7 ChibiOS USB bench**, com COM CDC. Selecionar a COM, ligar e identificar a ECU. A imagem atual tem **18 872 bytes**, firmware de identidade 0.0.2.
 
 Não há apagamento integral, remoção de proteções, alteração de option bytes ou arranque forçado em endereço base neste fluxo.
 
@@ -68,7 +68,7 @@ O manifesto é um contrato local de alvo e integridade, não uma assinatura digi
 - CI Windows aprovada na revisão 67ddd5a: compilou e empacotou Java 21, repetiu os testes de manutenção e abriu os controlos JavaFX do pacote, enumerando COM e executando a pesquisa DFU do Windows. O runner não tem uma ECU ligada.
 - Kit final aprovado: firmware, manifesto de gravação e Console do mesmo commit; hashes validados. Verificação local adicional do empacotador: ausência de ferramentas opcionais, inclusão de distribuição e rejeição de ferramenta alterada.
 
-**Não foi ligada ou gravada uma ECU física.** Os testes simulados não validam o controlador USB, a instalação dos drivers numa máquina real, a gravação em flash, o BootCommander com esta ECU ou funcionamento de um motor.
+**Os testes automáticos e locais não usam uma ECU física.** O utilizador forneceu posteriormente uma fotografia com gravação verificada; a aplicação USB continua sem confirmação de enumeração. Os testes simulados não validam o controlador USB, a instalação dos drivers numa máquina real, a gravação em flash, o BootCommander com esta ECU ou funcionamento de um motor.
 
 ## Correção do bloqueio antes da gravação — 22 de outubro de 2026
 
@@ -98,4 +98,21 @@ O diagnóstico anterior juntava duas condições diferentes numa única mensagem
 
 O parser compara o valor hexadecimal numérico e aceita zeros iniciais, saída CRLF, cores ANSI e preenchimento NUL. IDs diferentes, linhas inválidas e identificações contraditórias continuam a ser recusados. A suite verifica estas condições com ferramentas simuladas. A pipeline executou a mesma suite contra o JAR compilado e confirmou que o seu manifesto identifica o commit publicado.
 
-Extrair a nova pasta e verificar **build 72e49b8** no título antes de repetir a tentativa. Se continuar bloqueada, guardar a mensagem completa e o código de saída apresentado. Não se pode concluir, com a fotografia anterior, se a causa restante é uma versão antiga em execução, a saída da ferramenta ou uma diferença ainda não observada no texto devolvido. Não há confirmação de gravação física bem-sucedida.
+Extrair a nova pasta e verificar **build 65472d5** no título antes de repetir a tentativa. Se continuar bloqueada, guardar a mensagem completa e o código de saída apresentado. Não se pode concluir, com a fotografia anterior, se a causa restante é uma versão antiga em execução, a saída da ferramenta ou uma diferença ainda não observada no texto devolvido. Naquele momento não havia confirmação de gravação física bem-sucedida; a fotografia posterior descrita abaixo já mostra verificação positiva.
+
+
+## Startup e USB com o repositório Tunuino/ChibiOS
+
+A fotografia mais recente mostra **Download verified successfully** para a imagem anterior de cerca de 16 KiB. Isto confirma a escrita/verificação reportada pelo programador, mas não o arranque da aplicação. O utilizador relata que, ao reiniciar, deixam de aparecer tanto a COM como o STM32 bootloader. A causa desse desaparecimento não foi demonstrada por estes testes.
+
+A revisão [65472d5](https://github.com/Tunuino/Tunuino/commit/65472d5ec942eee82f8b8be3fb4be7c5d37c0d4a) substitui a imagem de bancada padrão por **ChibiOS HAL USB/SerialUSB** do próprio [Tunuino/ChibiOS](https://github.com/Tunuino/ChibiOS/tree/fd2e59c34878b1ef93ef5358f11fb5cc830027ff), fixado no commit indicado. O startup, kernel, relógio e driver CDC vêm dessa base. Segue a sequência da rusEFI: inicializar HAL/kernel e serial USB, desligar o USB por 250 ms, iniciar o controlador e voltar a ligar. Usa PA11/PA12, HSE de 8 MHz, SYSCLK de 168 MHz e USB de 48 MHz, sem deteção externa de VBUS.
+
+A Console continua a gravar pela ferramenta ST e a exigir verificação. A imagem continua a começar em **0x08000000** e substitui um bootloader existente na flash. Depois da escrita, repor BOOT0 e reiniciar a placa.
+
+Os testes locais e a [pipeline 39842387200](https://github.com/Tunuino/Tunuino/actions/runs/39842387200) passaram: imagem ARM de **18 872 bytes**, vetores reset/SysTick/USB e descritores CDC do binário, testes GCC/Clang, JAR e runtime Windows. O main real foi testado contra um modelo USB com dois pedidos juntos, conclusão atrasada, timeout, CRC inválido, desconexão e reconfiguração com uma conclusão antiga.
+
+O [Bundle desta revisão](https://github.com/Tunuino/Tunuino/releases/download/nightly-2026-10-22-39842387200/tunuino_bundle_proteus_v07_f427_usb_bench.zip) contém Console e firmware do mesmo commit, código-fonte correspondente e licenças ChibiOS dentro da pasta firmware. A Release tem apenas este anexo ZIP. Esta imagem continua a responder apenas à identificação Tunuino; não controla um motor.
+
+Extrair tudo para uma pasta nova e confirmar **build 65472d5** no título e **ChibiOS USB bench** na descrição do firmware. Após gravação verificada, repor BOOT0 e reiniciar. O resultado por confirmar é a nova COM e a leitura de identidade real. Se continuar sem dispositivo USB, o próximo diagnóstico útil é ler por ST-Link o PC, os registos de falha e o símbolo tunuino_bench_fault, cujo endereço consta do manifesto do firmware.
+
+Não foi feita validação física desta imagem. [Detalhes técnicos](https://github.com/Tunuino/Tunuino/blob/65472d5ec942eee82f8b8be3fb4be7c5d37c0d4a/docs/proteus-chibios-usb.md).

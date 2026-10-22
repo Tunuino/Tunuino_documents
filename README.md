@@ -8,6 +8,8 @@ O projeto está no início do desenvolvimento. Ainda não produz firmware para g
 
 ## Implementado
 
+- Extensão de observações de contador de 32 bits para timestamps de 64 bits, testada com capturas simuladas durante a volta do contador. [Contrato e limites](clock32.md).
+
 - Conversão de leituras brutas por curvas configuradas, com invalidação independente dos canais de telemetria. [Detalhes e testes](analog-calibration.md).
 
 - Montagem de telemetria com RPM calculadas das capturas e validade/frescura individual de MAP, lambda e temperatura.

@@ -1,6 +1,6 @@
 # Tunuino Console — USB, DFU e gravação de firmware
 
-**[Descarregar o kit aprovado: Console Windows + firmware F427](https://github.com/Tunuino/Tunuino/actions/runs/39823286596/artifacts/12444449828)**. A [pipeline final](https://github.com/Tunuino/Tunuino/actions/runs/39823286596) passou em 1 min 39 s, incluindo testes, compilação ARM, empacotamento Windows, abertura dos controlos JavaFX e criação do kit sincronizado. Não houve ensaio físico.
+**[Descarregar Console e firmware juntos num só ZIP](https://github.com/Tunuino/Tunuino/releases/download/nightly-2026-10-22-39829897109/tunuino_bundle_proteus_v07_f427_usb_bench.zip)**. [Release corrigida](https://github.com/Tunuino/Tunuino/releases/tag/nightly-2026-10-22-39829897109), commit [4a9b669](https://github.com/Tunuino/Tunuino/commit/4a9b669133dcaab9c12fcf0b09d7bba42f1e665a). A [pipeline](https://github.com/Tunuino/Tunuino/actions/runs/39829897109) passou nos sete jobs, incluindo testes GCC/Clang, compilação ARM, testes de manutenção no Windows, abertura do runtime JavaFX e validação do kit. A gravação física desta correção ainda aguarda confirmação.
 
 Implementação inicial: [89724f6](https://github.com/Tunuino/Tunuino/commit/89724f6f09236078c839630d7098db8a393ba5c2). Revisão atual: [67ddd5a](https://github.com/Tunuino/Tunuino/commit/67ddd5aa02a30afd631fc2f3e32f5255577c94b8), diretamente na master.
 
@@ -12,7 +12,7 @@ A interface tem os separadores **Dados e mapas** e **Firmware e USB**, com taman
 - Pesquisa independente de dispositivos USB STM32 DFU pelo hardware ID `0483:DF11`, mesmo sem qualquer porta COM.
 - Apresentação dos erros de driver do Windows; erro de pesquisa não é apresentado como ausência de dispositivo.
 - Seleção da ferramenta ST instalada, ou da pasta `console/STM32_Programmer_CLI/bin/STM32_Programmer_CLI.exe` de um pacote rusEFI existente. O caminho fica guardado para utilização offline.
-- Seleção do dispositivo DFU por número de série, reenumeração antes de gravar e verificação do grupo STM32F42x/F43x (`0x419`). Este ID é partilhado; não prova sozinho que o chip é F427 ou que a revisão da placa é v0.7. A interface pede confirmação explícita da placa antes de gravar.
+- Seleção do dispositivo DFU por número de série, reenumeração antes de gravar e verificação do grupo STM32F42x/F43x (`0x419` ou `0x0419`, aceitando zeros iniciais). Este ID é partilhado; não prova sozinho que o chip é F427 ou que a revisão da placa é v0.7. A interface pede confirmação explícita da placa antes de gravar.
 - Seleção de firmware com manifesto de alvo, modo, endereço, SHA-256 e declaração de substituição do bootloader. Validação dos vetores de arranque e dos limites da imagem.
 - Gravação DFU na Console através da ferramenta ST, com verificação obrigatória. Só indica sucesso com saída positiva da ferramenta e confirmação de verificação.
 - Registo da saída do programador, limites de tempo, tratamento de falhas, bloqueio de ligação COM e de fecho da janela durante programação.
@@ -21,7 +21,7 @@ A interface tem os separadores **Dados e mapas** e **Firmware e USB**, com taman
 
 ## Primeiro ensaio com a Proteus v0.7 STM32F427
 
-1. Descarregar o kit da execução CI correspondente a este commit e extrair tudo. Os kits anteriores não contêm o novo manifesto de gravação.
+1. Descarregar o ZIP conjunto da Release corrigida indicada acima e extrair tudo para uma pasta nova. Contém `console/`, `firmware/`, manifesto comum e instruções. Usar o executável desta pasta, pois as versões antigas continuam com o erro de identificação DFU.
 2. Guardar a instalação atual da ECU antes de a substituir. O ensaio continua a ser de bancada, com atuadores desligados.
 3. Executar `console/TunuinoConsole.exe` e abrir o separador **Firmware e USB**.
 4. A Console procura uma instalação normal do STM32CubeProgrammer. Se não a encontrar, usar **Ferramenta ST…** e selecionar o executável que já existe no pacote rusEFI. Manter todas as DLLs e a pasta `Data_Base` da ferramenta.
@@ -69,3 +69,11 @@ O manifesto é um contrato local de alvo e integridade, não uma assinatura digi
 - Kit final aprovado: firmware, manifesto de gravação e Console do mesmo commit; hashes validados. Verificação local adicional do empacotador: ausência de ferramentas opcionais, inclusão de distribuição e rejeição de ferramenta alterada.
 
 **Não foi ligada ou gravada uma ECU física.** Os testes simulados não validam o controlador USB, a instalação dos drivers numa máquina real, a gravação em flash, o BootCommander com esta ECU ou funcionamento de um motor.
+
+## Correção do bloqueio antes da gravação — 22 de outubro de 2026
+
+A fotografia enviada pelo utilizador mostra uma ECU real detetada pelo CubeProgrammer v2.19.0, com `Device ID : 0x0419` e grupo `STM32F42xxx/F43xxx`. A Console anterior procurava literalmente `0x419` e rejeitava o zero inicial, embora o valor hexadecimal seja o mesmo. O bloqueio ocorria antes do comando de escrita; aquela tentativa não iniciou a gravação.
+
+A revisão [4a9b669](https://github.com/Tunuino/Tunuino/commit/4a9b669133dcaab9c12fcf0b09d7bba42f1e665a) aceita zeros iniciais e continua a exigir a linha de identificação completa e código de saída zero. Os testes reproduziram primeiro a falha anterior e passaram após a correção com `0x0419`, `0X000419` e saída CRLF do Windows. Identificadores diferentes, prefixos como `0x04190`, identificadores ausentes/inválidos e falhas da ferramenta continuam a impedir qualquer escrita. Estes ensaios usam ferramentas simuladas.
+
+Alterações ao backend de gravação passam a selecionar uma nova imagem de bancada junto da Console para publicar imediatamente um kit sincronizado. A [Release corrigida](https://github.com/Tunuino/Tunuino/releases/tag/nightly-2026-10-22-39829897109) está pública e o ZIP conjunto inclui ambos, sem necessidade de descarregar os ZIPs separados. A fotografia comprova a deteção e leitura da identificação física; não comprova gravação nem arranque do firmware. A confirmação de escrita e arranque na ECU continua pendente.

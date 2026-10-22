@@ -14,7 +14,7 @@ Um único produtor serializado executa as operações do relógio e da origem. O
 4. Publicar os registos retidos com `tunuino_capture_source_push`, por ordem cronológica; em empate, cambota antes de cames.
 5. O consumidor processa a fila e monta uma nova telemetria.
 
-A observação periódica do contador continua mesmo sem impulsos do motor. Os limites e responsabilidades descritos em [clock32.md](clock32.md) mantêm-se: timer de 32 bits a 1 MHz, limite real entre observações e limite real de idade das capturas. O módulo não lê registos físicos, não reordena eventos e não deteta voltas completas perdidas apenas pelos bits brutos.
+A observação periódica do contador continua mesmo sem impulsos do motor. Os limites e responsabilidades descritos em [clock32.md](clock32.md) mantêm-se: timer de 32 bits a 1 MHz, limite real entre observações e limite real de idade das capturas. O módulo não lê registos físicos nem deteta voltas completas perdidas apenas pelos bits brutos. A API individual push exige eventos já ordenados; a API sample descrita abaixo ordena os dois canais de uma observação.
 
 O driver chama `tunuino_capture_source_lost` se detetar overcapture, reset, suspensão ou incumprimento do contrato temporal. Não publica um evento para substituir os que se perderam.
 
@@ -52,3 +52,15 @@ A execução específica com AddressSanitizer e UndefinedBehaviorSanitizer tamb�
 ## Pendente
 
 Faltam a configuração dos timers STM32, leitura coerente dos registos, deteção física de overcapture, prioridades de interrupções, publicação de snapshots para USB e ensaio nas placas Proteus e uaEFI. Não foram escolhidos novos pinos nem anunciadas capacidades de hardware.
+
+## Capturas conjuntas do timer
+
+Implementado no commit 94d47c3a70135eb44760b375b4e7e1578dcb781f: `tunuino_capture_source_sample` recebe zero, uma ou duas capturas brutas e uma leitura atual do mesmo timer. Há no máximo uma captura por canal. O driver deve reter todos os registos pendentes antes de ler o contador atual, detetar overcapture/reset/perda temporal e garantir que não deixa uma captura mais antiga para a chamada seguinte.
+
+A função valida os dois timestamps antes de publicar qualquer evento e ordena-os pelo instante estendido de 64 bits, mesmo na passagem do contador por zero. Em empate publica cambota antes de cames. Sem capturas, a mesma API faz a observação periódica necessária com o motor parado.
+
+Perda declarada, captura inválida, canal inválido/duplicado, argumentos de lote inválidos, falha do relógio ou da fila bloqueiam a aquisição. A saída temporal fica a zero em erro. Um ponteiro de saída nulo é erro de argumento não fatal. A recuperação continua a exigir reinicialização com os dois lados e o hardware parados.
+
+A publicação não é atómica como lote: se existir apenas um lugar livre, a primeira captura pode entrar e a segunda causar overflow. O consumidor deve manter as verificações existentes de falha da fila e frescura; isto não cancela respostas já construídas.
+
+A suite C/Java/KiCad completa passou localmente. Os testes novos verificam ordem através do wrap, cames realmente anteriores à cambota, empate entre canais, captura futura sem publicação parcial durante a validação, observação sem impulsos, perda declarada, duplicação de canal, argumentos inválidos, falha temporal e overflow após publicação parcial, incluindo invalidação das RPM. São testes simulados, sem leitura de registos STM32 ou validação física nas ECUs.

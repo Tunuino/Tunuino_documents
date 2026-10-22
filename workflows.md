@@ -51,7 +51,7 @@ A montagem verifica que o source_commit do manifesto do firmware e do manifesto 
 
 Se só um componente mudou, é publicado apenas o componente afetado, depois dos testes. Para obter um kit completo de um commit, executar **Tunuino CI → Run workflow**: a execução manual seleciona todos os componentes.
 
-Os pacotes de bancada continuam experimentais e sem validação física. As bibliotecas ARM conservam NOT-FLASHABLE no nome. Não foram acrescentados deploy, publicação de releases ou gravação automática numa ECU.
+Os pacotes de bancada continuam experimentais e sem validação física. As bibliotecas ARM conservam NOT-FLASHABLE no nome. A gravação numa ECU continua a ser uma ação manual. A publicação de Releases foi acrescentada posteriormente, como descrito abaixo.
 
 ## Verificação desta alteração
 
@@ -74,3 +74,28 @@ O manifesto comum foi validado para o commit beda9d056e637e61230652d6f6f9e33b5b9
 Os 2 min 16 s são uma observação de uma execução, não um prazo garantido: as filas do GitHub e a rede podem aumentar o tempo total. O antigo atraso de 1193 s foi medido no passo de instalação apt, que deixou de existir nesta pipeline.
 
 O README principal mantém a apresentação curta do projeto.
+
+## Releases automáticas
+
+A partir do [commit 3061933](https://github.com/Tunuino/Tunuino/commit/30619332d81b13d9a713be75258fe794c687642d), a pipeline publica os pacotes em [Tunuino Releases](https://github.com/Tunuino/Tunuino/releases), depois de todos os testes, dos builds ARM/Windows e da validação do kit sincronizado passarem.
+
+A publicação é permitida apenas na master do repositório Tunuino/Tunuino. Pull requests, falhas, cancelamentos e builds parciais não publicam Releases. Os componentes continuam a ser selecionados pelas alterações para evitar recompilações desnecessárias. Quando um push produz firmware e Console juntos, publica também uma Release. Para gerar ambos de qualquer commit atual da master, usar **Tunuino CI → Run workflow**. A execução diária às **02:20 UTC** também produz e valida o conjunto completo; o GitHub pode atrasar a execução agendada.
+
+O identificador é `nightly-AAAA-MM-DD-<ID da execução>`. Cada Release aponta para o commit exato dos seus pacotes e é marcada como **pre-release experimental**. O ID evita substituir silenciosamente os ficheiros de outra compilação do mesmo dia. Uma repetição da mesma execução preserva uma Release já publicada. Os ficheiros são enviados para um rascunho e a Release só fica pública depois do upload de todos os anexos.
+
+| Ficheiro | Conteúdo |
+|---|---|
+| `tunuino_bundle_proteus_v07_f427_usb_bench.zip` | Kit conjunto com firmware, Console e instruções |
+| `tunuino_console_windows_x64.zip` | Console portátil Windows x64 com Java incluído |
+| `tunuino_firmware_proteus_v07_f427_usb_bench.zip` | Firmware Proteus v0.7 F427 com manifesto de gravação |
+| `kit-manifest.json` | Proveniência dos componentes e hashes internos |
+| `START-HERE.txt` | Instruções iniciais e limites do teste |
+| `SHA256SUMS.txt` | Checksums SHA256 dos outros cinco ficheiros |
+
+Extrair o ZIP inteiro antes de executar a Console. No kit conjunto, abrir `console/TunuinoConsole.exe`; no ZIP separado da Console, abrir `TunuinoConsole/TunuinoConsole.exe`. Manter `.bin.properties` junto do `.bin`.
+
+Os pacotes atuais destinam-se apenas a testes USB em bancada na Proteus v0.7 STM32F427. Não controlam um motor e não incluem uma imagem uaEFI nem F767. A gravação da imagem de bancada começa em `0x08000000` e substitui o bootloader instalado. A validação física continua pendente. As ferramentas STM32CubeProgrammer/BootCommander e os drivers não são incluídos automaticamente; consultar `console/tools/PROGRAMMERS.txt` no kit e a [documentação USB/DFU](console-firmware-usb.md).
+
+Validação local da publicação: estrutura YAML e dependências dos jobs, sintaxe dos comandos Bash/Python, conteúdo e caminhos dos três ZIPs, checksums dos anexos e recusa de um kit com ID de execução diferente. Esta verificação usa dados de teste; a execução real é registada abaixo.
+
+A [primeira execução real](https://github.com/Tunuino/Tunuino/actions/runs/39827214851) terminou com **success** nos sete jobs (incluindo os dois compiladores). A [primeira Release](https://github.com/Tunuino/Tunuino/releases/tag/nightly-2026-10-22-39827214851) está pública, marcada como pre-release, com os seis anexos completos. O kit conjunto ocupa 36616090 bytes. Os builds ARM e Windows, a verificação do runtime e a validação do kit passaram; não foi efetuada gravação ou teste físico numa ECU.

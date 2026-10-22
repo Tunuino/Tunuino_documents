@@ -85,3 +85,33 @@ Os novos cenários verificam, para as identidades simuladas Proteus e uaEFI:
 A suite completa `python3 tools/check_core.py` passou localmente, incluindo C, Java, KiCad e os testes entre processos. Os testes específicos existentes da origem passaram com AddressSanitizer e UndefinedBehaviorSanitizer; a deteção de fugas foi desativada porque o LeakSanitizer não consegue inspecionar os processos neste ambiente. Este resultado não é uma verificação de fugas.
 
 Esta alteração integra e alarga o ambiente de teste; não acrescenta um driver físico nem modifica o protocolo ou as funcionalidades de produção. Os sensores e os impulsos continuam simulados. Continuam pendentes a captura dos registos STM32, a deteção física de overcapture, USB real e validação nas placas. O README principal mantém-se sem publicações de progresso.
+
+## Telemetria coerente entre aquisição e USB
+
+Implementação portátil no [commit 6a2233f](https://github.com/Tunuino/Tunuino/commit/6a2233f8ceef138d27d567d8c5225b1e1962b82e): `live_mailbox.h/c`.
+
+A aquisição pode agora publicar uma amostra completa enquanto a tarefa USB lê outra, através de três buffers com transferência atómica de propriedade. Há exatamente um produtor serializado e um consumidor serializado. A inicialização, reinicialização e qualquer alteração da configuração exigem os dois lados parados; o objeto não pode ser copiado nem escrito por DMA. A inicialização recusa plataformas nas quais o índice atómico não é lock-free.
+
+Este mecanismo guarda a publicação mais recente; não é uma fila de datalog e pode substituir publicações ainda não lidas. Não usa alocação dinâmica, locks explícitos ou ciclos de repetição no código de publicação/leitura. Isto não demonstra wait-freedom, aptidão para ISR ou um limite de execução no STM32.
+
+A leitura copia para um snapshot pertencente à tarefa USB. Esse snapshot deve permanecer estável durante o dispatcher e a construção da resposta. Nunca se entrega ao dispatcher um ponteiro para os buffers internos nem para dados escritos concorrentemente pela aquisição.
+
+### Frescura e falhas
+
+- Sem amostra, máscara incompleta/desconhecida, timestamp futuro ou idade maior ou igual ao limite: leitura NOT_READY, com saída a zero.
+- O instante de leitura deve ser monotónico e usar o mesmo domínio temporal em milissegundos da aquisição; o limite de idade deve ser positivo.
+- Uma publicação válida pode ser relida enquanto estiver fresca; se o produtor parar de atualizar, expira.
+- A aquisição deve continuar a publicar snapshots inválidos quando perde sinais. A publicação de uma falha substitui a leitura válida anterior; não cancela respostas já construídas.
+- A recuperação dos sinais pode ser publicada, mas isto não limpa falhas retidas na origem de capturas. A reinicialização da origem continua a exigir paragem explícita.
+
+O processo C dos testes integrados passa agora pela mailbox antes de atualizar o snapshot usado pelo protocolo. Mantêm-se os cenários até ao CSV Java de wrap, perda de capturas, paragem do motor e falha/recuperação de sensores para ambas as identidades simuladas.
+
+### Verificação desta etapa
+
+A suite completa `python3 tools/check_core.py` passou localmente. Os testes próprios cobrem cópia independente da entrada, substituição de amostras pendentes, releitura, expiração no limite exato, timestamps futuros e UINT64_MAX, máscaras inválidas, recuperação e reinicialização.
+
+O teste concorrente publicou 200 mil snapshots com campos correlacionados, verificou integridade e leituras sem recuo e forçou centenas de trocas de propriedade através de pontos de sincronização no teste. AddressSanitizer e UndefinedBehaviorSanitizer passaram; a deteção de fugas ficou desativada. ThreadSanitizer abortou internamente neste ambiente; o mesmo erro foi reproduzido num programa mínimo independente, com duas threads e um contador atómico. Não se declara aprovação por ThreadSanitizer.
+
+Os workflows do commit anterior cd042510b4ac15a5767ae5c31f9efb58014f55b7 concluíram com sucesso: Core checks e Windows console build. Os workflows deste novo commit são lançados pela publicação e devem ser consultados para o resultado remoto.
+
+Esta etapa acrescenta o mecanismo portátil e a sua integração no ambiente simulado. Continuam pendentes as tarefas e interrupções físicas STM32, a origem comum dos relógios, a frequência de publicação e a validação USB nas Proteus/uaEFI. O README principal mantém apenas a apresentação curta e o logótipo.

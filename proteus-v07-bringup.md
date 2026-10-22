@@ -40,3 +40,7 @@ O diretório de saída deve ser novo. O script recusa sobrescrever uma saída ex
 5. Depois integrar entradas reais de sensores/cambota e verificar datalog. Ensaio do controlo do motor fica para uma etapa posterior.
 
 Este plano não declara uma imagem pronta nem promete que o primeiro ensaio comprova todas as funções. O objetivo imediato é obter um primeiro arranque e comunicação verificáveis na placa correta.
+
+## Verificação remota desta publicação
+
+O commit 6a810781bd56360f842666a49f0888d619cd6354 passou Core checks e Windows console build. O job Cortex-M7 do novo workflow ARM concluiu com sucesso; o job Cortex-M4 ainda estava a instalar a toolchain na última verificação. [Execução ARM](https://github.com/Tunuino/Tunuino/actions/runs/39790127580). Este estado não confirma ainda a compilação Cortex-M4; consultar a execução para o resultado final.

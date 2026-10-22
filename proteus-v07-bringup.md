@@ -23,7 +23,7 @@ Esta imagem não é para F767, uaEFI ou funcionamento de um motor.
 
 ## Ficheiros
 
-A primeira compilação aprovada está disponível em [USB-BENCH-EXPERIMENTAL](https://github.com/Tunuino/Tunuino/actions/runs/39791962001/artifacts/12430804009). É preciso iniciar sessão no GitHub para descarregar artefactos; têm retenção de 30 dias. O workflow **Proteus F427 USB bench** gera novamente os ficheiros nas próximas alterações.
+A primeira compilação aprovada está disponível em [USB-BENCH-EXPERIMENTAL](https://github.com/Tunuino/Tunuino/actions/runs/39791962001/artifacts/12430804009). É preciso iniciar sessão no GitHub para descarregar artefactos; têm retenção de 30 dias. A pipeline **Tunuino CI** passou a gerar a imagem de bancada quando os respetivos ficheiros mudam e os testes passam. A execução manual gera também a Console e um kit sincronizado.
 
 O ZIP contém:
 
@@ -84,6 +84,10 @@ O primeiro resultado útil é: **DFU detetado → gravação verificada → apli
 
 - Firmware: commit 926e63057beb20560df6cb295e83acc23a492b32, workflow Proteus F427 USB bench aprovado e artefacto 12430804009.
 - Console portátil: commit 29a589fd373888b2b5d88e5a6c928840f3fde962, compilação, empacotamento e verificação do runtime aprovados no Windows; artefacto 12431777696.
-- Os testes simulados do ciclo de bancada foram executados localmente com o mesmo main.c presente na imagem aprovada. A nova execução de compilação ARM do segundo commit ainda estava a instalar a toolchain na última verificação; não se declara que essa execução terminou.
+- Os testes simulados do ciclo de bancada foram executados localmente com o mesmo main.c presente na imagem aprovada. A execução da imagem de bancada do segundo commit foi cancelada depois de 1193 segundos no passo de instalação da toolchain. A imagem aprovada do primeiro commit continua disponível; não se declara que o segundo build produziu uma imagem.
 
 A JavaFX em classpath emitiu um aviso de carregamento em unnamed module durante a verificação do pacote. A abertura da janela, recursos e biblioteca serial concluiu com sucesso; isto não constitui validação integral da interface ou do USB físico.
+
+## Pipeline atual e kit sincronizado
+
+Os quatro workflows independentes foram substituídos por [Tunuino CI](https://github.com/Tunuino/Tunuino/actions/workflows/ci.yml). Testes primeiro, compilação ARM/Windows depois e kit final apenas com componentes da mesma execução e do mesmo commit. Ver [workflows.md](workflows.md) para seleção por ficheiros alterados, cache e resultados medidos. Para reconstruir um kit completo, usar a execução manual da pipeline. Os links de pacotes já aprovados acima permanecem válidos até expirarem.

@@ -8,6 +8,8 @@ O projeto está no início do desenvolvimento. Ainda não produz firmware para g
 
 ## Implementado
 
+- Conversão de leituras brutas por curvas configuradas, com invalidação independente dos canais de telemetria. [Detalhes e testes](analog-calibration.md).
+
 - Montagem de telemetria com RPM calculadas das capturas e validade/frescura individual de MAP, lambda e temperatura.
 - Processamento limitado da fila para cambota/cames, com leituras inválidas perante atraso pendente, expiração ou falha.
 - Fila C11 de 64 capturas cambota/cames, com ordem temporal, falhas retidas e testes de produtor/consumidor concorrentes.

@@ -8,6 +8,8 @@ O projeto está no início do desenvolvimento. Ainda não produz firmware para g
 
 ## Implementado
 
+- Ligação do relógio à fila de capturas, com propagação de falhas e invalidação das RPM na leitura seguinte. [Implementação e limites](capture-source.md).
+
 - Extensão de observações de contador de 32 bits para timestamps de 64 bits, testada com capturas simuladas durante a volta do contador. [Contrato e limites](clock32.md).
 
 - Conversão de leituras brutas por curvas configuradas, com invalidação independente dos canais de telemetria. [Detalhes e testes](analog-calibration.md).

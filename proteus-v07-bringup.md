@@ -61,7 +61,7 @@ Depois de guardar a instalação anterior:
 5. Na Tunuino Console para Windows, selecionar Proteus, atualizar portas, escolher a COM, clicar **Ligar USB** e depois **Identificar ECU**.
 6. Confirmar família Proteus, série F4 e UID consistente em pedidos repetidos. Os controlos de datalog/mapas devem permanecer indisponíveis nesta imagem.
 
-O workflow **Windows console build** está a ser preparado para fornecer **TunuinoConsole-Windows-x64-EXPERIMENTAL**, com runtime Java e dependências incluídos. O passo de verificação abre uma janela JavaFX, carrega o logótipo e enumera portas, mas não testa uma ECU física. Quando essa compilação estiver aprovada, extrair o ZIP inteiro e executar `TunuinoConsole.exe`, mantendo as pastas app/runtime ao lado do executável.
+A [Console portátil para Windows x64](https://github.com/Tunuino/Tunuino/actions/runs/39792846378/artifacts/12431777696) já foi gerada, com runtime Java e dependências incluídos (ZIP de aproximadamente 36,5 MB). A verificação do executável empacotado passou no Windows: abriu uma janela JavaFX, carregou o logótipo e enumerou portas. Não foi ligada uma ECU física. Extrair o ZIP inteiro e executar `TunuinoConsole.exe`, mantendo as pastas app/runtime ao lado do executável. Não é preciso instalar Java ou Maven para este pacote.
 
 Após fechar a sessão serial ou perante timeout/CRC inválido, esta primeira versão exige reset da placa e nova abertura da porta. O bloqueio é intencional para não reutilizar respostas antigas de uma sessão interrompida. A transmissão avança apenas no callback de conclusão do endpoint; cada transferência é um pacote curto, para evitar confundir a confirmação de dados com um ZLP.
 
@@ -79,3 +79,11 @@ TinyUSB, CMSIS STM32F4 e CMSIS Core estão fixados por commit em `dependencies.j
 ## Depois do primeiro resultado
 
 O primeiro resultado útil é: **DFU detetado → gravação verificada → aplicação CDC enumerada → identidade real recebida**. Só depois se avança para sensores e RPM reais. O sucesso deste ensaio não valida injeção, ignição ou funcionamento integral da ECU.
+
+## Pacotes aprovados para este primeiro ensaio
+
+- Firmware: commit 926e63057beb20560df6cb295e83acc23a492b32, workflow Proteus F427 USB bench aprovado e artefacto 12430804009.
+- Console portátil: commit 29a589fd373888b2b5d88e5a6c928840f3fde962, compilação, empacotamento e verificação do runtime aprovados no Windows; artefacto 12431777696.
+- Os testes simulados do ciclo de bancada foram executados localmente com o mesmo main.c presente na imagem aprovada. A nova execução de compilação ARM do segundo commit ainda estava a instalar a toolchain na última verificação; não se declara que essa execução terminou.
+
+A JavaFX em classpath emitiu um aviso de carregamento em unnamed module durante a verificação do pacote. A abertura da janela, recursos e biblioteca serial concluiu com sucesso; isto não constitui validação integral da interface ou do USB físico.

@@ -1,6 +1,6 @@
 # Tunuino Console — USB, DFU e gravação de firmware
 
-**[Descarregar Console e firmware juntos num só ZIP](https://github.com/Tunuino/Tunuino/releases/download/nightly-2026-10-22-39842387200/tunuino_bundle_proteus_v07_f427_usb_bench.zip)**. A Console desta [Release](https://github.com/Tunuino/Tunuino/releases/tag/nightly-2026-10-22-39842387200) mostra **build 65472d5** no título. Os testes passaram na [execução 39842387200](https://github.com/Tunuino/Tunuino/actions/runs/39842387200), incluindo testes contra o JAR distribuído. O utilizador já mostrou uma gravação verificada da imagem anterior, mas continua sem COM depois do reset. A enumeração desta nova imagem ChibiOS ainda aguarda confirmação.
+**[Descarregar Console e firmware juntos num só ZIP](https://github.com/Tunuino/Tunuino/releases/download/nightly-2026-10-22-39842387200/tunuino_bundle_proteus_v07_f427_usb_bench.zip)**. A Console desta [Release](https://github.com/Tunuino/Tunuino/releases/tag/nightly-2026-10-22-39842387200) mostra **build 65472d5** no título. Os testes passaram na [execução 39842387200](https://github.com/Tunuino/Tunuino/actions/runs/39842387200), incluindo testes contra o JAR distribuído. O utilizador confirmou funcionamento desta imagem ChibiOS com ligação USB e identificação Proteus/F4, firmware 0.0.2, visíveis na fotografia da Console build 65472d5. A validação física é limitada a esse ensaio de bancada.
 
 Implementação inicial: [89724f6](https://github.com/Tunuino/Tunuino/commit/89724f6f09236078c839630d7098db8a393ba5c2). Revisão atual: [65472d5](https://github.com/Tunuino/Tunuino/commit/65472d5ec942eee82f8b8be3fb4be7c5d37c0d4a), diretamente na master.
 
@@ -68,7 +68,7 @@ O manifesto é um contrato local de alvo e integridade, não uma assinatura digi
 - CI Windows aprovada na revisão 67ddd5a: compilou e empacotou Java 21, repetiu os testes de manutenção e abriu os controlos JavaFX do pacote, enumerando COM e executando a pesquisa DFU do Windows. O runner não tem uma ECU ligada.
 - Kit final aprovado: firmware, manifesto de gravação e Console do mesmo commit; hashes validados. Verificação local adicional do empacotador: ausência de ferramentas opcionais, inclusão de distribuição e rejeição de ferramenta alterada.
 
-**Os testes automáticos e locais não usam uma ECU física.** O utilizador forneceu posteriormente uma fotografia com gravação verificada; a aplicação USB continua sem confirmação de enumeração. Os testes simulados não validam o controlador USB, a instalação dos drivers numa máquina real, a gravação em flash, o BootCommander com esta ECU ou funcionamento de um motor.
+**Os testes automáticos e locais não usam uma ECU física.** O utilizador forneceu posteriormente fotografias de gravação verificada e, no build 65472d5, de ligação USB com identidade recebida da ECU. Os testes simulados não validam o controlador USB, a instalação dos drivers numa máquina real, a gravação em flash, o BootCommander com esta ECU ou funcionamento de um motor.
 
 ## Correção do bloqueio antes da gravação — 22 de outubro de 2026
 
@@ -76,7 +76,7 @@ A fotografia enviada pelo utilizador mostra uma ECU real detetada pelo CubeProgr
 
 A revisão [4a9b669](https://github.com/Tunuino/Tunuino/commit/4a9b669133dcaab9c12fcf0b09d7bba42f1e665a) aceita zeros iniciais e continua a exigir a linha de identificação completa e código de saída zero. Os testes reproduziram primeiro a falha anterior e passaram após a correção com `0x0419`, `0X000419` e saída CRLF do Windows. Identificadores diferentes, prefixos como `0x04190`, identificadores ausentes/inválidos e falhas da ferramenta continuam a impedir qualquer escrita. Estes ensaios usam ferramentas simuladas.
 
-Alterações ao backend de gravação passam a selecionar uma nova imagem de bancada junto da Console para publicar imediatamente um kit sincronizado. A [Release corrigida](https://github.com/Tunuino/Tunuino/releases/tag/nightly-2026-10-22-39829897109) está pública e o ZIP conjunto inclui ambos, sem necessidade de descarregar os ZIPs separados. A fotografia comprova a deteção e leitura da identificação física; não comprova gravação nem arranque do firmware. A confirmação de escrita e arranque na ECU continua pendente.
+Alterações ao backend de gravação passam a selecionar uma nova imagem de bancada junto da Console para publicar imediatamente um kit sincronizado. A [Release corrigida](https://github.com/Tunuino/Tunuino/releases/tag/nightly-2026-10-22-39829897109) está pública e o ZIP conjunto inclui ambos, sem necessidade de descarregar os ZIPs separados. A fotografia comprova a deteção e leitura da identificação física; não comprova gravação nem arranque do firmware. Naquele momento, a confirmação de escrita e arranque na ECU continuava pendente; o resultado posterior com ChibiOS está registado no fim desta página.
 
 ## USB sem porta COM após reset — configuração VBUS do F427
 
@@ -103,7 +103,7 @@ Extrair a nova pasta e verificar **build 65472d5** no título antes de repetir a
 
 ## Startup e USB com o repositório Tunuino/ChibiOS
 
-A fotografia mais recente mostra **Download verified successfully** para a imagem anterior de cerca de 16 KiB. Isto confirma a escrita/verificação reportada pelo programador, mas não o arranque da aplicação. O utilizador relata que, ao reiniciar, deixam de aparecer tanto a COM como o STM32 bootloader. A causa desse desaparecimento não foi demonstrada por estes testes.
+Antes da migração, uma fotografia mostrava **Download verified successfully** para a imagem anterior de cerca de 16 KiB, mas o utilizador relatava ausência de COM e STM32 bootloader depois do reset. A causa exata dessa falha anterior não foi isolada; o resultado posterior com a imagem ChibiOS está registado abaixo.
 
 A revisão [65472d5](https://github.com/Tunuino/Tunuino/commit/65472d5ec942eee82f8b8be3fb4be7c5d37c0d4a) substitui a imagem de bancada padrão por **ChibiOS HAL USB/SerialUSB** do próprio [Tunuino/ChibiOS](https://github.com/Tunuino/ChibiOS/tree/fd2e59c34878b1ef93ef5358f11fb5cc830027ff), fixado no commit indicado. O startup, kernel, relógio e driver CDC vêm dessa base. Segue a sequência da rusEFI: inicializar HAL/kernel e serial USB, desligar o USB por 250 ms, iniciar o controlador e voltar a ligar. Usa PA11/PA12, HSE de 8 MHz, SYSCLK de 168 MHz e USB de 48 MHz, sem deteção externa de VBUS.
 
@@ -113,6 +113,15 @@ Os testes locais e a [pipeline 39842387200](https://github.com/Tunuino/Tunuino/a
 
 O [Bundle desta revisão](https://github.com/Tunuino/Tunuino/releases/download/nightly-2026-10-22-39842387200/tunuino_bundle_proteus_v07_f427_usb_bench.zip) contém Console e firmware do mesmo commit, código-fonte correspondente e licenças ChibiOS dentro da pasta firmware. A Release tem apenas este anexo ZIP. Esta imagem continua a responder apenas à identificação Tunuino; não controla um motor.
 
-Extrair tudo para uma pasta nova e confirmar **build 65472d5** no título e **ChibiOS USB bench** na descrição do firmware. Após gravação verificada, repor BOOT0 e reiniciar. O resultado por confirmar é a nova COM e a leitura de identidade real. Se continuar sem dispositivo USB, o próximo diagnóstico útil é ler por ST-Link o PC, os registos de falha e o símbolo tunuino_bench_fault, cujo endereço consta do manifesto do firmware.
+Extrair tudo para uma pasta nova e confirmar **build 65472d5** no título e **ChibiOS USB bench** na descrição do firmware. Após gravação verificada, repor BOOT0 e reiniciar. A nova COM e a leitura de identidade já foram confirmadas pelo utilizador neste build. Se continuar sem dispositivo USB, o próximo diagnóstico útil é ler por ST-Link o PC, os registos de falha e o símbolo tunuino_bench_fault, cujo endereço consta do manifesto do firmware.
 
-Não foi feita validação física desta imagem. [Detalhes técnicos](https://github.com/Tunuino/Tunuino/blob/65472d5ec942eee82f8b8be3fb4be7c5d37c0d4a/docs/proteus-chibios-usb.md).
+O primeiro ensaio físico de USB/identificação desta imagem foi confirmado pelo utilizador, conforme o registo seguinte. [Detalhes técnicos](https://github.com/Tunuino/Tunuino/blob/65472d5ec942eee82f8b8be3fb4be7c5d37c0d4a/docs/proteus-chibios-usb.md).
+
+
+## Primeiro ensaio físico USB/identificação confirmado — 22 de outubro de 2026
+
+Em 22 de outubro de 2026, o utilizador confirmou **«Já funciona»** e enviou uma fotografia da Console **build 65472d5** ligada à ECU. A interface apresenta **Proteus · STM32 F4 · revisão 7 · firmware 0.0.2**, um UID e a mensagem **«ECU identificada · firmware sem dados em tempo real»**. Este ensaio confirma execução da aplicação, porta COM/ligação USB e resposta de identificação nesta unidade. Não foi um teste físico executado pelo agente.
+
+A ausência de dados em tempo real é esperada nesta imagem de bancada, que só anuncia identificação. Ainda não foram demonstrados sensores, RPM, mapas, controlo de motor, estabilidade prolongada ou repetibilidade de vários ciclos de alimentação/religação USB.
+
+O Bundle e os manifestos originais mantêm os resultados e hashes registados no momento da compilação. Este resultado físico posterior é documentado aqui; não se altera o ZIP já publicado nem se declara validação integral da ECU.

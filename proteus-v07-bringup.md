@@ -1,6 +1,10 @@
 # Proteus v0.7 F427 — primeiro ensaio por USB
 
-**Pacote atual recomendado:** [kit completo de bancada — firmware e Console do mesmo commit](https://github.com/Tunuino/Tunuino/actions/runs/39798031342/artifacts/12435280193). A pipeline unificada passou; este pacote continua sem ensaio físico nas ECUs. Os pacotes anteriores abaixo ficam como histórico.
+**Pacote atual:** [kit com gravação DFU integrada na Console](https://github.com/Tunuino/Tunuino/actions/runs/39823286596/artifacts/12444449828), commit 67ddd5a, pipeline aprovada.
+
+**Atualização da Console:** a deteção USB DFU e a gravação manual dentro da Console estão implementadas em [89724f6](https://github.com/Tunuino/Tunuino/commit/89724f6f09236078c839630d7098db8a393ba5c2). Ver [Console: USB/DFU e gravação](console-firmware-usb.md) para o novo procedimento, ferramentas externas e limitações OpenBLT. O pacote histórico abaixo ainda usa o procedimento antigo.
+
+**Pacote histórico anterior à gravação integrada:** [kit completo de bancada — firmware e Console do mesmo commit](https://github.com/Tunuino/Tunuino/actions/runs/39798031342/artifacts/12435280193). A pipeline unificada passou; este pacote continua sem ensaio físico nas ECUs. Os pacotes anteriores abaixo ficam como histórico.
 
 ## Alvo confirmado e estado
 

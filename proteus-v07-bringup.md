@@ -6,9 +6,11 @@ A imagem atual usa o próprio [Tunuino/ChibiOS](https://github.com/Tunuino/Chibi
 
 ## Estado confirmado
 
-O alvo indicado pelo utilizador é **Proteus v0.7 com STM32F427**. A fotografia mais recente mostra programação e verificação positivas da imagem anterior, mas o utilizador continua sem porta COM depois do reset. A escrita reportada pelo programador já ocorreu; o arranque/USB normal continuam por resolver na ECU.
+O alvo indicado pelo utilizador é **Proteus v0.7 com STM32F427**. Em 22 de outubro de 2026, o utilizador confirmou **«Já funciona»** e enviou uma fotografia da Console **build 65472d5** ligada à ECU. A interface apresenta **Proteus · STM32 F4 · revisão 7 · firmware 0.0.2**, um UID e a mensagem **«ECU identificada · firmware sem dados em tempo real»**. Este ensaio confirma execução da aplicação, porta COM/ligação USB e resposta de identificação nesta unidade. Não foi um teste físico executado pelo agente.
 
-A imagem ChibiOS atual tem **18 872 bytes** e firmware de identificação **0.0.2**. Compilação ARM e testes de software passaram; a enumeração física desta imagem ainda está pendente. Não é firmware para funcionamento de um motor.
+A imagem ChibiOS atual tem **18 872 bytes** e firmware de identificação **0.0.2**. Compilação ARM e testes de software passaram; o primeiro ensaio físico de USB e identificação foi agora confirmado pelo utilizador. Não é firmware para funcionamento de um motor.
+
+A ausência de dados em tempo real é esperada nesta imagem de bancada, que só anuncia identificação. Ainda não foram demonstrados sensores, RPM, mapas, controlo de motor, estabilidade prolongada ou repetibilidade de vários ciclos de alimentação/religação USB.
 
 ## Configuração da imagem
 
@@ -46,7 +48,7 @@ Após timeout, CRC inválido ou alteração da configuração USB durante uma se
 
 ## Verificação e ficheiros
 
-A [pipeline 39842387200](https://github.com/Tunuino/Tunuino/actions/runs/39842387200) passou nos sete jobs: C/Java/KiCad com GCC e Clang, compilação ARM, vetores e descritores CDC ligados, JAR e runtime Windows distribuído. O main ChibiOS é testado com USB simulado para pedidos juntos, conclusão atrasada, timeout, CRC, desconexão e reconfiguração com conclusão antiga. Nenhum destes testes demonstra enumeração física ou controlo de motor.
+A [pipeline 39842387200](https://github.com/Tunuino/Tunuino/actions/runs/39842387200) passou nos sete jobs: C/Java/KiCad com GCC e Clang, compilação ARM, vetores e descritores CDC ligados, JAR e runtime Windows distribuído. O main ChibiOS é testado com USB simulado para pedidos juntos, conclusão atrasada, timeout, CRC, desconexão e reconfiguração com conclusão antiga. Estes testes automáticos são distintos do ensaio físico de USB/identificação confirmado pelo utilizador acima; não validam controlo de motor.
 
 O único ZIP anexo contém console/, firmware/, kit-manifest.json, START-HERE.txt e SHA256SUMS.txt. A pasta firmware inclui ELF/HEX/BIN, propriedades, manifesto, mapa/layout e tamanho, licenças e corresponding-source.tar.gz. O firmware ligado inclui ChibiOS/RT GPLv3; o código próprio e os componentes adaptados mantêm os seus avisos MIT/Apache-2.0. O código-fonte correspondente segue dentro do mesmo Bundle.
 

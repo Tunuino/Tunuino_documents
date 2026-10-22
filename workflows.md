@@ -51,7 +51,7 @@ A montagem verifica que o source_commit do manifesto do firmware e do manifesto 
 
 Se só um componente mudou, é publicado apenas o componente afetado, depois dos testes. Para obter um kit completo de um commit, executar **Tunuino CI → Run workflow**: a execução manual seleciona todos os componentes.
 
-Os pacotes de bancada continuam experimentais e sem validação física. As bibliotecas ARM conservam NOT-FLASHABLE no nome. A gravação numa ECU continua a ser uma ação manual. A publicação de Releases foi acrescentada posteriormente, como descrito abaixo.
+Os pacotes de bancada continuam experimentais. A CI não usa uma ECU física; o ensaio USB/identificação do build 65472d5 foi posteriormente confirmado pelo utilizador e está registado em proteus-v07-bringup.md. As bibliotecas ARM conservam NOT-FLASHABLE no nome. A gravação numa ECU continua a ser uma ação manual. A publicação de Releases foi acrescentada posteriormente, como descrito abaixo.
 
 ## Verificação desta alteração
 
@@ -91,7 +91,7 @@ A Console incorpora o commit no manifesto do JAR e mostra-o no título e no regi
 
 Validação da alteração: teste local de um único ZIP com todos os componentes e checksums internos; seleção de limpeza com recusa de rascunhos, releases sem Bundle e ficheiros alheios; testes DFU com ferramentas simuladas. A [execução real 39835615234](https://github.com/Tunuino/Tunuino/actions/runs/39835615234) passou nos sete jobs e a API confirmou um único anexo em cada uma das quatro Releases.
 
-O firmware continua destinado a testes USB em bancada, sem controlo de motor nem imagem uaEFI/F767. A imagem substitui o bootloader instalado ao ser gravada em `0x08000000`. A gravação e enumeração física na ECU do utilizador continuam por confirmar. Ver [USB e DFU](console-firmware-usb.md).
+O firmware continua destinado a testes USB em bancada, sem controlo de motor nem imagem uaEFI/F767. A imagem substitui o bootloader instalado ao ser gravada em `0x08000000`. O utilizador confirmou posteriormente arranque, ligação USB e identificação no build 65472d5; a CI continua sem ensaio físico automático. Ver [USB e DFU](console-firmware-usb.md).
 
 
 ## Imagem ChibiOS no Bundle
@@ -100,4 +100,13 @@ A revisão [65472d5](https://github.com/Tunuino/Tunuino/commit/65472d5ec942eee82
 
 O builder verifica os descritores CDC no binário ligado, os vetores reset/SysTick/USB e os símbolos ChibiOS, além dos limites e hashes. O firmware tem **18 872 bytes**. A suite executa também o main real com USB simulado: atraso de conclusão, pedidos juntos, CRC, timeout, desconexão e reconfiguração.
 
-O artefacto de firmware passa a transportar corresponding-source.tar.gz, com o código-fonte correspondente ChibiOS/Tunuino e os scripts/configurações. As licenças seguem no mesmo Bundle; não se cria um segundo anexo na Release. A montagem verifica o hash deste arquivo e o commit comum da Console/firmware. A [execução 39842387200](https://github.com/Tunuino/Tunuino/actions/runs/39842387200) passou nos sete jobs e publicou a [Release](https://github.com/Tunuino/Tunuino/releases/tag/nightly-2026-10-22-39842387200) com um único Bundle ZIP. A enumeração física da nova imagem permanece por confirmar.
+O artefacto de firmware passa a transportar corresponding-source.tar.gz, com o código-fonte correspondente ChibiOS/Tunuino e os scripts/configurações. As licenças seguem no mesmo Bundle; não se cria um segundo anexo na Release. A montagem verifica o hash deste arquivo e o commit comum da Console/firmware. A [execução 39842387200](https://github.com/Tunuino/Tunuino/actions/runs/39842387200) passou nos sete jobs e publicou a [Release](https://github.com/Tunuino/Tunuino/releases/tag/nightly-2026-10-22-39842387200) com um único Bundle ZIP. O utilizador confirmou posteriormente o funcionamento USB e a identificação desta imagem na Proteus v0.7 F427.
+
+
+## Resultado físico posterior à publicação
+
+Em 22 de outubro de 2026, o utilizador confirmou **«Já funciona»** e enviou uma fotografia da Console **build 65472d5** ligada à ECU. A interface apresenta **Proteus · STM32 F4 · revisão 7 · firmware 0.0.2**, um UID e a mensagem **«ECU identificada · firmware sem dados em tempo real»**. Este ensaio confirma execução da aplicação, porta COM/ligação USB e resposta de identificação nesta unidade. Não foi um teste físico executado pelo agente.
+
+A ausência de dados em tempo real é esperada nesta imagem de bancada, que só anuncia identificação. Ainda não foram demonstrados sensores, RPM, mapas, controlo de motor, estabilidade prolongada ou repetibilidade de vários ciclos de alimentação/religação USB.
+
+Os manifestos do Bundle mantêm physical_ecu_validation=false porque descrevem a validação disponível no momento do build, sem hardware no runner. O relato físico posterior não altera os bytes/checksums do pacote publicado. Ver [registo de bancada](proteus-v07-bringup.md).

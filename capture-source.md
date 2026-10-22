@@ -66,3 +66,22 @@ A publicação não é atómica como lote: se existir apenas um lugar livre, a p
 A suite C/Java/KiCad completa passou localmente. Os testes novos verificam ordem através do wrap, cames realmente anteriores à cambota, empate entre canais, captura futura sem publicação parcial durante a validação, observação sem impulsos, perda declarada, duplicação de canal, argumentos inválidos, falha temporal e overflow após publicação parcial, incluindo invalidação das RPM. São testes simulados, sem leitura de registos STM32 ou validação física nas ECUs.
 
 Os workflows deste commit também concluíram com sucesso no GitHub: Core checks com GCC/Clang e Java 21, e compilação da consola JavaFX no Windows. Execuções: https://github.com/Tunuino/Tunuino/actions/runs/39772884906 e https://github.com/Tunuino/Tunuino/actions/runs/39772884937.
+
+## Capturas até ao CSV Java
+
+Integração de teste no [commit cd04251](https://github.com/Tunuino/Tunuino/commit/cd042510b4ac15a5767ae5c31f9efb58014f55b7).
+
+O processo C usado pelos testes Java deixou de injetar eventos diretamente no processador. Os cenários de cambota passam agora pela API `tunuino_capture_source_sample`, com capturas brutas de 32 bits, extensão do relógio, fila, descodificação, telemetria, dispatcher e comunicação entre processos, até aos clientes e ao gravador CSV reais da Console.
+
+Os novos cenários verificam, para as identidades simuladas Proteus e uaEFI:
+
+- 45 amostras com RPM calculadas e timestamps contínuos antes e depois da volta do contador de 32 bits, incluindo a falha de dentes;
+- perda declarada de capturas depois da primeira amostra válida, propagada até à resposta NOT_READY;
+- recusa de capturas posteriores enquanto a falha permanece retida, sem recuperação automática;
+- ausência de novas linhas no CSV após a falha e preservação da linha anterior, que continua legível pelo leitor offline;
+- ligação de protocolo ainda aberta perante indisponibilidade da aquisição;
+- observações periódicas do relógio durante a paragem simulada do motor.
+
+A suite completa `python3 tools/check_core.py` passou localmente, incluindo C, Java, KiCad e os testes entre processos. Os testes específicos existentes da origem passaram com AddressSanitizer e UndefinedBehaviorSanitizer; a deteção de fugas foi desativada porque o LeakSanitizer não consegue inspecionar os processos neste ambiente. Este resultado não é uma verificação de fugas.
+
+Esta alteração integra e alarga o ambiente de teste; não acrescenta um driver físico nem modifica o protocolo ou as funcionalidades de produção. Os sensores e os impulsos continuam simulados. Continuam pendentes a captura dos registos STM32, a deteção física de overcapture, USB real e validação nas placas. O README principal mantém-se sem publicações de progresso.

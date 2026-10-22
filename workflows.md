@@ -13,11 +13,15 @@ Permissões limitadas à leitura do repositório, ações fixadas por SHA e dura
 
 ## Validação e limites
 
-A suite tools/check_core.py passou localmente com GCC e Java 17 (o núcleo portátil usa --release 17; a consola usa Java 21). O ambiente local não dispõe de Clang, Maven ou Java 21; as verificações correspondentes dependem dos runners do GitHub. A publicação dos workflows não equivale a confirmar uma execução bem-sucedida.
+A suite tools/check_core.py passou localmente com GCC e Java 17 (o núcleo portátil usa --release 17; a consola usa Java 21). O ambiente local não dispõe de Clang, Maven ou Java 21; as verificações correspondentes dependem dos runners do GitHub. As primeiras execuções no GitHub concluíram com sucesso: GCC e Clang com Java 21 no Ubuntu, e Maven verify com Java 21 no Windows.
 
 Maven verify compila e empacota a consola; os testes de comportamento existentes são executados pelo workflow Core checks, porque usam programas de verificação próprios e não JUnit.
 
 Estes workflows não validam a interface gráfica em execução, USB físico, aquisição STM32, firmware gravável nas ECUs ou funcionamento de um motor. Não publicam releases nem instaladores. A validação física em Proteus e uaEFI continua pendente.
+
+Primeiras execuções confirmadas:
+- Core checks (GCC e Clang): https://github.com/Tunuino/Tunuino/actions/runs/39771980258
+- Windows console build: https://github.com/Tunuino/Tunuino/actions/runs/39771979821
 
 Consultar as execuções: https://github.com/Tunuino/Tunuino/actions
 

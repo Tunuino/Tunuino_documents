@@ -77,7 +77,7 @@ O README principal mantém a apresentação curta do projeto.
 
 ## Releases automáticas — apenas Bundle ZIP
 
-As [Releases](https://github.com/Tunuino/Tunuino/releases) passam a ter **um único anexo**, `tunuino_bundle_proteus_v07_f427_usb_bench.zip`. A [Release atual](https://github.com/Tunuino/Tunuino/releases/tag/nightly-2026-10-22-39835615234) contém a Console Windows x64 com Java, o firmware Proteus v0.7 F427, os manifestos e as instruções.
+As [Releases](https://github.com/Tunuino/Tunuino/releases) passam a ter **um único anexo**, `tunuino_bundle_proteus_v07_f427_usb_bench.zip`. A [Release atual](https://github.com/Tunuino/Tunuino/releases/tag/nightly-2026-10-22-39842387200) contém a Console Windows x64 com Java, o firmware Proteus v0.7 F427, os manifestos e as instruções.
 
 Dentro do ZIP: `console/`, `firmware/`, `kit-manifest.json`, `START-HERE.txt` e `SHA256SUMS.txt`. O ficheiro de checksums verifica os restantes ficheiros internos do Bundle. Extrair tudo e abrir `console/TunuinoConsole.exe`. Manter `.bin.properties` junto do `.bin`.
 
@@ -92,3 +92,12 @@ A Console incorpora o commit no manifesto do JAR e mostra-o no título e no regi
 Validação da alteração: teste local de um único ZIP com todos os componentes e checksums internos; seleção de limpeza com recusa de rascunhos, releases sem Bundle e ficheiros alheios; testes DFU com ferramentas simuladas. A [execução real 39835615234](https://github.com/Tunuino/Tunuino/actions/runs/39835615234) passou nos sete jobs e a API confirmou um único anexo em cada uma das quatro Releases.
 
 O firmware continua destinado a testes USB em bancada, sem controlo de motor nem imagem uaEFI/F767. A imagem substitui o bootloader instalado ao ser gravada em `0x08000000`. A gravação e enumeração física na ECU do utilizador continuam por confirmar. Ver [USB e DFU](console-firmware-usb.md).
+
+
+## Imagem ChibiOS no Bundle
+
+A revisão [65472d5](https://github.com/Tunuino/Tunuino/commit/65472d5ec942eee82f8b8be3fb4be7c5d37c0d4a) passa a obter uma única dependência de bancada: **Tunuino/ChibiOS**, commit fd2e59c34878b1ef93ef5358f11fb5cc830027ff. O build padrão usa o startup, kernel e HAL USB/SerialUSB dessa base com a sequência de ligação da rusEFI. TinyUSB e CMSIS separados deixam de ser obtidos para a imagem padrão; o código anterior conserva testes de regressão.
+
+O builder verifica os descritores CDC no binário ligado, os vetores reset/SysTick/USB e os símbolos ChibiOS, além dos limites e hashes. O firmware tem **18 872 bytes**. A suite executa também o main real com USB simulado: atraso de conclusão, pedidos juntos, CRC, timeout, desconexão e reconfiguração.
+
+O artefacto de firmware passa a transportar corresponding-source.tar.gz, com o código-fonte correspondente ChibiOS/Tunuino e os scripts/configurações. As licenças seguem no mesmo Bundle; não se cria um segundo anexo na Release. A montagem verifica o hash deste arquivo e o commit comum da Console/firmware. A [execução 39842387200](https://github.com/Tunuino/Tunuino/actions/runs/39842387200) passou nos sete jobs e publicou a [Release](https://github.com/Tunuino/Tunuino/releases/tag/nightly-2026-10-22-39842387200) com um único Bundle ZIP. A enumeração física da nova imagem permanece por confirmar.

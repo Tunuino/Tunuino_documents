@@ -34,6 +34,31 @@ A atualização é executada pelo consumidor, serializada com a montagem da tele
 
 Os novos testes cobrem todos os valores de uma curva sintética por troços, extremos inclusivos, leituras fora da gama, validade fornecida pelo driver, arredondamento positivo/negativo, uma curva decrescente entre INT32_MAX e INT32_MIN, configuração inválida, 32 pontos e atualização/invalidação independente dos canais. A execução com AddressSanitizer e UndefinedBehaviorSanitizer também passou.
 
+## Integração simulada com o datalog
+
+Atualização de 2026-10-22: [commit ba30e61](https://github.com/Tunuino/Tunuino/commit/ba30e61b331cc609bfe6e12968d9a08ca30df74b).
+
+O peer C inclui agora o cenário `sensor-recover`: leituras brutas passam por `tunuino_analog_update`, montagem da telemetria, dispatcher, enquadramento binário, clientes Java e gravador CSV. As RPM provêm do descodificador de capturas de dentes simulados. MAP, lambda e temperatura resultam da interpolação de curvas sintéticas, incluindo uma curva de temperatura decrescente.
+
+O cenário percorre oito pedidos de dados:
+
+| Pedido | Condição | Resultado |
+| --- | --- | --- |
+| 1 | Todos os sinais válidos | Amostra disponível |
+| 2 | MAP bruto acima do extremo da curva | NOT_READY |
+| 3 | Driver assinala leitura lambda inválida | NOT_READY |
+| 4 | Curva de temperatura com número de pontos inválido | NOT_READY |
+| 5 | Novas leituras válidas | Amostra disponível |
+| 6 | MAP com idade igual ao prazo máximo | NOT_READY |
+| 7 | Timestamp lambda no futuro | NOT_READY |
+| 8 | Novas leituras válidas | Amostra disponível |
+
+Os testes Java verificam cada estado nas duas famílias sintéticas, mantêm a sessão aberta e confirmam os valores e timestamps após recuperação. Uma segunda execução usa o gravador real: oito pedidos produzem três linhas, com intervalos de aquisição de 4 ms e 3 ms entre as linhas, preservando a ausência de dados durante as falhas. Os cinco estados indisponíveis não geram zeros substitutos no CSV.
+
+A suite completa `python3 tools/check_core.py` passou. O peer C também passou com AddressSanitizer e UndefinedBehaviorSanitizer, recebendo os pedidos binários e verificando independentemente a sequência de estados e os CRCs em Python.
+
+As curvas, leituras, relógio e identidades são sintéticos. Estes testes não validam ADC, USB físico, temporização real ou compatibilidade elétrica.
+
 ## Pendente
 
-Esta parte não implementa ADC, DMA, referência de tensão, filtragem, diagnóstico elétrico, drivers de sonda lambda ou curvas reais. Ainda não foi ensaiada fisicamente em Proteus ou uaEFI. A integração dos resultados calibrados com capturas e comunicação física continua por fazer.
+Esta parte não implementa ADC, DMA, referência de tensão, filtragem, diagnóstico elétrico, drivers de sonda lambda ou curvas reais. Ainda não foi ensaiada fisicamente em Proteus ou uaEFI. A integração simulada dos resultados calibrados com capturas e clientes Java está testada acima. A aquisição e a comunicação física continuam por fazer.

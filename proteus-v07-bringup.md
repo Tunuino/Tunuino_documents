@@ -1,5 +1,7 @@
 # Proteus v0.7 F427 — primeiro ensaio por USB
 
+**Pacote atual recomendado:** [kit completo de bancada — firmware e Console do mesmo commit](https://github.com/Tunuino/Tunuino/actions/runs/39798031342/artifacts/12435280193). A pipeline unificada passou; este pacote continua sem ensaio físico nas ECUs. Os pacotes anteriores abaixo ficam como histórico.
+
 ## Alvo confirmado e estado
 
 O utilizador confirmou **Proteus v0.7 com STM32F427**, tem ST-Link e prefere gravar/comunicar por USB. A F767 fica como variante opcional separada.

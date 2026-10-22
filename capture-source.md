@@ -64,3 +64,5 @@ Perda declarada, captura inválida, canal inválido/duplicado, argumentos de lot
 A publicação não é atómica como lote: se existir apenas um lugar livre, a primeira captura pode entrar e a segunda causar overflow. O consumidor deve manter as verificações existentes de falha da fila e frescura; isto não cancela respostas já construídas.
 
 A suite C/Java/KiCad completa passou localmente. Os testes novos verificam ordem através do wrap, cames realmente anteriores à cambota, empate entre canais, captura futura sem publicação parcial durante a validação, observação sem impulsos, perda declarada, duplicação de canal, argumentos inválidos, falha temporal e overflow após publicação parcial, incluindo invalidação das RPM. São testes simulados, sem leitura de registos STM32 ou validação física nas ECUs.
+
+Os workflows deste commit também concluíram com sucesso no GitHub: Core checks com GCC/Clang e Java 21, e compilação da consola JavaFX no Windows. Execuções: https://github.com/Tunuino/Tunuino/actions/runs/39772884906 e https://github.com/Tunuino/Tunuino/actions/runs/39772884937.

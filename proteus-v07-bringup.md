@@ -1,46 +1,81 @@
-# Primeiro ensaio da Proteus v0.7
+# Proteus v0.7 F427 — primeiro ensaio por USB
 
-## Prioridade e alvo
+## Alvo confirmado e estado
 
-O primeiro ensaio físico será na **Proteus v0.7**, escolhida pelo utilizador. A prioridade passa a ser uma imagem de bancada, antes de acrescentar outras funções ao núcleo.
+O utilizador confirmou **Proteus v0.7 com STM32F427**, tem ST-Link e prefere gravar/comunicar por USB. A F767 fica como variante opcional separada.
 
-A configuração base será preparada para F427; F767 fica como variante opcional com mais recursos, incluindo memória para funcionalidades como Lua, conforme esclarecido pelo utilizador. Não há seleção automática da F767 a partir da propriedade PN do esquema. F427 e F767 usam alvos diferentes de compilação e exigem confirmação de clocks, memória, periféricos e imagem gravável; a variante não é apenas uma alteração do tamanho de memória no linker.
+Foi criado um alvo **experimental de bancada**, com startup STM32F427, linker, relógio e USB CDC. A primeira [compilação completa](https://github.com/Tunuino/Tunuino/actions/runs/39791962001) passou e produziu uma imagem de **16 416 bytes**, sem símbolos por resolver e com os vetores iniciais verificados. [Implementação](https://github.com/Tunuino/Tunuino/commit/926e63057beb20560df6cb295e83acc23a492b32). Os [testes de callbacks e o empacotamento Windows](https://github.com/Tunuino/Tunuino/commit/29a589fd373888b2b5d88e5a6c928840f3fde962) foram acrescentados no bloco seguinte.
 
-Falta confirmar a referência completa do MCU montado na unidade de teste e o meio de gravação disponível (ST-Link/SWD ou apenas USB). A indicação v0.7, por si só, não confirma esses dados. O conflito entre símbolo F427 e propriedade PN F767 continua documentado em Tunuino/Tunuino/hardware até a identificação da variante real.
+**Ainda não houve ensaio físico.** Compilar e ligar não demonstra que o USB enumera nesta placa nem que todas as funções da ECU trabalham.
 
-## Estado real do firmware
+## O que esta imagem faz
 
-O repositório tem um núcleo C portátil e uma Console Java, com comunicação, calibração, captura e telemetria testadas por simulação. Até esta etapa não existia compilação ARM automática. Ainda não há uma imagem STM32 ligada, com startup e drivers de placa, pronta para gravar na Proteus.
+- Arranca diretamente da flash em `0x08000000`.
+- Usa o cristal de 8 MHz indicado em Y1501 no esquema MCU da Proteus consultado; configura SYSCLK e USB a 48 MHz.
+- Configura PA11/PA12 como USB OTG FS, abre uma interface CDC e responde ao protocolo de identificação da Console.
+- Devolve família Proteus, série F4, UID real de 96 bits e firmware 0.0.1. O campo numérico de revisão é 7, correspondendo a v0.7 neste alvo.
+- Anuncia capacidades de telemetria/mapas a zero. Não fornece sensores simulados como se fossem medições físicas.
+- Não inicializa injeção, ignição, bomba, ventoinha, aquisições ADC ou captura de cambota/cames.
 
-Não é possível concluir que tudo funciona na ECU pelos testes em PC, nem pelo sucesso de compilação ARM.
+O código próprio só configura GPIO de USB. Isto não certifica os níveis elétricos dos drivers da placa durante reset/DFU: **fazer o ensaio na bancada com bobinas, injetores e restantes atuadores desligados**.
 
-## Compilação ARM acrescentada
+Esta imagem não é para F767, uaEFI ou funcionamento de um motor.
 
-[Commit 6a81078](https://github.com/Tunuino/Tunuino/commit/6a810781bd56360f842666a49f0888d619cd6354).
+## Ficheiros
 
-O workflow **ARM core compilation** compila todos os ficheiros C de firmware/src com o GCC bare-metal, separadamente para Cortex-M4 e Cortex-M7. Usa Thumb e ABI soft-float, verifica que não existem dependências de helpers atómicos externos e produz uma biblioteca estática, os símbolos ainda por resolver, atributos ARM e um manifesto com hashes e versão do compilador.
+A primeira compilação aprovada está disponível em [USB-BENCH-EXPERIMENTAL](https://github.com/Tunuino/Tunuino/actions/runs/39791962001/artifacts/12430804009). É preciso iniciar sessão no GitHub para descarregar artefactos; têm retenção de 30 dias. O workflow **Proteus F427 USB bench** gera novamente os ficheiros nas próximas alterações.
 
-Os artefactos têm NOT-FLASHABLE no nome. São bibliotecas de preparação, **não são ficheiros de firmware e não devem ser gravados na ECU**. Não incluem startup, tabela de vetores, mapa de memória, inicialização da placa, USB físico ou drivers dos sensores. Bibliotecas C, matemática e runtime do compilador ainda precisam de resolução na ligação final.
+O ZIP contém:
 
-Reprodução com GCC ARM instalado:
+- `tunuino-proteus-v07-f427-usb-bench.elf`, `.hex` e `.bin`;
+- `manifest.json` com alvo, endereços, hashes SHA-256, compilador e commits das dependências;
+- mapa de ligação, tamanho, atributos/layout ELF e licenças do projeto e das dependências.
 
-```sh
-python3 tools/build_arm_core.py --cpu cortex-m4 --output build/arm/cortex-m4
-python3 tools/build_arm_core.py --cpu cortex-m7 --output build/arm/cortex-m7
-```
+Confirmar o hash do ficheiro escolhido contra o manifesto. Este alvo é diferente das bibliotecas ARM com NOT-FLASHABLE no nome: essas bibliotecas não são firmware.
 
-O diretório de saída deve ser novo. O script recusa sobrescrever uma saída existente.
+## Antes da gravação
 
-## Sequência para chegar à bancada
+Esta imagem começa em `0x08000000` e **substitui o início da instalação existente, incluindo um eventual bootloader na flash**. Não preserva esse bootloader. O bootloader de sistema da ST fica em ROM e não faz parte da imagem.
 
-1. Confirmar MCU e meio de gravação da Proteus v0.7 física; identificar também o método de recuperação e o layout do firmware/bootloader existente antes de decidir endereços de gravação.
-2. Preparar startup, linker e configuração da placa para esse MCU, com um primeiro alvo de bancada sem comando de injeção ou ignição.
-3. Implementar USB físico e identificação real (incluindo UID), disponibilizando uma imagem e instruções específicas.
-4. Gravar com os atuadores desligados e confirmar arranque, identificação e estabilidade da ligação.
-5. Depois integrar entradas reais de sensores/cambota e verificar datalog. Ensaio do controlo do motor fica para uma etapa posterior.
+Antes de apagar/gravar, guardar uma cópia da flash atual e registar as option bytes, ou dispor da imagem original e do procedimento de recuperação. O ST-Link pode ser usado para esta cópia/recuperação; não é obrigatório para a comunicação USB normal. Se uma proteção impedir a leitura, não remover a proteção para obter a cópia: a remoção pode apagar a flash. Não alterar RDP, BFB2 ou outras option bytes para experimentar este alvo.
 
-Este plano não declara uma imagem pronta nem promete que o primeiro ensaio comprova todas as funções. O objetivo imediato é obter um primeiro arranque e comunicação verificáveis na placa correta.
+A alimentação correta da ECU continua necessária; não se assume que o cabo USB sozinho alimente todos os circuitos da Proteus. Usar um cabo USB de dados.
 
-## Verificação remota desta publicação
+## Entrar em DFU por USB
 
-O commit 6a810781bd56360f842666a49f0888d619cd6354 passou Core checks e Windows console build. O job Cortex-M7 do novo workflow ARM concluiu com sucesso; o job Cortex-M4 ainda estava a instalar a toolchain na última verificação. [Execução ARM](https://github.com/Tunuino/Tunuino/actions/runs/39790127580). Este estado não confirma ainda a compilação Cortex-M4; consultar a execução para o resultado final.
+1. Instalar [STM32CubeProgrammer para Windows](https://www.st.com/en/development-tools/stm32cubeprog) e o driver DFU fornecido pela ST.
+2. Com atuadores desligados, colocar a Proteus em arranque de sistema através do BOOT0 da placa e efetuar reset, conforme os controlos físicos da unidade. A seleção depende também de BOOT1 e BFB2; não alterar option bytes se o dispositivo não aparecer.
+3. Ligar o USB. No CubeProgrammer, selecionar **USB**, atualizar a lista e procurar o dispositivo DFU, normalmente USB1.
+4. Nesta primeira passagem, confirmar que o dispositivo é detetado e que se consegue ler a identificação. Não apagar nem alterar proteções para conseguir a deteção.
+
+O F427 possui DFU na ROM; não depende de o firmware Tunuino já estar instalado. Os requisitos e limitações estão em [AN2606, secção STM32F42xxx/43xxx](https://www.st.com/resource/en/application_note/an2606-introduction-to-system-memory-boot-mode-on-stm32-mcus-stmicroelectronics.pdf). O esquema usado como referência é [mcu.kicad_sch](https://github.com/Tunuino/proteus/blob/383558bf7ca1c53ad8bbd8fdc9dd3a4187013c46/mcu.kicad_sch); não se atribuiu um número de botão sem confirmar a unidade física.
+
+## Gravar e testar a identificação
+
+Depois de guardar a instalação anterior:
+
+1. No CubeProgrammer ligado por USB DFU, abrir o `.hex` ou `.elf` do alvo acima. Estes formatos transportam os endereços. Se usar o `.bin`, o endereço é **0x08000000**.
+2. Programar os setores necessários e verificar a gravação. Não selecionar mass erase nem modificar option bytes para este ensaio.
+3. Devolver BOOT0 à posição de arranque normal e fazer reset da placa. Fechar a ligação DFU do CubeProgrammer.
+4. A aplicação deve aparecer como **Proteus v0.7 USB bench**, com uma porta COM CDC. Não aplicar o driver DFU à interface CDC da aplicação.
+5. Na Tunuino Console para Windows, selecionar Proteus, atualizar portas, escolher a COM, clicar **Ligar USB** e depois **Identificar ECU**.
+6. Confirmar família Proteus, série F4 e UID consistente em pedidos repetidos. Os controlos de datalog/mapas devem permanecer indisponíveis nesta imagem.
+
+O workflow **Windows console build** está a ser preparado para fornecer **TunuinoConsole-Windows-x64-EXPERIMENTAL**, com runtime Java e dependências incluídos. O passo de verificação abre uma janela JavaFX, carrega o logótipo e enumera portas, mas não testa uma ECU física. Quando essa compilação estiver aprovada, extrair o ZIP inteiro e executar `TunuinoConsole.exe`, mantendo as pastas app/runtime ao lado do executável.
+
+Após fechar a sessão serial ou perante timeout/CRC inválido, esta primeira versão exige reset da placa e nova abertura da porta. O bloqueio é intencional para não reutilizar respostas antigas de uma sessão interrompida. A transmissão avança apenas no callback de conclusão do endpoint; cada transferência é um pacote curto, para evitar confundir a confirmação de dados com um ZLP.
+
+## Verificação feita
+
+- Compilação e ligação reais ARM com GCC para STM32F427, incluindo startup e TinyUSB.
+- Inspeção de tamanho, vetores, memória e ausência de símbolos indefinidos.
+- Suite completa C/Java/KiCad aprovada localmente após acrescentar os testes do ciclo de bancada.
+- Testes com callbacks USB simulados: dois pedidos juntos, primeiro pedido já recebido com DTR, aceitação parcial de cinco bytes, confirmação de envio, CRC inválido, timeout e bloqueio após fechar/reabrir DTR.
+
+Os callbacks simulados não exercitam registos STM32 nem os controladores físicos. Não se realizou gravação, enumeração USB, medição elétrica ou ensaio do motor.
+
+TinyUSB, CMSIS STM32F4 e CMSIS Core estão fixados por commit em `dependencies.json`; o pacote inclui as suas licenças. VID/PID 0xCAFE/0x4001 são valores de exemplo/desenvolvimento usados nesta bancada, sem alegação de atribuição USB de produção.
+
+## Depois do primeiro resultado
+
+O primeiro resultado útil é: **DFU detetado → gravação verificada → aplicação CDC enumerada → identidade real recebida**. Só depois se avança para sensores e RPM reais. O sucesso deste ensaio não valida injeção, ignição ou funcionamento integral da ECU.

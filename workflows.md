@@ -96,7 +96,7 @@ O firmware continua destinado a testes USB em bancada, sem controlo de motor nem
 
 ## Imagem ChibiOS no Bundle
 
-A revisão [65472d5](https://github.com/Tunuino/Tunuino/commit/65472d5ec942eee82f8b8be3fb4be7c5d37c0d4a) passa a obter uma única dependência de bancada: **Tunuino/ChibiOS**, commit fd2e59c34878b1ef93ef5358f11fb5cc830027ff. O build padrão usa o startup, kernel e HAL USB/SerialUSB dessa base com a sequência de ligação da rusEFI. TinyUSB e CMSIS separados deixam de ser obtidos para a imagem padrão; o código anterior conserva testes de regressão.
+A revisão [65472d5](https://github.com/Tunuino/Tunuino/commit/65472d5ec942eee82f8b8be3fb4be7c5d37c0d4a) passa a obter uma única dependência de bancada: **Tunuino/ChibiOS**, commit fd2e59c34878b1ef93ef5358f11fb5cc830027ff. O build padrão usa o startup, kernel e HAL USB/SerialUSB dessa base, com desconexão USB de 250 ms antes de iniciar o controlador e ligar o dispositivo. TinyUSB e CMSIS separados deixam de ser obtidos para a imagem padrão; o código anterior conserva testes de regressão.
 
 O builder verifica os descritores CDC no binário ligado, os vetores reset/SysTick/USB e os símbolos ChibiOS, além dos limites e hashes. O firmware tem **18 872 bytes**. A suite executa também o main real com USB simulado: atraso de conclusão, pedidos juntos, CRC, timeout, desconexão e reconfiguração.
 

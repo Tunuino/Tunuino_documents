@@ -1,6 +1,6 @@
 # Proteus v0.7 F427 — ensaio USB com ChibiOS
 
-**[Descarregar o Bundle com Console, firmware e INI](https://github.com/Tunuino/Tunuino/releases/download/nightly-2026-10-23-39926528236/tunuino_bundle_proteus_v07_f427_usb_bench.zip)** · [Release](https://github.com/Tunuino/Tunuino/releases/tag/nightly-2026-10-23-39926528236) · build **36ef278**.
+**[Descarregar o Bundle com Console, firmware e INI](https://github.com/Tunuino/Tunuino/releases/download/nightly-2026-10-23-39927868860/tunuino_bundle_proteus_v07_f427_usb_bench.zip)** · [Release](https://github.com/Tunuino/Tunuino/releases/tag/nightly-2026-10-23-39927868860) · build **f105ed0**.
 
 O firmware **0.0.3** acrescenta identificação de bancada pelo TunerStudio, mantendo o protocolo da Tunuino Console. O ZIP inclui `firmware/tunuino_proteus_v07_f427_usb_bench.ini`, correspondente ao firmware distribuído. [Ligar no TunerStudio](tunerstudio.md).
 
@@ -26,7 +26,7 @@ O código próprio só configura os pinos USB. Isto não certifica os níveis el
 
 ## Gravar pela Console
 
-1. Extrair o **Bundle completo** para uma pasta nova. Abrir `console/TunuinoConsole.exe` e confirmar **build 36ef278** no título.
+1. Extrair o **Bundle completo** para uma pasta nova. Abrir `console/TunuinoConsole.exe` e confirmar **build f105ed0** no título.
 2. Guardar a instalação e option bytes existentes, ou dispor da imagem original e do procedimento de recuperação. O utilizador tem ST-Link para diagnóstico/recuperação; não é necessário para comunicação USB normal.
 3. Abrir **Firmware e USB**. Selecionar a ferramenta ST instalada, mantendo DLLs e a base de dispositivos junto do executável.
 4. Colocar BOOT0 em modo de sistema e reiniciar conforme a placa. Pesquisar DFU. A lista DFU é independente das portas COM.
@@ -50,11 +50,11 @@ Após timeout de um pedido/transmissão, CRC inválido ou alteração da configu
 
 ## Verificação e ficheiros
 
-A [pipeline 39926528236](https://github.com/Tunuino/Tunuino/actions/runs/39926528236) passou nos sete jobs: C/Java/KiCad com GCC e Clang, compilação ARM, vetores e descritores CDC ligados, JAR/runtime Windows, kit sincronizado e publicação. O `main` ChibiOS é testado com USB simulado para identificação nativa, descoberta TunerStudio, pedidos simples/framed juntos, conclusão atrasada, timeout, CRC inválido, desconexão e reconfiguração. Não foi executada a aplicação TunerStudio nem uma ECU física nestes ensaios.
+A [pipeline 39927868860](https://github.com/Tunuino/Tunuino/actions/runs/39927868860) passou nos sete jobs: C/Java/KiCad com GCC e Clang, compilação ARM, vetores e descritores CDC ligados, JAR/runtime Windows, kit sincronizado e publicação. O `main` ChibiOS é testado com USB simulado para identificação nativa, descoberta TunerStudio, pedidos simples/framed juntos, conclusão atrasada, timeout, CRC inválido, desconexão e reconfiguração. Não foi executada a aplicação TunerStudio nem uma ECU física nestes ensaios.
 
 O único ZIP anexo contém `console/`, `firmware/`, `kit-manifest.json`, `START-HERE.txt` e `SHA256SUMS.txt`. Em `firmware/` estão ELF/HEX/BIN, propriedades, **INI**, manifesto, mapa/layout/tamanho, licenças e `corresponding-source.tar.gz`. O manifesto inclui o hash do INI e a assinatura verificada no binário. O código-fonte correspondente, incluindo o INI, segue no mesmo Bundle. A imagem ligada inclui ChibiOS/RT GPLv3; os componentes mantêm os seus avisos MIT/Apache-2.0.
 
-[Implementação TunerStudio](https://github.com/Tunuino/Tunuino/blob/36ef278e77bd5f0b9faebe26d7448b7860b5427f/docs/tunerstudio-bench.md) · [Configuração USB](https://github.com/Tunuino/Tunuino/blob/36ef278e77bd5f0b9faebe26d7448b7860b5427f/docs/proteus-chibios-usb.md) · [Política de Bundle único](workflows.md).
+[Implementação TunerStudio](https://github.com/Tunuino/Tunuino/blob/f105ed0b7ff90b5dd37cceb49a32883202adcb84/docs/tunerstudio-bench.md) · [Configuração USB](https://github.com/Tunuino/Tunuino/blob/f105ed0b7ff90b5dd37cceb49a32883202adcb84/docs/proteus-chibios-usb.md) · [Política de Bundle único](workflows.md).
 
 ## Histórico
 

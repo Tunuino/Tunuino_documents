@@ -1,8 +1,10 @@
 # Tunuino Console — USB, DFU e gravação de firmware
 
-**[Descarregar Console e firmware juntos num só ZIP](https://github.com/Tunuino/Tunuino/releases/download/nightly-2026-10-22-39842387200/tunuino_bundle_proteus_v07_f427_usb_bench.zip)**. A Console desta [Release](https://github.com/Tunuino/Tunuino/releases/tag/nightly-2026-10-22-39842387200) mostra **build 65472d5** no título. Os testes passaram na [execução 39842387200](https://github.com/Tunuino/Tunuino/actions/runs/39842387200), incluindo testes contra o JAR distribuído. O utilizador confirmou funcionamento desta imagem ChibiOS com ligação USB e identificação Proteus/F4, firmware 0.0.2, visíveis na fotografia da Console build 65472d5. A validação física é limitada a esse ensaio de bancada.
+**[Descarregar Console, firmware e INI num só ZIP](https://github.com/Tunuino/Tunuino/releases/download/nightly-2026-10-23-39927868860/tunuino_bundle_proteus_v07_f427_usb_bench.zip)**. Esta [Release](https://github.com/Tunuino/Tunuino/releases/tag/nightly-2026-10-23-39927868860) apresenta **build f105ed0** na Console e firmware **0.0.3**. A [pipeline 39927868860](https://github.com/Tunuino/Tunuino/actions/runs/39927868860) verifica a imagem ARM, o JAR e o runtime Windows. O [INI TunerStudio](tunerstudio.md) está incluído no mesmo Bundle.
 
-Implementação inicial: [89724f6](https://github.com/Tunuino/Tunuino/commit/89724f6f09236078c839630d7098db8a393ba5c2). Revisão atual: [65472d5](https://github.com/Tunuino/Tunuino/commit/65472d5ec942eee82f8b8be3fb4be7c5d37c0d4a), diretamente na master.
+A confirmação física anterior do utilizador refere-se ao firmware **0.0.2**, no **build 65472d5**, com USB e identificação Proteus/F4 visíveis na fotografia. A versão 0.0.3 e a ligação pela aplicação TunerStudio ainda precisam de ensaio físico.
+
+Implementação inicial: [89724f6](https://github.com/Tunuino/Tunuino/commit/89724f6f09236078c839630d7098db8a393ba5c2). Integração inicial ChibiOS USB: [65472d5](https://github.com/Tunuino/Tunuino/commit/65472d5ec942eee82f8b8be3fb4be7c5d37c0d4a), diretamente na master.
 
 A interface tem os separadores **Dados e mapas** e **Firmware e USB**, com tamanho inicial adaptado ao ecrã.
 
@@ -11,12 +13,12 @@ A interface tem os separadores **Dados e mapas** e **Firmware e USB**, com taman
 - Atualização periódica das portas COM disponíveis, preservando a seleção quando a porta continua presente.
 - Pesquisa independente de dispositivos USB STM32 DFU pelo hardware ID `0483:DF11`, mesmo sem qualquer porta COM.
 - Apresentação dos erros de driver do Windows; erro de pesquisa não é apresentado como ausência de dispositivo.
-- Seleção da ferramenta ST instalada, ou da pasta `console/STM32_Programmer_CLI/bin/STM32_Programmer_CLI.exe` de um pacote rusEFI existente. O caminho fica guardado para utilização offline.
+- Seleção da ferramenta ST instalada, ou da pasta `console/STM32_Programmer_CLI/bin/STM32_Programmer_CLI.exe` de uma distribuição ST existente. O caminho fica guardado para utilização offline.
 - Seleção do dispositivo DFU por número de série, reenumeração antes de gravar e verificação do grupo STM32F42x/F43x (`0x419` ou `0x0419`, aceitando zeros iniciais). Este ID é partilhado; não prova sozinho que o chip é F427 ou que a revisão da placa é v0.7. A interface pede confirmação explícita da placa antes de gravar.
 - Seleção de firmware com manifesto de alvo, modo, endereço, SHA-256 e declaração de substituição do bootloader. Validação dos vetores de arranque e dos limites da imagem.
 - Gravação DFU na Console através da ferramenta ST, com verificação obrigatória. Só indica sucesso com saída positiva da ferramenta e confirmação de verificação.
 - Registo da saída do programador, limites de tempo, tratamento de falhas, bloqueio de ligação COM e de fecho da janela durante programação.
-- Instalação dos drivers ST a partir do `silent_st_drivers2.exe` do pacote rusEFI, usando o fluxo de extração e o script Windows fornecido nesse instalador. O Windows pode pedir autorização de administrador.
+- Instalação dos drivers ST a partir do `silent_st_drivers2.exe` de uma distribuição ST, usando o fluxo de extração e o script Windows fornecido nesse instalador. O Windows pode pedir autorização de administrador.
 - Caminho manual OpenBLT através da ferramenta oficial `BootCommander.exe`, transporte XCP serial a 115200, para imagens `.srec` próprias com manifesto e endereços fora da área reservada ao bootloader.
 
 ## Primeiro ensaio com a Proteus v0.7 STM32F427
@@ -24,12 +26,12 @@ A interface tem os separadores **Dados e mapas** e **Firmware e USB**, com taman
 1. Descarregar o ZIP conjunto da Release corrigida indicada acima e extrair tudo para uma pasta nova. Contém `console/`, `firmware/`, manifesto comum e instruções. Usar o executável desta pasta, pois as versões antigas continuam com o erro de identificação DFU.
 2. Guardar a instalação atual da ECU antes de a substituir. O ensaio continua a ser de bancada, com atuadores desligados.
 3. Executar `console/TunuinoConsole.exe` e abrir o separador **Firmware e USB**.
-4. A Console procura uma instalação normal do STM32CubeProgrammer. Se não a encontrar, usar **Ferramenta ST…** e selecionar o executável que já existe no pacote rusEFI. Manter todas as DLLs e a pasta `Data_Base` da ferramenta.
+4. A Console procura uma instalação normal do STM32CubeProgrammer. Se não a encontrar, usar **Ferramenta ST…** e selecionar o executável da instalação STM32CubeProgrammer. Manter todas as DLLs e a pasta `Data_Base` da ferramenta.
 5. Entrar em DFU através de BOOT0 e reset, conforme a placa. A pesquisa DFU é independente da lista COM. O dispositivo deve aparecer na lista **Dispositivo USB DFU**.
-6. Se o Windows indicar erro de driver, usar **Instalar drivers…** e selecionar `drivers/silent_st_drivers2.exe` do pacote rusEFI. Também pode instalar os drivers fornecidos com o CubeProgrammer oficial.
+6. Se o Windows indicar erro de driver, usar **Instalar drivers…** e selecionar `drivers/silent_st_drivers2.exe` de uma distribuição ST existente. Também pode instalar os drivers fornecidos com o CubeProgrammer oficial.
 7. Usar **Selecionar firmware** e escolher `firmware/tunuino-proteus-v07-f427-usb-bench.bin`. Manter o ficheiro `.bin.properties` ao lado. A Console valida ambos.
 8. Encerrar qualquer ligação COM antes de gravar, confirmar o dispositivo USB e usar **Gravar por DFU**. A confirmação mostra que a imagem substitui o bootloader na flash.
-9. Depois da verificação positiva, repor BOOT0 em arranque normal e reiniciar a ECU. A aplicação esperada é **Proteus v0.7 ChibiOS USB bench**, com COM CDC. Selecionar a COM, ligar e identificar a ECU. A imagem atual tem **18 872 bytes**, firmware de identidade 0.0.2.
+9. Depois da verificação positiva, repor BOOT0 em arranque normal e reiniciar a ECU. A aplicação esperada é **Proteus v0.7 ChibiOS USB bench**, com COM CDC. Selecionar a COM, ligar e identificar a ECU. O Bundle atual responde à identidade **0.0.3**; o tamanho da imagem consta de `firmware/size.txt`.
 
 Não há apagamento integral, remoção de proteções, alteração de option bytes ou arranque forçado em endereço base neste fluxo.
 
@@ -39,11 +41,11 @@ O backend manual está implementado, mas **não existe ainda uma imagem Tunuino 
 
 Para esse modo é necessário ter o bootloader já instalado e ativo, a ferramenta oficial BootCommander com as respetivas DLLs, e firmware `.srec` compilado para os endereços da aplicação desse bootloader. Não converter a imagem DFU atual em `.srec` para tentar contornar esta diferença.
 
-A deteção automática da assinatura OpenBLT, a mudança automática do firmware para DFU/OpenBLT e a instalação de um bootloader Tunuino não estão implementadas nesta entrega. O nome de uma porta COM não prova que está em OpenBLT. Não foi copiado para a Tunuino o comando de reboot rusEFI: o firmware Tunuino tem protocolo próprio e precisa de implementar esse comando antes de o usar.
+A deteção automática da assinatura OpenBLT, a mudança automática do firmware para DFU/OpenBLT e a instalação de um bootloader Tunuino não estão implementadas nesta entrega. O nome de uma porta COM não prova que está em OpenBLT. A mudança de modo exige um comando próprio no firmware Tunuino e ainda não está implementada.
 
 ## Pacote Windows e ferramentas externas
 
-O pacote inclui Java, JavaFX, biblioteca serial, os novos controlos e instruções offline em `tools/PROGRAMMERS.txt`. A compilação padrão **não inclui os executáveis ST, BootCommander ou o instalador de drivers**: usa a instalação local ou o pacote rusEFI que o utilizador já possui.
+O pacote inclui Java, JavaFX, biblioteca serial, os novos controlos e instruções offline em `tools/PROGRAMMERS.txt`. A compilação padrão **não inclui os executáveis ST, BootCommander ou o instalador de drivers**: usa a instalação local das ferramentas e dos drivers ST.
 
 O empacotador `tools/package_programmer_tools.py` pode incluir distribuições completas fornecidas durante a compilação:
 
@@ -82,7 +84,7 @@ Alterações ao backend de gravação passam a selecionar uma nova imagem de ban
 
 O utilizador relatou ausência de porta COM depois de reiniciar em modo normal. A fotografia do Gestor de Dispositivos não mostra uma porta serial; mostra um dispositivo USB composto cuja identidade não está estabelecida. Isto não permite concluir, por si só, que o processador não executa código, que a ECU está avariada ou que falta um driver.
 
-Na revisão anterior faltava configurar `USB_OTG_FS->GCCFG` para a operação sem deteção externa de VBUS. O STM32F427 usa `NOVBUSSENS` no bit 21, com `VBUSASEN` e `VBUSBSEN` desativados nos bits 18 e 19. A versão TinyUSB fixada no projeto não faz esta configuração específica da placa; o seu driver tenta forçar B-valid em GOTGCTL, mecanismo usado noutros núcleos. A rusEFI define `BOARD_OTG_NOVBUSSENS TRUE` no [board.h STM32F4](https://github.com/rusefi/rusefi/blob/master/firmware/hw_layer/ports/stm32/stm32f4/board.h). A configuração segue também `USB_DevInit` sem VBUS sensing do [driver oficial ST](https://github.com/STMicroelectronics/stm32f4xx-hal-driver/blob/master/Src/stm32f4xx_ll_usb.c).
+Na revisão anterior faltava configurar `USB_OTG_FS->GCCFG` para a operação sem deteção externa de VBUS. O STM32F427 usa `NOVBUSSENS` no bit 21, com `VBUSASEN` e `VBUSBSEN` desativados nos bits 18 e 19. A versão TinyUSB fixada no projeto não faz esta configuração específica da placa; o seu driver tenta forçar B-valid em GOTGCTL, mecanismo usado noutros núcleos. A configuração segue também `USB_DevInit` sem VBUS sensing do [driver oficial ST](https://github.com/STMicroelectronics/stm32f4xx-hal-driver/blob/master/Src/stm32f4xx_ll_usb.c).
 
 A correção aplica esta configuração depois do reset do periférico e antes da inicialização/conexão TinyUSB. Preserva os restantes bits e não configura pinos adicionais. O esquema Proteus consultado declara cristal de 8 MHz e os pinos de dados usados continuam PA11/PA12, AF10.
 
@@ -105,7 +107,7 @@ Extrair a nova pasta e verificar **build 65472d5** no título antes de repetir a
 
 Antes da migração, uma fotografia mostrava **Download verified successfully** para a imagem anterior de cerca de 16 KiB, mas o utilizador relatava ausência de COM e STM32 bootloader depois do reset. A causa exata dessa falha anterior não foi isolada; o resultado posterior com a imagem ChibiOS está registado abaixo.
 
-A revisão [65472d5](https://github.com/Tunuino/Tunuino/commit/65472d5ec942eee82f8b8be3fb4be7c5d37c0d4a) substitui a imagem de bancada padrão por **ChibiOS HAL USB/SerialUSB** do próprio [Tunuino/ChibiOS](https://github.com/Tunuino/ChibiOS/tree/fd2e59c34878b1ef93ef5358f11fb5cc830027ff), fixado no commit indicado. O startup, kernel, relógio e driver CDC vêm dessa base. Segue a sequência da rusEFI: inicializar HAL/kernel e serial USB, desligar o USB por 250 ms, iniciar o controlador e voltar a ligar. Usa PA11/PA12, HSE de 8 MHz, SYSCLK de 168 MHz e USB de 48 MHz, sem deteção externa de VBUS.
+A revisão [65472d5](https://github.com/Tunuino/Tunuino/commit/65472d5ec942eee82f8b8be3fb4be7c5d37c0d4a) substitui a imagem de bancada padrão por **ChibiOS HAL USB/SerialUSB** do próprio [Tunuino/ChibiOS](https://github.com/Tunuino/ChibiOS/tree/fd2e59c34878b1ef93ef5358f11fb5cc830027ff), fixado no commit indicado. O startup, kernel, relógio e driver CDC vêm dessa base. A sequência de inicialização é: inicializar HAL/kernel e serial USB, desligar o USB por 250 ms, iniciar o controlador e voltar a ligar. Usa PA11/PA12, HSE de 8 MHz, SYSCLK de 168 MHz e USB de 48 MHz, sem deteção externa de VBUS.
 
 A Console continua a gravar pela ferramenta ST e a exigir verificação. A imagem continua a começar em **0x08000000** e substitui um bootloader existente na flash. Depois da escrita, repor BOOT0 e reiniciar a placa.
 

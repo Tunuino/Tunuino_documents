@@ -1,6 +1,6 @@
 # Tunuino e TunerStudio — INI de bancada
 
-**[Descarregar o Bundle com Console, firmware e INI](https://github.com/Tunuino/Tunuino/releases/download/nightly-2026-10-23-39926528236/tunuino_bundle_proteus_v07_f427_usb_bench.zip)** · [Release](https://github.com/Tunuino/Tunuino/releases/tag/nightly-2026-10-23-39926528236) · build **36ef278**.
+**[Descarregar o Bundle com Console, firmware e INI](https://github.com/Tunuino/Tunuino/releases/download/nightly-2026-10-23-39927868860/tunuino_bundle_proteus_v07_f427_usb_bench.zip)** · [Release](https://github.com/Tunuino/Tunuino/releases/tag/nightly-2026-10-23-39927868860) · build **f105ed0**.
 
 A partir do firmware **0.0.3**, o Bundle Proteus v0.7 / STM32F427 inclui `firmware/tunuino_proteus_v07_f427_usb_bench.ini`, a Console Windows e o firmware do mesmo commit. O ficheiro já não depende de um download separado. Esta definição serve para identificação e leitura do estado da ligação USB em bancada.
 
@@ -27,8 +27,8 @@ O perfil é **apenas de leitura**. Não apresenta RPM, MAP, lambda ou temperatur
 
 Os testes locais C/Java/KiCad passaram, incluindo a comunicação normal da Console. Os testes novos comparam as respostas C com a assinatura e os offsets do INI, verificam o CRC por uma implementação Python independente e ensaiam descoberta simples, pedidos fragmentados/juntos, conclusão física de TX simulada, timeout, CRC inválido e rejeição de escrita. O `main` ChibiOS real foi executado com transporte USB simulado e pedidos alternados dos dois protocolos.
 
-A [pipeline 39926528236](https://github.com/Tunuino/Tunuino/actions/runs/39926528236) passou nos sete jobs, incluindo GCC/Clang, imagem ARM F427, Console e runtime Windows, kit sincronizado e publicação. O empacotador foi também verificado com um kit de teste: um único ZIP, INI incluído e todos os hashes internos conferidos. A compilação ARM verifica que a assinatura do INI existe no binário ligado. A pipeline recusa publicar um Bundle sem INI, com checksum errado ou assinatura/layout diferente.
+A [pipeline 39927868860](https://github.com/Tunuino/Tunuino/actions/runs/39927868860) passou nos sete jobs, incluindo GCC/Clang, imagem ARM F427, Console e runtime Windows, kit sincronizado e publicação. O empacotador foi também verificado com um kit de teste: um único ZIP, INI incluído e todos os hashes internos conferidos. A compilação ARM verifica que a assinatura do INI existe no binário ligado. A pipeline recusa publicar um Bundle sem INI, com checksum errado ou assinatura/layout diferente.
 
 **Estes ensaios não executaram a aplicação TunerStudio nem uma ECU física.** O funcionamento USB/identificação do firmware anterior 0.0.2 foi confirmado pelo utilizador em 22 de outubro. A ligação TunerStudio e a versão 0.0.3 precisam de ensaio físico; o resultado anterior não as valida automaticamente.
 
-[Implementação técnica](https://github.com/Tunuino/Tunuino/blob/36ef278e77bd5f0b9faebe26d7448b7860b5427f/docs/tunerstudio-bench.md) · [Gravação USB/DFU](proteus-v07-bringup.md) · [Pipeline desta alteração](https://github.com/Tunuino/Tunuino/actions/runs/39926528236).
+[Implementação técnica](https://github.com/Tunuino/Tunuino/blob/f105ed0b7ff90b5dd37cceb49a32883202adcb84/docs/tunerstudio-bench.md) · [Gravação USB/DFU](proteus-v07-bringup.md) · [Pipeline desta alteração](https://github.com/Tunuino/Tunuino/actions/runs/39927868860).

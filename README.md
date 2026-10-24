@@ -4,7 +4,11 @@ Conteúdo transferido do README de [Tunuino/Tunuino](https://github.com/Tunuino/
 
 Firmware próprio para centralinas Proteus e uaEFI e Tunuino Console para Windows.
 
-O projeto está no início do desenvolvimento. Ainda não produz firmware para gravar numa ECU.
+O projeto tem uma imagem experimental USB para Proteus v0.7 F427. Ainda não produz firmware de controlo de motor.
+
+Estado atual: [workflows separados e Bundle](workflows.md), [INI TunerStudio](tunerstudio.md), [aplicação Android offline por USB](android.md) e [gravação/arranque de bancada](proteus-v07-bringup.md). O arranque USB da versão 0.0.2 foi confirmado pelo utilizador; Android e TunerStudio ainda exigem ensaio físico.
+
+As notas técnicas iniciais abaixo descrevem a evolução do núcleo; as páginas específicas acima contêm as instruções atuais.
 
 ## Implementado
 
@@ -46,7 +50,7 @@ O projeto está no início do desenvolvimento. Ainda não produz firmware para g
 - Validação USB física e da identificação no Windows com firmware Tunuino nas centralinas, e recuperação de ligação.
 - Firmware STM32, aquisição/validação física de cambota e cames, padrões adicionais e controlo do motor.
 - Drivers, bootloader e gravação específicos de cada variante de hardware.
-- Aquisição física e validação do datalogging nas placas, definições INI para TunerStudio e Autotune online/offline.
+- Aquisição física e validação do datalogging nas placas, sensores/mapas no INI TunerStudio e Autotune online/offline.
 - Exportação da netlist Proteus e comparação com o PCB, rastreio dos circuitos intermédios, validação elétrica de conectores/pinos STM32 e geração de definições de hardware.
 
 ## Verificar o núcleo

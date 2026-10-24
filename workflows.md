@@ -1,112 +1,41 @@
-# Integração contínua da Tunuino
+# Workflows Tunuino
 
-Implementação: [commit beda9d0](https://github.com/Tunuino/Tunuino/commit/beda9d056e637e61230652d6f6f9e33b5b9160b4).
+A partir do [commit 4b61dd8](https://github.com/Tunuino/Tunuino/commit/4b61dd8a1556f884708809920049dc4dc561049b), o repositório tem sete ficheiros de workflow, separados por responsabilidade. O antigo `ci.yml` foi removido.
 
-A definição ativa passou dos quatro workflows independentes para uma única pipeline: [Tunuino CI](https://github.com/Tunuino/Tunuino/actions/workflows/ci.yml). As execuções históricas e os artefactos anteriores continuam no GitHub.
+| Ficheiro | Função |
+|---|---|
+| [check-core.yml](https://github.com/Tunuino/Tunuino/blob/master/.github/workflows/check-core.yml) | Testes C/Java/KiCad com GCC e Clang, incluindo protocolos Android e TunerStudio |
+| [build-firmware.yml](https://github.com/Tunuino/Tunuino/blob/master/.github/workflows/build-firmware.yml) | Bibliotecas M4/M7 e imagem USB de bancada Proteus v0.7 F427 |
+| [build-console.yml](https://github.com/Tunuino/Tunuino/blob/master/.github/workflows/build-console.yml) | Console Windows, Java incluído e verificação do executável distribuído |
+| [validate-tunerstudio.yml](https://github.com/Tunuino/Tunuino/blob/master/.github/workflows/validate-tunerstudio.yml) | Verifica o INI contra respostas reais do código C |
+| [build-android.yml](https://github.com/Tunuino/Tunuino/blob/master/.github/workflows/build-android.yml) | APK de teste, testes unitários, Android lint e manifesto com SHA-256 |
+| [build-bundle.yml](https://github.com/Tunuino/Tunuino/blob/master/.github/workflows/build-bundle.yml) | Seleciona alterações, chama os workflows reutilizáveis e monta o kit sincronizado |
+| [publish-release.yml](https://github.com/Tunuino/Tunuino/blob/master/.github/workflows/publish-release.yml) | Publica apenas o Bundle ZIP, depois das verificações |
 
-## Problemas observados
+## Execução
 
-Na execução antiga de bancada 39792846260, o passo de instalação ARM demorou **1193 segundos (19 min 53 s)** e o job acabou cancelado. A compilação/ligação em si demorou 4 segundos nessa execução; na imagem de bancada aprovada anterior, demorou 3 segundos. O problema medido principal era a instalação da toolchain, não o custo de compilar o firmware.
+**Tunuino Bundle** corre nos pushes relevantes para `master`, nos pull requests, manualmente e diariamente às 02:20 UTC (04:20 em Berlim no horário de verão; 03:20 no horário de inverno). Os testes, firmware e Console podem correr em paralelo; uma falha impede a montagem/publicação. As alterações só em testes não recompilam os pacotes. Documentação não dispara builds.
 
-A mesma instalação apt era repetida em três jobs: biblioteca Cortex-M4, biblioteca Cortex-M7 e imagem de bancada. Todos os workflows arrancavam a cada alteração, mesmo quando os respetivos componentes não tinham mudado. Os jobs de empacotamento também não dependiam do resultado dos testes.
+O workflow do Bundle chama os workflows dos componentes, sem duplicar as suas definições. **Core checks**, **Firmware**, **Windows Console** e **TunerStudio** também podem ser executados individualmente por **Run workflow**. Estas execuções individuais produzem resultados/artefactos, sem publicar uma Release parcial.
 
-Tempos observados antes da alteração, pelos passos dos jobs:
+**Android** tem execução independente, automática para alterações Android/protocolo de identificação e manual. Uma alteração apenas na aplicação Android não recompila a Console Windows nem o firmware. O build usa JDK 17, Gradle 8.11.1 e SDK 35; Gradle Wrapper e distribuição têm integridade verificada. A aplicação funciona offline depois de instalada.
 
-| Trabalho | Tempo observado |
-|---|---:|
-| Testes GCC na última execução concluída | 14 s |
-| Testes Clang na última execução concluída | 15 s |
-| Compilação/ligação de bancada aprovada | 3 s |
-| Job Windows completo com pacote e verificação do runtime | 65 s |
-| Instalação ARM que ficou presa | 1193 s |
+Mantêm-se a cache da toolchain ARM xPack e das dependências Maven; o Android usa a cache Gradle. Uma nova execução da mesma referência cancela a anterior do mesmo workflow.
 
-Estes tempos não são uma promessa de duração futura. As filas de runners e os downloads podem variar. Os timestamps globais da execução não medem apenas compilação.
+## Sincronização e downloads
 
-## Ordem da nova pipeline
+Uma alteração que exija distribuir firmware ou Console constrói os dois a partir do mesmo commit. A montagem usa exclusivamente os artefactos da execução atual, compara os commits e verifica hashes, assinatura e layout do INI. Não reutiliza um componente de uma execução antiga.
 
-1. **Select affected components**: determina os componentes alterados.
-2. **Core checks (gcc/clang)**: mantém os dois compiladores e a suite completa C/Java/KiCad, incluindo integração até ao CSV e callbacks USB simulados.
-3. Depois dos testes aprovados, **ARM** e **Windows Console** correm em paralelo, quando necessários.
-4. **CI result** resume todos os resultados. Se ambos os componentes de bancada foram construídos e passaram, descarrega apenas os artefactos desta execução e valida o commit e os hashes antes de publicar o kit completo.
+A Release continua a ter um único anexo: `tunuino_bundle_proteus_v07_f427_usb_bench.zip`. Contém `console/`, `firmware/`, o INI, fontes/licenças, instruções e checksums. O INI no código-fonte passou para [`tunerstudio/`](https://github.com/Tunuino/Tunuino/tree/master/tunerstudio); dentro do Bundle mantém-se em `firmware/`, junto da imagem correspondente.
 
-Uma falha ou cancelamento impede a publicação do kit sincronizado. Não há mistura automática de um firmware novo com a Console de uma execução antiga.
+O APK Android experimental é um artefacto da execução **Android**, chamado `android-debug-<SHA>`, com `tunuino-android-debug.apk` e `package-manifest.json`. Não é acrescentado como outro ZIP à Release. A assinatura debug serve para testes; ainda não existe uma chave de distribuição Android estável.
 
-## Redução de trabalho repetido
+## Verificação desta revisão
 
-- A toolchain ARM passa a ser uma distribuição fixa xPack GCC 13.2.1-1.1, descarregada com limites de tempo e verificada pelo checksum publicado na mesma release. Não se executa apt update/install nos builds ARM.
-- O diretório da toolchain usa cache e uma chave que inclui a versão, sistema, arquitetura e hash do instalador. Num acerto de cache não há novo download.
-- Bibliotecas M4/M7 e imagem de bancada partilham uma única instalação no mesmo job.
-- Maven usa cache das dependências e executa compilação e cópia das dependências na mesma invocação.
-- Alterações apenas em testes não voltam a gerar firmware nem a Console portátil.
-- Alterações de código C não recompilam automaticamente a Console; alterações da Console não voltam a instalar a toolchain ARM.
-- README e documentação não disparam builds. Alterações na configuração CI ou licença validam todos os componentes.
-- Push é executado na master; pull requests para master são validados antes de integrar. Isto evita o par push/PR duplicado para a mesma branch de trabalho.
-- Uma nova execução na mesma referência/PR cancela a execução antiga da pipeline completa.
+A suite local C/Java/KiCad passou, incluindo os novos testes do cliente Android contra uma resposta do firmware C, CRC, fragmentação, UID/capacidades inválidos, ausência de resposta e cancelamento. Também foram verificados YAML, chamadas reutilizáveis, dependências, scripts shell e seleção de componentes.
 
-## Kits e artefactos
+O [build completo do Bundle](https://github.com/Tunuino/Tunuino/actions/runs/40121598035) passou com GCC/Clang, firmware ARM, Console Windows, verificação do runtime e montagem sincronizada. A [Release](https://github.com/Tunuino/Tunuino/releases/tag/nightly-2026-10-24-40121598035) foi publicada com um único anexo Bundle ZIP. Estes builds não fazem ensaios numa ECU física.
 
-Os nomes dos artefactos incluem o SHA completo do commit. Quando firmware e Console são construídos juntos, é publicado **Tunuino-Proteus-v07-USB-Bench-Kit-<SHA>**, contendo as duas pastas e um manifesto comum.
+O [build Android 23310c6](https://github.com/Tunuino/Tunuino/actions/runs/40121722278) compilou o APK e passou os testes unitários e Android lint. [Descarregar o APK de teste e manifesto](https://github.com/Tunuino/Tunuino/actions/runs/40121722278/artifacts/12571491778). O registo do recetor USB usa ContextCompat para compatibilidade entre as versões suportadas; esta alteração apenas Android não disparou a compilação de firmware/Console.
 
-A montagem verifica que o source_commit do manifesto do firmware e do manifesto da Console coincide com GITHUB_SHA. Também verifica os hashes das imagens e do JAR principal da Console. Um commit misturado ou ficheiro corrompido é recusado.
-
-Se só um componente mudou, é publicado apenas o componente afetado, depois dos testes. Para obter um kit completo de um commit, executar **Tunuino CI → Run workflow**: a execução manual seleciona todos os componentes.
-
-Os pacotes de bancada continuam experimentais. A CI não usa uma ECU física; o ensaio USB/identificação do build 65472d5 foi posteriormente confirmado pelo utilizador e está registado em proteus-v07-bringup.md. As bibliotecas ARM conservam NOT-FLASHABLE no nome. A gravação numa ECU continua a ser uma ação manual. A publicação de Releases foi acrescentada posteriormente, como descrito abaixo.
-
-## Verificação desta alteração
-
-A sintaxe Python, shell e YAML foi verificada localmente, assim como a seleção de alterações de documentação, testes, código C, Console e placa. A montagem do kit foi exercitada com um pacote válido e com três recusas: commits diferentes, firmware corrompido e JAR da Console corrompido.
-
-A [primeira execução real](https://github.com/Tunuino/Tunuino/actions/runs/39798031342) concluiu com **success** e produziu o [kit sincronizado](https://github.com/Tunuino/Tunuino/actions/runs/39798031342/artifacts/12435280193).
-
-| Medida nesta execução | Resultado |
-|---|---:|
-| Pipeline, desde criação até conclusão | **2 min 16 s** |
-| Preparação da toolchain, sem cache anterior | **6 s** |
-| Compilar bibliotecas M4 e M7 | **2 s** |
-| Compilar/ligar e verificar imagem de bancada | **2 s** |
-| GCC/Clang, Console e verificação do kit | Aprovados |
-
-O primeiro download foi verificado pelo checksum publicado. A cache da toolchain e a cache Maven foram guardadas para execuções seguintes; ainda não se mediu uma segunda execução com acerto de cache.
-
-O manifesto comum foi validado para o commit beda9d056e637e61230652d6f6f9e33b5b9160b4 antes do upload. O kit contém firmware e Console desse mesmo commit. A imagem produzida pela distribuição xPack tem 16 412 bytes, com limites e vetores verificados. A diferença de tamanho face à primeira imagem, produzida pela toolchain Ubuntu, não é uma validação funcional adicional.
-
-Os 2 min 16 s são uma observação de uma execução, não um prazo garantido: as filas do GitHub e a rede podem aumentar o tempo total. O antigo atraso de 1193 s foi medido no passo de instalação apt, que deixou de existir nesta pipeline.
-
-O README principal mantém a apresentação curta do projeto.
-
-## Releases automáticas — apenas Bundle ZIP
-
-As [Releases](https://github.com/Tunuino/Tunuino/releases) passam a ter **um único anexo**, `tunuino_bundle_proteus_v07_f427_usb_bench.zip`. A [Release atual](https://github.com/Tunuino/Tunuino/releases/tag/nightly-2026-10-22-39842387200) contém a Console Windows x64 com Java, o firmware Proteus v0.7 F427, os manifestos e as instruções.
-
-Dentro do ZIP: `console/`, `firmware/`, `kit-manifest.json`, `START-HERE.txt` e `SHA256SUMS.txt`. O ficheiro de checksums verifica os restantes ficheiros internos do Bundle. Extrair tudo e abrir `console/TunuinoConsole.exe`. Manter `.bin.properties` junto do `.bin`.
-
-A revisão [72e49b8](https://github.com/Tunuino/Tunuino/commit/72e49b8af471a29c16ddd025f8fb1272b552bf75) publicou o Bundle e retirou os 15 anexos separados das três Releases anteriores. Os Bundles existentes foram preservados. A seleção da limpeza limita-se aos cinco nomes gerados anteriormente e exige um Bundle completo; não remove ficheiros com outros nomes, rascunhos ou releases fora do prefixo nightly. As notas antigas foram ajustadas para não recomendar os anexos retirados. Os downloads de código-fonte ZIP/TAR que o GitHub gera automaticamente não são anexos da pipeline e continuam disponíveis.
-
-A publicação só corre na master de Tunuino/Tunuino, depois dos testes, dos builds ARM/Windows e da validação do commit e hashes do kit. Falhas e builds parciais não publicam. Alterações ao backend de gravação também constroem firmware e Console juntos. A execução manual **Tunuino CI → Run workflow** e a execução diária às **02:20 UTC** produzem o kit completo. A hora agendada pode sofrer atrasos no GitHub.
-
-Cada tag é `nightly-AAAA-MM-DD-<ID da execução>`, aponta para o commit exato e é marcada como pre-release experimental. Os anexos são carregados num rascunho antes da publicação.
-
-A Console incorpora o commit no manifesto do JAR e mostra-o no título e no registo de gravação. A pipeline repete os testes de manutenção **contra o JAR compilado que vai distribuir**, confirma o identificador desse JAR e abre a aplicação portátil Windows. O manifesto do kit mantém ambos os componentes no mesmo commit.
-
-Validação da alteração: teste local de um único ZIP com todos os componentes e checksums internos; seleção de limpeza com recusa de rascunhos, releases sem Bundle e ficheiros alheios; testes DFU com ferramentas simuladas. A [execução real 39835615234](https://github.com/Tunuino/Tunuino/actions/runs/39835615234) passou nos sete jobs e a API confirmou um único anexo em cada uma das quatro Releases.
-
-O firmware continua destinado a testes USB em bancada, sem controlo de motor nem imagem uaEFI/F767. A imagem substitui o bootloader instalado ao ser gravada em `0x08000000`. O utilizador confirmou posteriormente arranque, ligação USB e identificação no build 65472d5; a CI continua sem ensaio físico automático. Ver [USB e DFU](console-firmware-usb.md).
-
-
-## Imagem ChibiOS no Bundle
-
-A revisão [65472d5](https://github.com/Tunuino/Tunuino/commit/65472d5ec942eee82f8b8be3fb4be7c5d37c0d4a) passa a obter uma única dependência de bancada: **Tunuino/ChibiOS**, commit fd2e59c34878b1ef93ef5358f11fb5cc830027ff. O build padrão usa o startup, kernel e HAL USB/SerialUSB dessa base, com desconexão USB de 250 ms antes de iniciar o controlador e ligar o dispositivo. TinyUSB e CMSIS separados deixam de ser obtidos para a imagem padrão; o código anterior conserva testes de regressão.
-
-O builder verifica os descritores CDC no binário ligado, os vetores reset/SysTick/USB e os símbolos ChibiOS, além dos limites e hashes. O firmware tem **18 872 bytes**. A suite executa também o main real com USB simulado: atraso de conclusão, pedidos juntos, CRC, timeout, desconexão e reconfiguração.
-
-O artefacto de firmware passa a transportar corresponding-source.tar.gz, com o código-fonte correspondente ChibiOS/Tunuino e os scripts/configurações. As licenças seguem no mesmo Bundle; não se cria um segundo anexo na Release. A montagem verifica o hash deste arquivo e o commit comum da Console/firmware. A [execução 39842387200](https://github.com/Tunuino/Tunuino/actions/runs/39842387200) passou nos sete jobs e publicou a [Release](https://github.com/Tunuino/Tunuino/releases/tag/nightly-2026-10-22-39842387200) com um único Bundle ZIP. O utilizador confirmou posteriormente o funcionamento USB e a identificação desta imagem na Proteus v0.7 F427.
-
-
-## Resultado físico posterior à publicação
-
-Em 22 de outubro de 2026, o utilizador confirmou **«Já funciona»** e enviou uma fotografia da Console **build 65472d5** ligada à ECU. A interface apresenta **Proteus · STM32 F4 · revisão 7 · firmware 0.0.2**, um UID e a mensagem **«ECU identificada · firmware sem dados em tempo real»**. Este ensaio confirma execução da aplicação, porta COM/ligação USB e resposta de identificação nesta unidade. Não foi um teste físico executado pelo agente.
-
-A ausência de dados em tempo real é esperada nesta imagem de bancada, que só anuncia identificação. Ainda não foram demonstrados sensores, RPM, mapas, controlo de motor, estabilidade prolongada ou repetibilidade de vários ciclos de alimentação/religação USB.
-
-Os manifestos do Bundle mantêm physical_ecu_validation=false porque descrevem a validação disponível no momento do build, sem hardware no runner. O relato físico posterior não altera os bytes/checksums do pacote publicado. Ver [registo de bancada](proteus-v07-bringup.md).
+O arranque e a identificação USB do firmware anterior 0.0.2 na Proteus F427 foram confirmados pelo utilizador em 22 de outubro. A ligação Android, o TunerStudio e o firmware 0.0.3 continuam a exigir validação física. O firmware distribuído é de bancada, sem controlo de motor, sensores físicos ou mapas.

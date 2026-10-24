@@ -1,8 +1,10 @@
 # Tunuino e TunerStudio — INI de bancada
 
-**[Descarregar o Bundle com Console, firmware e INI](https://github.com/Tunuino/Tunuino/releases/download/nightly-2026-10-23-39927868860/tunuino_bundle_proteus_v07_f427_usb_bench.zip)** · [Release](https://github.com/Tunuino/Tunuino/releases/tag/nightly-2026-10-23-39927868860) · build **f105ed0**.
+**[Descarregar o Bundle com Console, firmware e INI](https://github.com/Tunuino/Tunuino/releases/download/nightly-2026-10-24-40121598035/tunuino_bundle_proteus_v07_f427_usb_bench.zip)** · [Release](https://github.com/Tunuino/Tunuino/releases/tag/nightly-2026-10-24-40121598035) · build **4b61dd8**.
 
 A partir do firmware **0.0.3**, o Bundle Proteus v0.7 / STM32F427 inclui `firmware/tunuino_proteus_v07_f427_usb_bench.ini`, a Console Windows e o firmware do mesmo commit. O ficheiro já não depende de um download separado. Esta definição serve para identificação e leitura do estado da ligação USB em bancada.
+
+O código-fonte do INI encontra-se agora na pasta [`tunerstudio/` da raiz](https://github.com/Tunuino/Tunuino/tree/master/tunerstudio). O builder, os testes e o arquivo de fontes usam essa localização. Dentro do Bundle, o INI mantém-se em `firmware/`, junto da imagem correspondente.
 
 ## Ligar no TunerStudio
 

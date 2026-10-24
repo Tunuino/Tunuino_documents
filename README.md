@@ -6,7 +6,7 @@ Firmware próprio para centralinas Proteus e uaEFI e Tunuino Console para Window
 
 O projeto tem uma imagem experimental USB para Proteus v0.7 F427. Ainda não produz firmware de controlo de motor.
 
-Estado atual: [workflows separados e Bundle](workflows.md), [INI TunerStudio](tunerstudio.md), [aplicação Android offline por USB](android.md) e [gravação/arranque de bancada](proteus-v07-bringup.md). O arranque USB da versão 0.0.2 foi confirmado pelo utilizador; Android e TunerStudio ainda exigem ensaio físico.
+Estado atual: [estrutura e funções por pasta](estrutura-e-funcoes.md), [workflows separados e Bundle](workflows.md), [INI TunerStudio](tunerstudio.md), [aplicação Android offline por USB](android.md) e [gravação/arranque de bancada](proteus-v07-bringup.md). O arranque USB da versão 0.0.2 foi confirmado pelo utilizador; Android e TunerStudio ainda exigem ensaio físico.
 
 As notas técnicas iniciais abaixo descrevem a evolução do núcleo; as páginas específicas acima contêm as instruções atuais.
 
@@ -68,7 +68,7 @@ O teste integrado inicia um peer C com dados sintéticos e comunica com os clien
 Requer JDK 21 e Maven 3.9 ou superior. A primeira resolução das dependências necessita de rede; depois podem ser usadas as dependências em cache.
 
 ```powershell
-cd console
+cd java_console
 mvn javafx:run
 ```
 

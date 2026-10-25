@@ -16,10 +16,17 @@ Atualizado: **25 de outubro de 2026**. Alvo atual: **Proteus v0.7 / STM32F427**,
 | Diagnóstico de comunicação | Reabertura de USB após erros terminais, controlo de timeouts, testes de modelos USB |
 | Leitura de indicadores TunerStudio | Comando `A` de 100 bytes preservado; acrescentado `O` com offset e comprimento, mantendo `ochBlockSize = 100` |
 | Pré-visualização de mapas | Acrescentado comando nativo `TUNUINO:E`: cálculos VE/avanço, indicador de validade, motivos de indisponibilidade, RPM/MAP e geração da configuração, **sem controlo de atuadores** |
+| Console Windows — cálculo de bancada | Painel Mapas com botão de pré-visualização, valores VE/ignição quando válidos e identificação em português das condições impeditivas; pedido USB exclusivo em segundo plano |
+| Console Windows — leitura por intervalos | Cliente do comando `O` com limites, contagem exata e rejeição de respostas malformadas |
 | TunerStudio Windows | O INI já abre e o protocolo responde corretamente a testes diretos. A ligação total no TunerStudio continua por confirmar; anteriormente aparecia `Unsupported Controller Firmware` |
 
 Código da etapa de pré-visualização e leitura por blocos:
 [commit `f04c7a3`](https://github.com/Tunuino/Tunuino/commit/f04c7a3721c40a32471ca4009fc6bd67c3aa6e87).
+
+Ligação à Console (cliente Java, UI e testes):
+[commit `b8f2e24`](https://github.com/Tunuino/Tunuino/commit/b8f2e24c5c4e2dd123e9285b5918d71e1be3a8c7).
+A integração mantém o botão desativado sem uma ECU F427 IO identificada ou durante outra operação USB.
+O botão não escreve calibrações e não atua sobre o motor. A validação física da nova UI permanece pendente.
 
 ## Funcionalidades que faltam para gestão completa do motor
 

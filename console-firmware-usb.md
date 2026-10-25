@@ -1,12 +1,14 @@
 # Tunuino Console — USB, DFU e gravação de firmware
 
+O [novo aspeto da Console](console-visual.md) está preparado para integração. A navegação lateral apresenta **Painel**, **Mapas** e **Firmware e USB**; a ligação COM fica no cabeçalho. As instruções de gravação abaixo mantêm-se aplicáveis, e o download indicado refere-se à versão já publicada.
+
 **[Descarregar Console, firmware e INI num só ZIP](https://github.com/Tunuino/Tunuino/releases/download/nightly-2026-10-23-39927868860/tunuino_bundle_proteus_v07_f427_usb_bench.zip)**. Esta [Release](https://github.com/Tunuino/Tunuino/releases/tag/nightly-2026-10-23-39927868860) apresenta **build f105ed0** na Console e firmware **0.0.3**. A [pipeline 39927868860](https://github.com/Tunuino/Tunuino/actions/runs/39927868860) verifica a imagem ARM, o JAR e o runtime Windows. O [INI TunerStudio](tunerstudio.md) está incluído no mesmo Bundle.
 
 A confirmação física anterior do utilizador refere-se ao firmware **0.0.2**, no **build 65472d5**, com USB e identificação Proteus/F4 visíveis na fotografia. A versão 0.0.3 e a ligação pela aplicação TunerStudio ainda precisam de ensaio físico.
 
 Implementação inicial: [89724f6](https://github.com/Tunuino/Tunuino/commit/89724f6f09236078c839630d7098db8a393ba5c2). Integração inicial ChibiOS USB: [65472d5](https://github.com/Tunuino/Tunuino/commit/65472d5ec942eee82f8b8be3fb4be7c5d37c0d4a), diretamente na master.
 
-A interface tem os separadores **Dados e mapas** e **Firmware e USB**, com tamanho inicial adaptado ao ecrã.
+A distribuição publicada tem os separadores **Dados e mapas** e **Firmware e USB**, com tamanho inicial adaptado ao ecrã. A revisão visual substitui-os pela navegação lateral descrita acima.
 
 ## Implementado
 

@@ -66,3 +66,12 @@ python3 firmware/tunerstudio/generate.py --check
 A suite local passou: testes C/Java/KiCad existentes, gerador, interoperabilidade com o executável C real, leitura de mapas completos, mapas carregados de ficheiro, datalogs, recuperação de paragem/perda de sensor, volta do contador e timeout/fecho do processo. A [execução 40123914479](https://github.com/Tunuino/Tunuino/actions/runs/40123914479) passou em Gradle, GCC/Clang, ARM, Console/runtime Windows e Bundle; o [Android 40123809702](https://github.com/Tunuino/Tunuino/actions/runs/40123809702) também passou.
 
 O simulador e as ferramentas não acrescentam aquisição física de sensores, comandos de injeção/ignição, CAN, Lua, Autotune ou imagens uaEFI/F767 ao firmware da ECU. Esses componentes continuam por implementar/integrar e validar; esta revisão não equivale a um firmware de motor completo. A imagem F427 distribuída continua de identificação USB em bancada.
+
+
+## Firmware STM32F427 — evolução de 25 de outubro de 2026
+
+A evolução do firmware IO, as funções já implementadas, os testes e as etapas
+pendentes estão descritos em [Firmware STM32F427 — progresso e próximos blocos](firmware-f427-progresso.md).
+A existência de mapas, pré-visualização ou sensores no firmware não corresponde
+a uma centralina pronta para controlar um motor. A ativação de saídas mantém-se
+fora da imagem distribuída até existirem pinagem, proteções e ensaios específicos.

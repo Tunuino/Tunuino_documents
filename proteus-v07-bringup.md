@@ -1,5 +1,11 @@
 # Proteus v0.7 F427 — ensaio USB com ChibiOS
 
+**Atualização 0.1.0:** o [novo guia de ensaio](firmware-io-010.md) identifica o
+Bundle, BIN, propriedades e INI para testar entradas, sensores e mapas.
+O procedimento DFU mantém o endereço 0x08000000. As versões, builds, ausência
+de ADC e necessidade de reset manual descritas abaixo pertencem ao histórico
+USB 0.0.2/0.0.3. O perfil 0.1.0 reserva também os setores flash 5 e 6 para dados.
+
 **[Descarregar o Bundle com Console, firmware e INI](https://github.com/Tunuino/Tunuino/releases/download/nightly-2026-10-23-39927868860/tunuino_bundle_proteus_v07_f427_usb_bench.zip)** · [Release](https://github.com/Tunuino/Tunuino/releases/tag/nightly-2026-10-23-39927868860) · build **f105ed0**.
 
 O firmware **0.0.3** acrescenta identificação de bancada pelo TunerStudio, mantendo o protocolo da Tunuino Console. O ZIP inclui `firmware/tunuino_proteus_v07_f427_usb_bench.ini`, correspondente ao firmware distribuído. [Ligar no TunerStudio](tunerstudio.md).

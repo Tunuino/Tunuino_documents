@@ -1,6 +1,6 @@
 # Aspeto da Tunuino Console
 
-Revisão de 25 de outubro de 2026. A interface foi implementada e passou nos testes desktop e no runtime Windows do pacote; está preparada para integração no repositório principal. As imagens desta página são capturas da aplicação JavaFX real com dados de demonstração, sem ligação a uma ECU.
+Revisão de 25 de outubro de 2026. A interface foi integrada e passou nos testes desktop e no runtime Windows do pacote. As imagens desta página são capturas da aplicação JavaFX real com dados de demonstração, sem ligação a uma ECU. O [perfil 0.1.0](firmware-io-010.md) acrescenta entradas ADC, validade por sensor e gravação verificada de mapas; o respetivo ensaio físico continua pendente.
 
 ## Painel
 
@@ -36,6 +36,6 @@ Os controlos estão organizados em imagem de firmware, dispositivo USB e registo
 - Aplicação JavaFX executada localmente: navegação entre áreas, tema e logótipo, seleção de canais, cursor, reprodução, ausência de dados, dimensões compactas e editor de mapas.
 - A [execução 40184638618](https://github.com/Tunuino/Tunuino/actions/runs/40184638618) aprovou GCC, Clang, ARM, TunerStudio, desktop/JavaFX e Windows. O ensaio Windows executa a interface real com o Java do pacote distribuído, incluindo os controlos e o rodapé em janelas pequenas; guarda capturas como artefactos de CI.
 
-O firmware F427 distribuído continua a ser o perfil USB de bancada, sem aquisição física de sensores nem controlo de motor. As novas imagens não demonstram medições numa ECU. O ensaio físico desta revisão da Console continua pendente; a confirmação USB anterior não valida automaticamente as novas funções.
+As capturas desta página usaram o perfil USB anterior e dados de demonstração. Não demonstram medições numa ECU. Para o ensaio de entradas e sensores do novo firmware, usar o guia 0.1.0; a confirmação USB anterior não valida automaticamente essas funções.
 
 [Código em revisão](https://github.com/Tunuino/Tunuino/pull/1) · [Gravação de firmware](console-firmware-usb.md) · [Estrutura e funções](estrutura-e-funcoes.md) · [Workflows](workflows.md).

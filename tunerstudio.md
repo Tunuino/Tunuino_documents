@@ -1,5 +1,10 @@
 # Tunuino e TunerStudio — INI de bancada
 
+**Perfil 0.1.0:** consultar o [guia de entradas, sensores e mapas](firmware-io-010.md).
+Usa `tunuino_proteus_v07_f427_io.ini`, assinatura `Tunuino Proteus v0.7 F427 IO v1`,
+sensores calibrados e tabelas editáveis. As instruções abaixo são o histórico
+do perfil 0.0.3, apenas de identificação; não misturar os dois INI.
+
 **[Descarregar o Bundle com Console, firmware e INI](https://github.com/Tunuino/Tunuino/releases/download/nightly-2026-10-24-40123914479/tunuino_bundle_proteus_v07_f427_usb_bench.zip)** · [Release](https://github.com/Tunuino/Tunuino/releases/tag/nightly-2026-10-24-40123914479) · build **e50a296**.
 
 A partir do firmware **0.0.3**, o Bundle Proteus v0.7 / STM32F427 inclui `firmware/tunuino_proteus_v07_f427_usb_bench.ini`, a Console Windows e o firmware do mesmo commit. O ficheiro já não depende de um download separado. Esta definição serve para identificação e leitura do estado da ligação USB em bancada.

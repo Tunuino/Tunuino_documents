@@ -4,13 +4,15 @@ Conteúdo transferido do README de [Tunuino/Tunuino](https://github.com/Tunuino/
 
 Firmware próprio para centralinas Proteus e uaEFI e Tunuino Console para Windows.
 
-Em revisão: [novo aspeto da Console](console-visual.md), com tema Tunuino, painel de sensores, datalogs, mapas e área de firmware. As capturas usam dados de demonstração.
+O [novo aspeto da Console](console-visual.md) foi integrado, com tema Tunuino, painel de sensores, datalogs, mapas e área de firmware. As capturas usam dados de demonstração.
+
+Nova versão de ensaio: **[Tunuino 0.1.0 — entradas, sensores e mapas](firmware-io-010.md)** para Proteus v0.7 F427. Inclui ADC, calibração persistente, captura de cambota/cames e mapas 8×8 na Console e no INI TunerStudio. Validação física e execução na aplicação TunerStudio pendentes; sem controlo de motor. O guia identifica o BIN e o novo INI que devem vir juntos no mesmo Bundle.
 
 O projeto tem uma imagem experimental USB para Proteus v0.7 F427. Ainda não produz firmware de controlo de motor.
 
 Estado atual: [estrutura e funções por pasta](estrutura-e-funcoes.md), [workflows separados e Bundle](workflows.md), [INI TunerStudio](tunerstudio.md), [aplicação Android offline por USB](android.md) e [gravação/arranque de bancada](proteus-v07-bringup.md). O arranque USB da versão 0.0.2 foi confirmado pelo utilizador; Android e TunerStudio ainda exigem ensaio físico.
 
-As notas técnicas iniciais abaixo descrevem a evolução do núcleo; as páginas específicas acima contêm as instruções atuais.
+As notas técnicas iniciais abaixo descrevem a evolução do núcleo e incluem limitações das versões anteriores. Para o perfil 0.1.0, usar o novo guia acima; as referências a ausência de aquisição, mapas e imagem STM32 nas notas históricas não descrevem esse perfil.
 
 ## Implementado
 

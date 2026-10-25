@@ -1,6 +1,6 @@
 # Aspeto da Tunuino Console
 
-Revisão de 25 de outubro de 2026. A interface foi implementada e verificada localmente; está preparada para integração no repositório principal. As imagens desta página são capturas da aplicação JavaFX real com dados de demonstração, sem ligação a uma ECU.
+Revisão de 25 de outubro de 2026. A interface foi implementada e passou nos testes desktop e no runtime Windows do pacote; está preparada para integração no repositório principal. As imagens desta página são capturas da aplicação JavaFX real com dados de demonstração, sem ligação a uma ECU.
 
 ## Painel
 
@@ -14,7 +14,7 @@ Os quatro indicadores mostram RPM, MAP, lambda e temperatura. O gráfico permite
 
 ## Janelas pequenas
 
-O cabeçalho, a tipografia e os espaçamentos adaptam-se à altura disponível. Os quatro indicadores, a navegação do datalog e a barra de estado foram verificados em 1060 × 720 e 960 × 680.
+O cabeçalho, a tipografia e os espaçamentos adaptam-se à altura disponível. Os quatro indicadores, a navegação do datalog e a barra de estado foram verificados em 1060 × 720 e 960 × 680. A disposição também se adapta a uma área útil de 640 píxeis de altura, contando com a moldura e a barra de título do Windows.
 
 ![Interface compacta a 960 por 680](images/console/compacta.png)
 
@@ -34,8 +34,8 @@ Os controlos estão organizados em imagem de firmware, dispositivo USB e registo
 
 - Suite portátil C/Java aprovada, incluindo monitorização contra o simulador C real, início/fim de vários CSV, indisponibilidade/recuperação de sensores, recuo do relógio e preservação de ficheiros parciais.
 - Aplicação JavaFX executada localmente: navegação entre áreas, tema e logótipo, seleção de canais, cursor, reprodução, ausência de dados, dimensões compactas e editor de mapas.
-- Verificação da interface acrescentada aos workflows desktop e Windows. O ensaio Windows usa o Java do pacote distribuído e guarda capturas como artefactos de CI.
+- A [execução 40184638618](https://github.com/Tunuino/Tunuino/actions/runs/40184638618) aprovou GCC, Clang, ARM, TunerStudio, desktop/JavaFX e Windows. O ensaio Windows executa a interface real com o Java do pacote distribuído, incluindo os controlos e o rodapé em janelas pequenas; guarda capturas como artefactos de CI.
 
 O firmware F427 distribuído continua a ser o perfil USB de bancada, sem aquisição física de sensores nem controlo de motor. As novas imagens não demonstram medições numa ECU. O ensaio físico desta revisão da Console continua pendente; a confirmação USB anterior não valida automaticamente as novas funções.
 
-[Gravação de firmware](console-firmware-usb.md) · [Estrutura e funções](estrutura-e-funcoes.md) · [Workflows](workflows.md).
+[Código em revisão](https://github.com/Tunuino/Tunuino/pull/1) · [Gravação de firmware](console-firmware-usb.md) · [Estrutura e funções](estrutura-e-funcoes.md) · [Workflows](workflows.md).

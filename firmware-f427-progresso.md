@@ -16,6 +16,8 @@ Atualizado: **25 de outubro de 2026**. Alvo atual: **Proteus v0.7 / STM32F427**,
 | Diagnóstico de comunicação | Reabertura de USB após erros terminais, controlo de timeouts, testes de modelos USB |
 | Leitura de indicadores TunerStudio | Comando `A` de 100 bytes preservado; acrescentado `O` com offset e comprimento, mantendo `ochBlockSize = 100` |
 | Pré-visualização de mapas | Acrescentado comando nativo `TUNUINO:E`: cálculos VE/avanço, indicador de validade, motivos de indisponibilidade, RPM/MAP e geração da configuração, **sem controlo de atuadores** |
+| Modelo temporal de motor (bancada) | Módulo C portátil `engine_math` para microssegundos por rotação, ciclo 720° e dente, desfasamento do avanço relativo a uma referência **hipotética** e índice de carga relativo; sem massa de combustível, dwell, PMS ou atuação |
+| Consulta de tempos na Console | Novo botão de cálculo teórico na área Mapas, leitura por `TUNUINO:T`, descodificação estrita e explicação dos bloqueios de validade |
 | Console Windows — cálculo de bancada | Painel Mapas com botão de pré-visualização, valores VE/ignição quando válidos e identificação em português das condições impeditivas; pedido USB exclusivo em segundo plano |
 | Console Windows — leitura por intervalos | Cliente do comando `O` com limites, contagem exata e rejeição de respostas malformadas |
 | TunerStudio Windows | O INI já abre e o protocolo responde corretamente a testes diretos. A ligação total no TunerStudio continua por confirmar; anteriormente aparecia `Unsupported Controller Firmware` |
@@ -26,6 +28,8 @@ Código da etapa de pré-visualização e leitura por blocos:
 Ligação à Console (cliente Java, UI e testes):
 [commit `b8f2e24`](https://github.com/Tunuino/Tunuino/commit/b8f2e24c5c4e2dd123e9285b5918d71e1be3a8c7).
 A integração mantém o botão desativado sem uma ECU F427 IO identificada ou durante outra operação USB.
+
+O modelo matemático de bancada foi implementado no [commit `9fb7bbd`](https://github.com/Tunuino/Tunuino/commit/9fb7bbd613ab81243104ac139254e94ddef5b263), com leitura e interface na Console no [commit `f565f439`](https://github.com/Tunuino/Tunuino/commit/f565f439bb914b1852bacc50e366653fa78c0eef). O teste completo requer o Bundle correspondente: a imagem F427 IO anterior, embora identifique a mesma versão 0.1.0, não implementa `TUNUINO:T` e devolve `0x83`. A Console mostra a indisponibilidade sem fechar uma ligação USB funcional.
 O botão não escreve calibrações e não atua sobre o motor. A validação física da nova UI permanece pendente.
 
 ## Funcionalidades que faltam para gestão completa do motor

@@ -123,3 +123,5 @@ A fila de eventos e as condições de integração com interrupções estão em 
 A ligação das RPM ao formato de datalog está em [telemetry-assembly.md](https://github.com/Tunuino/Tunuino/blob/master/docs/telemetry-assembly.md). O teste Java/C inclui capturas simuladas e confirma que a perda da cambota deixa de produzir linhas CSV. A aquisição física continua pendente.
 
 - [Instalação Windows, atualizações e preservação de dados](console-instalacao-windows.md)
+
+- [Menus, modelos de configuração e testes de atuadores](console-menus-modelos-testes.md)

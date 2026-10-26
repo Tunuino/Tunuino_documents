@@ -1,72 +1,41 @@
-# Firmware Tunuino STM32F427 — progresso e próximos blocos
+# Firmware Tunuino STM32F427 — estado atual
 
-Atualizado: **25 de outubro de 2026**. Alvo atual: **Proteus v0.7 / STM32F427**, firmware IO **0.1.0**. A versão 0.1.0 identifica a família de firmware, não cada revisão de código: para identificar um pacote concreto, verificar também o SHA do Release.
+Atualizado em **26 de outubro de 2026**. Alvo: **Proteus v0.7 / STM32F427**, protocolo IO **0.2.0**, assinatura `Tunuino Proteus v0.7 F427 IO v2`. A versão do protocolo mantém compatibilidade de sensores/mapas; identifica o pacote concreto pelo SHA do Bundle.
 
-A Console recebeu um **novo Dashboard JavaFX com instrumentos, heatmaps 16×16, superfície 3D, navegação e diagnósticos de leitura**. A referência das páginas e as limitações de telemetria estão descritas em [Console — interface ECU de 16×16](console-dashboard.md). Os canais não existentes continuam indisponíveis; não se apresentam valores de demonstração como se fossem leituras.
+O commit [8623c56](https://github.com/Tunuino/Tunuino/commit/8623c56254da0e74b854afa9200c4bd6869eef8d) acrescenta **comando físico experimental de saídas**, com perfil de motor configurável na Console. Não se trata apenas de pré-visualização matemática. A validação física destas novas saídas ainda não foi realizada.
 
-## Funcionalidades no código
-
-| Subsistema | Situação |
+| Subsistema | Implementação e limites |
 |---|---|
-| Arranque STM32F427, ChibiOS e USB CDC | Implementado; ligação COM e identificação pela Tunuino Console confirmadas no hardware pelo utilizador |
-| Identidade, assinatura Tunuino e CRC32 | Implementados; respostas `F`, `S` e `A` verificadas diretamente pela porta COM |
-| Sensores analógicos | ADC1 com DMA, 16 canais e máscaras de validade; precisão elétrica ainda por validar no veículo |
-| Cambota e cames | Captura EXTI e descodificação da roda com dentes em falta, com sincronização e deteção de falhas; referência real ao PMS pendente |
-| Curvas MAP, lambda e temperatura | Conversão e validação de calibrações; a configuração padrão mantém sensores desativados |
-| Mapas VE e ignição | **16×16 nativos** no firmware IO 0.2.0; validação, interpolação, leitura e escrita pela Console; mapas padrão não são afinação de motor |
-| Persistência | **Schema 2**, registos de 1.440 bytes com CRC e proteção contra gravações interrompidas; versão antiga não é recuperada automaticamente |
-| Diagnóstico de comunicação | Reabertura de USB após erros terminais, controlo de timeouts, testes de modelos USB |
-| Leitura de indicadores TunerStudio | Comando `A` de 100 bytes preservado; acrescentado `O` com offset e comprimento, mantendo `ochBlockSize = 100` |
-| Pré-visualização de mapas | Acrescentado comando nativo `TUNUINO:E`: cálculos VE/avanço, indicador de validade, motivos de indisponibilidade, RPM/MAP e geração da configuração, **sem controlo de atuadores** |
-| Modelo temporal de motor (bancada) | Módulo C portátil `engine_math` para microssegundos por rotação, ciclo 720° e dente, desfasamento do avanço relativo a uma referência **hipotética** e índice de carga relativo; sem massa de combustível, dwell, PMS ou atuação |
-| Consulta de tempos na Console | Novo botão de cálculo teórico na área Mapas, leitura por `TUNUINO:T`, descodificação estrita e explicação dos bloqueios de validade |
-| Preparação 16×16 (sem gravação física) | Conversores independentes C/Java para refinar mapas 8×8 em 16×16, conservando eixos/células originais e calculando células adicionais; testes cruzados com CRC |
-| Editor de mapas 16×16 | Botão de conversão no editor, nova janela local, visualização e exportação `.tnmap`; carregamento para ECU 8×8 deliberadamente bloqueado |
-| Console Windows — cálculo de bancada | Painel Mapas com botão de pré-visualização, valores VE/ignição quando válidos e identificação em português das condições impeditivas; pedido USB exclusivo em segundo plano |
-| Console Windows — leitura por intervalos | Cliente do comando `O` com limites, contagem exata e rejeição de respostas malformadas |
-| TunerStudio Windows | O INI já abre e o protocolo responde corretamente a testes diretos. A ligação total no TunerStudio continua por confirmar; anteriormente aparecia `Unsupported Controller Firmware` |
+| Arranque F427, ChibiOS e USB CDC | Implementados; ligação COM e identificação de versões anteriores confirmadas pelo utilizador; nova imagem exige ensaio próprio |
+| Sensores | 16 ADC, máscaras de validade e calibração de MAP/lambda/temperatura; TPS/IAT e outras medições calibradas ainda faltam |
+| Cambota/cames | Captura EXTI, roda uniforme com dentes em falta, fase 720°; janela de cames e referência ao PMS configuráveis no perfil |
+| Mapas | VE e ignição 16×16 nativos; leitura, edição, persistência e verificação completa; mapas de fábrica a zero |
+| Configuração de entradas/mapas | Flash schema 2, 1.408 bytes de parâmetros, registos de 1.440 bytes com CRC; não grava enquanto saídas estão armadas |
+| Injeção | Sequencial, 1–12 cilindros, ReqFuel/VE/MAP, tempo morto fixo e ângulo de fim por referência PMS; limite 20 ms e 80% do ciclo |
+| Ignição | Sequencial com PMS e canal por cilindro, avanço pelo mapa e dwell configurável até 5 ms; sinal lógico IGN para etapa de potência externa |
+| Saídas auxiliares | Bomba com escorva e funcionamento durante rotação, relé principal e ventoinha com histerese; canais LS escolhidos pelo utilizador |
+| Agendador | Contador TIM2 e interrupção GPT5 a 1 MHz; pulso/lease independentes do ciclo de leitura USB, sem temporização por sleep |
+| Cortes | Perda de sincronismo/sinal, limite RPM, calibração alterada/inválida, atraso de flanco e falta de serviço; falha exige armação explícita |
+| Console | Perfil por cilindro em Inputs / Outputs, consulta real de estado, pulsos de bancada, armação confirmada e paragem de todas as saídas |
+| Supervisão do anfitrião | Perfil volátil; Console consulta estado a cada 750 ms e ausência de consulta por 2 s corta saídas. Ainda não é modo autónomo sem Console |
+| TunerStudio | INI e protocolo IO mantidos; o novo perfil de atuação é configurado pela Console. Painel de parâmetros de atuação no TunerStudio continua pendente |
 
-Código da etapa de pré-visualização e leitura por blocos:
-[commit `f04c7a3`](https://github.com/Tunuino/Tunuino/commit/f04c7a3721c40a32471ca4009fc6bd67c3aa6e87).
+As consultas `TUNUINO:E` e `TUNUINO:T` continuam só de leitura. O comando de atuação é separado, `TUNUINO:X`, com configuração, armação, paragem, estado e um único pulso de bancada. Ligar USB, identificar ou enviar um perfil **não arma as saídas**.
 
-Ligação à Console (cliente Java, UI e testes):
-[commit `b8f2e24`](https://github.com/Tunuino/Tunuino/commit/b8f2e24c5c4e2dd123e9285b5918d71e1be3a8c7).
-A integração mantém o botão desativado sem uma ECU F427 IO identificada ou durante outra operação USB.
+## O que ainda falta
 
-O modelo matemático de bancada foi implementado no [commit `9fb7bbd`](https://github.com/Tunuino/Tunuino/commit/9fb7bbd613ab81243104ac139254e94ddef5b263), com leitura e interface na Console no [commit `f565f439`](https://github.com/Tunuino/Tunuino/commit/f565f439bb914b1852bacc50e366653fa78c0eef). O teste completo requer o Bundle correspondente: a imagem F427 IO anterior, embora identifique a mesma versão 0.1.0, não implementa `TUNUINO:T` e devolve `0x83`. A Console mostra a indisponibilidade sem fechar uma ligação USB funcional.
-O botão não escreve calibrações e não atua sobre o motor. A validação física da nova UI permanece pendente.
+- Validar na placa: reset/arranque, níveis e polaridade, cablagem, corrente, PMS, sincronismo, jitter e aceleração. Os modelos de registos não medem esses efeitos.
+- Perfil persistente de motor, funcionamento autónomo, backup/restauro deste perfil e interface equivalente no TunerStudio.
+- TPS/IAT/bateria calibrados, correções por temperatura/pressão/tensão, enriquecimento de arranque/aquecimento/aceleração e curva de tempo morto por tensão.
+- Lambda em malha fechada/AFR-alvo/Autotune, knock, boost, marcha lenta e borboleta eletrónica com redundância e diagnóstico.
+- Modos semi-sequencial/wasted-spark, entradas de carga invertidas e drivers peak-and-hold.
+- Proteção independente contra bloqueios da CPU/interrupções, brown-out e falhas de drivers. O prazo de 20 ms atual é um watchdog de software servido por interrupção de temporizador, não um circuito independente de corte de dwell.
+- Monitorização/datalogging em simultâneo com a armação: neste primeiro perfil experimental o monitor separado é bloqueado para manter disponíveis a consulta de estado e a paragem pelo mesmo proprietário da porta.
 
-## Conversão gradual dos mapas 16×16
+## Verificação desta alteração
 
-A etapa de preparação implementa [conversão matemática C/Java](https://github.com/Tunuino/Tunuino/commit/538110e8a7f5e73c5bc5142b0c1a62457cb64a5f) e
-[botão de conversão da Console](https://github.com/Tunuino/Tunuino/commit/452e4a12ca12053d6fd384ecf0c184b4305da12d).
-A conversão preserva os 64 valores originais nas interseções dos eixos e usa interpolação bilinear nas novas células, arredondando a três casas.
-Também valida valores negativos de avanço na implementação C e Java.
+Passaram localmente a compilação ARM F427, inspeção da imagem e vetores de interrupção, a bateria C/Java e a interface real JavaFX com dados sintéticos. Os testes novos incluem 12 cilindros entre 400 e 12.000 rpm, flancos LS/IGN, rejeição de perfis, sobreposição de pulsos, dwell máximo, contador a dar a volta, atrasos, perda de fase, alterações de configuração, paragem, bloqueio da rotina principal e expiração da comunicação. Os workflows do commit verificam separadamente o pacote Windows e a publicação do Bundle; consultar o estado atual antes de descarregar.
 
-**Atualização de 26 de outubro de 2026:** o firmware IO 0.2.0 passou a utilizar **exclusivamente mapas VE e ignição 16×16 nativos**. As páginas 2 e 3 têm agora 576 bytes cada, a configuração completa tem 1.408 bytes, o jornal de flash utiliza registos de 1.440 bytes e o schema foi atualizado para 2. A assinatura mudou para `Tunuino Proteus v0.7 F427 IO v2` e o INI para a revisão 5. A Tunuino Console lê, edita, envia e verifica mapas 16×16. O formato 8×8 não é suportado na ECU nova; apenas a ferramenta de importação local permite converter um ficheiro antigo numa direção.
+**Não houve ensaio físico destas saídas nem funcionamento confirmado num motor.** O firmware inicia desarmado e não inclui uma afinação para o motor do utilizador. Começar por cargas de ensaio e osciloscópio, com pinagem/polaridade verificadas e fontes/limites adequados.
 
-**Atenção antes da gravação:** a versão 0.2.0 não interpreta automaticamente os registos de flash gravados no formato anterior. Quando não encontra um registo do schema 2, arranca com sensores desativados e mapas 16×16 a zero. Guardar previamente mapas e calibrações da ECU atual e manter os atuadores desligados. A funcionalidade não constitui controlo de motor funcional.
-
-Implementação atual na `master`: [novo formato de firmware](https://github.com/Tunuino/Tunuino/commit/93af3b05f1dd9be5cca9b6d312736d3f17d4ccb3), [Console e INI 16×16](https://github.com/Tunuino/Tunuino/commit/9a6a0d8dc439f627b2c66b3c7d6c2465649a04bf).
-
-## Funcionalidades que faltam para gestão completa do motor
-
-1. **Confirmação do hardware:** mapa elétrico de saídas (injetores, bobinas, relés, bomba, marcha lenta, ventoinha), polaridade, estados de reset e isolamento dos drivers.
-2. **Posição do motor:** referência PMS, fase de cames, escolha de roda dentada e tolerância de ruído/variação de velocidade com sensores reais.
-3. **Agendamento de injeção e ignição:** modelo de cilindros e ordem de ignição, temporizadores dedicados, dwell, tempos de abertura, modos sequencial e semi-sequencial; inicialmente em simulador e com saídas desativadas.
-4. **Gestão do combustível:** cálculo de carga, correções de temperatura, tensão de bateria, aceleração, arranque e aquecimento; limites de AFR e compensações com verificação de calibração.
-5. **Proteções de funcionamento:** watchdog, corte de RPM, perda de sincronização, leitura de sensores inválida, brown-out, falhas de atuadores e desligamento seguro, com testes negativos.
-6. **Comunicações e ferramentas:** concluir reconhecimento de família no TunerStudio, painéis operacionais da Console, CAN/diagnósticos e datalogging completo.
-7. **Expansões opcionais:** hardware F767, Lua e funções de maior memória somente em perfis próprios, sem as tornar dependências da imagem F427.
-
-## Ensaios e limites de segurança
-
-Os testes GitHub Actions verificam compilação, coerência do INI e vetores binários em modelos de bancada. **Não representam certificação de funcionamento com motor nem verificam uma ECU montada no veículo.**
-
-A imagem atual **não comanda injetores, ignição ou bomba**. Para ensaios de desenvolvimento, manter motor e atuadores desligados e guardar uma cópia do firmware/parametrização que já funciona. Não utilizar dados VE/ignição sintéticos como mapa de afinação.
-
-O novo comando `TUNUINO:E` só devolve valores interpolados se houver RPM e MAP válidos, captura sincronizada, ADC válido, parametrização e mapas no intervalo. Mesmo quando o resultado é válido, isso **não autoriza nem provoca atuação**. O ficheiro INI é revisto junto do firmware no Bundle do mesmo commit; o protocolo da Console continua independente.
-
-[Documentação técnica do firmware](https://github.com/Tunuino/Tunuino/blob/master/docs/proteus-io.md) ·
-[Releases Tunuino](https://github.com/Tunuino/Tunuino/releases) ·
-[Workflows](https://github.com/Tunuino/Tunuino/actions).
+[Configurar e testar saídas](controlo-motor.md) · [Contrato técnico e limites](https://github.com/Tunuino/Tunuino/blob/master/docs/engine-outputs.md) · [Mapa de pinos](https://github.com/Tunuino/Tunuino/blob/master/hardware/review/proteus-v07-outputs.json) · [Console](console-dashboard.md) · [Releases](https://github.com/Tunuino/Tunuino/releases).

@@ -18,6 +18,8 @@ Atualizado: **25 de outubro de 2026**. Alvo atual: **Proteus v0.7 / STM32F427**,
 | Pré-visualização de mapas | Acrescentado comando nativo `TUNUINO:E`: cálculos VE/avanço, indicador de validade, motivos de indisponibilidade, RPM/MAP e geração da configuração, **sem controlo de atuadores** |
 | Modelo temporal de motor (bancada) | Módulo C portátil `engine_math` para microssegundos por rotação, ciclo 720° e dente, desfasamento do avanço relativo a uma referência **hipotética** e índice de carga relativo; sem massa de combustível, dwell, PMS ou atuação |
 | Consulta de tempos na Console | Novo botão de cálculo teórico na área Mapas, leitura por `TUNUINO:T`, descodificação estrita e explicação dos bloqueios de validade |
+| Preparação 16×16 (sem gravação física) | Conversores independentes C/Java para refinar mapas 8×8 em 16×16, conservando eixos/células originais e calculando células adicionais; testes cruzados com CRC |
+| Editor de mapas 16×16 | Botão de conversão no editor, nova janela local, visualização e exportação `.tnmap`; carregamento para ECU 8×8 deliberadamente bloqueado |
 | Console Windows — cálculo de bancada | Painel Mapas com botão de pré-visualização, valores VE/ignição quando válidos e identificação em português das condições impeditivas; pedido USB exclusivo em segundo plano |
 | Console Windows — leitura por intervalos | Cliente do comando `O` com limites, contagem exata e rejeição de respostas malformadas |
 | TunerStudio Windows | O INI já abre e o protocolo responde corretamente a testes diretos. A ligação total no TunerStudio continua por confirmar; anteriormente aparecia `Unsupported Controller Firmware` |
@@ -31,6 +33,15 @@ A integração mantém o botão desativado sem uma ECU F427 IO identificada ou d
 
 O modelo matemático de bancada foi implementado no [commit `9fb7bbd`](https://github.com/Tunuino/Tunuino/commit/9fb7bbd613ab81243104ac139254e94ddef5b263), com leitura e interface na Console no [commit `f565f439`](https://github.com/Tunuino/Tunuino/commit/f565f439bb914b1852bacc50e366653fa78c0eef). O teste completo requer o Bundle correspondente: a imagem F427 IO anterior, embora identifique a mesma versão 0.1.0, não implementa `TUNUINO:T` e devolve `0x83`. A Console mostra a indisponibilidade sem fechar uma ligação USB funcional.
 O botão não escreve calibrações e não atua sobre o motor. A validação física da nova UI permanece pendente.
+
+## Conversão gradual dos mapas 16×16
+
+A etapa de preparação implementa [conversão matemática C/Java](https://github.com/Tunuino/Tunuino/commit/538110e8a7f5e73c5bc5142b0c1a62457cb64a5f) e
+[botão de conversão da Console](https://github.com/Tunuino/Tunuino/commit/452e4a12ca12053d6fd384ecf0c184b4305da12d).
+A conversão preserva os 64 valores originais nas interseções dos eixos e usa interpolação bilinear nas novas células, arredondando a três casas.
+Também valida valores negativos de avanço na implementação C e Java.
+
+**O firmware físico continua a utilizar páginas 8×8.** Não foram alterados o formato do journal de flash, a tabela ativa, a assinatura nem o INI. O ficheiro 16×16 é, nesta etapa, apenas uma cópia local para preparar a migração. A evolução do formato persistente exige recuperação compatível dos registos antigos e um ensaio de falhas de gravação. Nunca enviar um mapa 16×16 para um firmware que só aceite 8×8.
 
 ## Funcionalidades que faltam para gestão completa do motor
 

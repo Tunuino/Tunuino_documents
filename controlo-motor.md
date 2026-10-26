@@ -2,6 +2,8 @@
 
 A implementação [8623c56](https://github.com/Tunuino/Tunuino/commit/8623c56254da0e74b854afa9200c4bd6869eef8d) acrescenta saídas físicas à Tunuino. **Compilação e testes simulados não equivalem a validação na ECU.** Começa com cargas de ensaio e osciloscópio; não existe calibração predefinida do teu motor.
 
+[Descarregar o Bundle correspondente](https://github.com/Tunuino/Tunuino/releases/tag/nightly-2026-10-26-40342132371). Windows Console, Firmware, Unit tests, Desktop, TunerStudio, Bundle e Publish Release passaram para o mesmo commit `8623c56`.
+
 ## Sequência na Console
 
 1. Instala firmware e Console do mesmo Bundle. Confirma a placa F427, as ligações e os drivers. IGN é sinal lógico para uma etapa externa; não liga diretamente uma bobina de potência.

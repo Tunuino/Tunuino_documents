@@ -34,8 +34,10 @@ As consultas `TUNUINO:E` e `TUNUINO:T` continuam só de leitura. O comando de at
 
 ## Verificação desta alteração
 
-Passaram localmente a compilação ARM F427, inspeção da imagem e vetores de interrupção, a bateria C/Java e a interface real JavaFX com dados sintéticos. Os testes novos incluem 12 cilindros entre 400 e 12.000 rpm, flancos LS/IGN, rejeição de perfis, sobreposição de pulsos, dwell máximo, contador a dar a volta, atrasos, perda de fase, alterações de configuração, paragem, bloqueio da rotina principal e expiração da comunicação. Os workflows do commit verificam separadamente o pacote Windows e a publicação do Bundle; consultar o estado atual antes de descarregar.
+Passaram localmente a compilação ARM F427, inspeção da imagem e vetores de interrupção, a bateria C/Java e a interface real JavaFX com dados sintéticos. Os testes novos incluem 12 cilindros entre 400 e 12.000 rpm, flancos LS/IGN, rejeição de perfis, sobreposição de pulsos, dwell máximo, contador a dar a volta, atrasos, perda de fase, alterações de configuração, paragem, bloqueio da rotina principal e expiração da comunicação. Passaram também Windows Console (incluindo execução dos testes da UI no Java incluído no pacote), Firmware, Unit tests, Desktop, TunerStudio, Bundle e Publish Release para o commit `8623c56`.
 
 **Não houve ensaio físico destas saídas nem funcionamento confirmado num motor.** O firmware inicia desarmado e não inclui uma afinação para o motor do utilizador. Começar por cargas de ensaio e osciloscópio, com pinagem/polaridade verificadas e fontes/limites adequados.
+
+[Bundle Console + firmware + INI — commit 8623c56](https://github.com/Tunuino/Tunuino/releases/tag/nightly-2026-10-26-40342132371), publicado com um único ZIP em 26 de outubro de 2026.
 
 [Configurar e testar saídas](controlo-motor.md) · [Contrato técnico e limites](https://github.com/Tunuino/Tunuino/blob/master/docs/engine-outputs.md) · [Mapa de pinos](https://github.com/Tunuino/Tunuino/blob/master/hardware/review/proteus-v07-outputs.json) · [Console](console-dashboard.md) · [Releases](https://github.com/Tunuino/Tunuino/releases).

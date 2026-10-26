@@ -7,6 +7,7 @@ O commit [8623c56](https://github.com/Tunuino/Tunuino/commit/8623c56254da0e74b85
 | Subsistema | Implementação e limites |
 |---|---|
 | Arranque F427, ChibiOS e USB CDC | Implementados; ligação COM e identificação de versões anteriores confirmadas pelo utilizador; nova imagem exige ensaio próprio |
+| LEDs de estado PE3..PE6 | [Implementados no commit c589056](leds-proteus-v07.md): teste no arranque, comunicação, estado do motor, aviso e erro crítico; temporizadores independentes; testes simulados e compilação F427 passaram, confirmação física pendente |
 | Sensores | 16 ADC, máscaras de validade e calibração de MAP/lambda/temperatura; TPS/IAT e outras medições calibradas ainda faltam |
 | Cambota/cames | Captura EXTI, roda uniforme com dentes em falta, fase 720°; janela de cames e referência ao PMS configuráveis no perfil |
 | Mapas | VE e ignição 16×16 nativos; leitura, edição, persistência e verificação completa; mapas de fábrica a zero |

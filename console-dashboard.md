@@ -29,6 +29,10 @@ As tabelas VE e ignição têm **16 pontos RPM × 16 pontos MAP** no firmware e 
 
 O editor de mapas utiliza um fluxo diferente: uma gravação explícita valida, persiste e confirma o conteúdo por leitura completa. O ficheiro 8×8 só é aceite como **importação histórica para conversão local**; não é um formato de funcionamento da ECU IO 0.2.0. A versão nova usa páginas 576/576 e esquema de flash 2. Deve-se guardar uma cópia dos mapas/configuração antigos antes de atualizar o firmware.
 
+## Logótipo no cabeçalho
+
+O logótipo original passou de 105 para **270 px de largura** na janela normal, de 84 para **246 px** na janela compacta e de 68 para **228 px** nas janelas de menor altura. A proporção original é preservada. A alteração está no commit [85dc050](https://github.com/Tunuino/Tunuino/commit/85dc0503a75f4bda28043dea029859b6473500c9). A compilação limpa e os testes JavaFX locais passaram, incluindo os tamanhos compactos; a verificação do pacote Windows decorre no CI.
+
 ## Edição a partir do painel
 
 No Dashboard, Fuel Tables e Ignition Tables, lê primeiro a tabela da ECU. Usa **Editar tabela** ou faz duplo clique numa das 256 células: o editor abre com a linha MAP e a coluna RPM escolhidas. A abertura e a edição são locais; **Guardar e verificar na ECU** é a ação explícita que escreve, persiste e compara a leitura completa com o mapa enviado. Após sucesso, as três páginas atualizam-se com o mapa verificado.

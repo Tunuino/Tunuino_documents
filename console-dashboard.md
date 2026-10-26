@@ -31,7 +31,7 @@ O editor de mapas utiliza um fluxo diferente: uma gravação explícita valida, 
 
 ## Logótipo no cabeçalho
 
-O logótipo original passou de 105 para **270 px de largura** na janela normal, de 84 para **246 px** na janela compacta e de 68 para **228 px** nas janelas de menor altura. A proporção original é preservada. A alteração está no commit [85dc050](https://github.com/Tunuino/Tunuino/commit/85dc0503a75f4bda28043dea029859b6473500c9). A compilação limpa e os testes JavaFX locais passaram, incluindo os tamanhos compactos; a verificação do pacote Windows decorre no CI.
+O logótipo original passou de 105 para **270 px de largura** na janela normal, de 84 para **246 px** na janela compacta e de 68 para **228 px** nas janelas de menor altura. A proporção original é preservada. A alteração está no commit [85dc050](https://github.com/Tunuino/Tunuino/commit/85dc0503a75f4bda28043dea029859b6473500c9). A compilação limpa e os testes JavaFX locais passaram, incluindo os tamanhos compactos; a verificação do pacote Windows com o Java incluído também passou. Firmware, Unit tests, Desktop, TunerStudio, Bundle e Publish Release passaram para o mesmo commit.
 
 ## Edição a partir do painel
 
@@ -49,6 +49,6 @@ Os workflows Windows Console e Desktop geram capturas reais JavaFX, verificam a 
 
 O firmware distribuído não controla injetores, ignição, bomba ou atuadores. A implementação completa desses sistemas exige hardware validado, limites de corrente e tempo, proteções, calibrações reais e ensaios em bancada.
 
-[Bundle Windows + firmware F427 + INI](https://github.com/Tunuino/Tunuino/releases/tag/nightly-2026-10-26-40301671104): publicado em 26 de outubro de 2026, um único ZIP, commit `7b53fbd`. A publicação verifica a origem comum dos componentes e os checksums; a validação física continua pendente.
+[Bundle Windows + firmware F427 + INI](https://github.com/Tunuino/Tunuino/releases/tag/nightly-2026-10-26-40305145956): publicado em 26 de outubro de 2026, um único ZIP, commit `85dc050`. A publicação verifica a origem comum dos componentes e os checksums; a validação física continua pendente.
 
 [Código da Console](https://github.com/Tunuino/Tunuino/tree/master/java_console) · [Releases](https://github.com/Tunuino/Tunuino/releases) · [Documentação do firmware](firmware-f427-progresso.md).

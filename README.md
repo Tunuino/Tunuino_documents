@@ -121,3 +121,5 @@ A extensão experimental para um impulso de cames por ciclo está em [cycle-posi
 A fila de eventos e as condições de integração com interrupções estão em [capture-queue.md](https://github.com/Tunuino/Tunuino/blob/master/docs/capture-queue.md). A ligação portátil ao descodificador está em [capture-processor.md](https://github.com/Tunuino/Tunuino/blob/master/docs/capture-processor.md). Falta integrar e validar a tarefa e a captura física STM32.
 
 A ligação das RPM ao formato de datalog está em [telemetry-assembly.md](https://github.com/Tunuino/Tunuino/blob/master/docs/telemetry-assembly.md). O teste Java/C inclui capturas simuladas e confirma que a perda da cambota deixa de produzir linhas CSV. A aquisição física continua pendente.
+
+- [Instalação Windows, atualizações e preservação de dados](console-instalacao-windows.md)

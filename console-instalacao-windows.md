@@ -6,6 +6,8 @@ O instalador Windows x64 é a descarga principal. O ficheiro `tunuino_setup_wind
 2. Escolher a pasta no assistente e concluir a instalação para o utilizador atual.
 3. Abrir TunuinoConsole pelo menu Iniciar ou pelo atalho no ambiente de trabalho.
 
+A pasta predefinida da aplicação é `%LOCALAPPDATA%\TunuinoConsoleApp`, separada dos dados do utilizador em `%LOCALAPPDATA%\TunuinoConsole`.
+
 O firmware, os manifestos de gravação, o INI correspondente, o código-fonte e as licenças encontram-se na pasta `firmware` junto da aplicação. O seletor de firmware da Console começa nessa pasta mesmo quando a aplicação é aberta por um atalho com outra pasta de trabalho. A instalação não grava a ECU nem instala drivers ou ferramentas de terceiros automaticamente. As ferramentas de programação continuam configuráveis na Console.
 
 ## Dados e atualizações
@@ -43,3 +45,9 @@ A publicação exige compilações e testes dos componentes no mesmo commit. O w
 - desinstalação e preservação de ficheiros de mapas, configurações, datalogs e definições de ferramentas.
 
 O teste de atualização usa o mesmo conteúdo com dois números de versão para exercitar o mecanismo MSI. Os ensaios automáticos de empacotamento não verificam uma ECU física, a precisão elétrica das saídas nem o funcionamento num motor. As limitações do firmware experimental mantêm-se descritas em [arranque de bancada](proteus-v07-bringup.md).
+
+## Resultado da primeira versão validada
+
+O instalador **1.0.89**, do commit [`c6d666f`](https://github.com/Tunuino/Tunuino/commit/c6d666fb6c785f4d78635f8d333817fd697c8893), passou a instalação limpa, atualização entre duas versões, verificação dos componentes e atalhos, abertura com Java incluído, descoberta do firmware, desinstalação e preservação dos ficheiros de utilizador. [Execução Windows aprovada](https://github.com/Tunuino/Tunuino/actions/runs/40351430390).
+
+Os testes foram executados num runner Windows Server 2022. Falta o teste de utilização no computador do utilizador. A Console, o firmware F427 e os testes de núcleo, ferramentas desktop e TunerStudio também passaram no mesmo commit. Não foi realizada validação física da ECU nesta alteração.

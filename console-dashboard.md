@@ -12,7 +12,7 @@ Atualizado em **26 de outubro de 2026**. Referência visual: painel escuro com l
 | Ignition Tables | Mapa de avanço nativo 16×16, leitura explícita, edição por célula e visualização 3D; não significa comando das bobinas |
 | Autotune | Entrada visível mas desativada; o firmware de bancada não oferece afinação em malha fechada |
 | Data Log | Monitorização USB com histórico, cursores, reprodução CSV e gravação de amostras reais |
-| Inputs / Outputs | Configuração dos sensores, ADC, captura, validade e persistência; as saídas físicas ainda não estão controladas |
+| Inputs / Outputs | Sensores/ADC e configuração, perfil sequencial por cilindro, consulta de estado, pulsos de bancada, armação e paragem de saídas físicas |
 | Diagnostics | Leitura da validação de configuração, estado da flash, ADC, sincronização da cambota, dente e contador de erros |
 | Firmware | Identificação, USB CDC, ferramentas de DFU/programação e verificação do firmware |
 | Settings | Identidade da aplicação e informação de compatibilidade |
@@ -41,13 +41,17 @@ A edição a partir do painel exige uma tabela lida na ligação identificada at
 
 Os seis mostradores ajustam a largura para ocupar uma linha em janelas de desktop com espaço suficiente; em janelas estreitas distribuem-se em duas linhas de três. Os cartões secundários também ajustam a largura. Os controlos das tabelas passam à linha seguinte quando necessário.
 
+## Comando das saídas
+
+Em Inputs / Outputs, define o número de cilindros e os canais LS/IGN, PMS, janela de fase, ReqFuel, dwell, tempo morto e auxiliares. Não é selecionado nenhum motor automaticamente. Enviar o perfil mantém as saídas desarmadas; armar exige calibração persistida, confirmação explícita e correspondência entre o perfil visível e o enviado. Uma edição local invalida essa correspondência. Existe uma paragem de todas as saídas e um teste de pulso isolado com motor parado. O perfil é volátil e exige consulta do estado pela Console; ainda não permite funcionamento autónomo ou datalog separado em simultâneo com armação.
+
 ## Testes e limites
 
 A alteração [7b53fbd](https://github.com/Tunuino/Tunuino/commit/7b53fbd9cec0668f94cb0776357fcbc1e26c3621) passou os testes locais do núcleo C/Java e os testes reais de interface JavaFX em Linux, com dados sintéticos. Foram verificados: botão de edição, duplo clique na célula 16/16, exclusão dos eixos, seleção da célula no editor, bloqueio durante operações USB, limpeza ao desligar/trocar de ECU e seis mostradores numa linha. Estes testes não ligaram uma ECU física. A compilação e a verificação do pacote Windows com o Java incluído passaram. Também passaram os workflows Firmware (imagem F427 e bibliotecas ARM), Unit tests, Desktop, TunerStudio, Bundle e Publish Release.
 
 Os workflows Windows Console e Desktop geram capturas reais JavaFX, verificam a navegação e a largura reduzida, mantêm o Autotune inativo e testam que os indicadores offline não exibem valores falsos. A disponibilidade de imagens e o sucesso de CI **não equivalem a ensaio na ECU física nem a funcionamento do TunerStudio Windows**.
 
-O firmware distribuído não controla injetores, ignição, bomba ou atuadores. A implementação completa desses sistemas exige hardware validado, limites de corrente e tempo, proteções, calibrações reais e ensaios em bancada.
+O firmware novo inclui comando experimental de injetores, sinais de ignição, bomba, relé e ventoinha, com perfil configurável em Inputs / Outputs e armação explícita. A validação física continua pendente. O estado apresentado indica comandos lógicos do MCU e não mede corrente ou confirmação elétrica da carga. [Configuração, ensaio e limitações](controlo-motor.md).
 
 [Bundle Windows + firmware F427 + INI](https://github.com/Tunuino/Tunuino/releases/tag/nightly-2026-10-26-40305145956): publicado em 26 de outubro de 2026, um único ZIP, commit `85dc050`. A publicação verifica a origem comum dos componentes e os checksums; a validação física continua pendente.
 

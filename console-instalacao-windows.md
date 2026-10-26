@@ -35,7 +35,9 @@ Ambos os formatos levam a Console, o firmware e o INI produzidos a partir do mes
 
 ## Verificação
 
-A publicação exige compilações e testes dos componentes no mesmo commit. O workflow Bundle executa no Windows e só entrega o MSI depois de verificar:
+A publicação exige compilações e testes dos componentes no mesmo commit. A identificação do commit e da execução de origem é transmitida por variáveis próprias (`SOURCE_SHA` e `KIT_RUN_ID`), separadas das variáveis reservadas do GitHub. A publicação rejeita componentes de outras compilações.
+
+O workflow Bundle executa no Windows e só entrega o MSI depois de verificar:
 
 - instalação de uma versão com número inferior e atualização para o MSI a publicar;
 - instalação limpa do MSI a publicar;
@@ -46,8 +48,8 @@ A publicação exige compilações e testes dos componentes no mesmo commit. O w
 
 O teste de atualização usa o mesmo conteúdo com dois números de versão para exercitar o mecanismo MSI. Os ensaios automáticos de empacotamento não verificam uma ECU física, a precisão elétrica das saídas nem o funcionamento num motor. As limitações do firmware experimental mantêm-se descritas em [arranque de bancada](proteus-v07-bringup.md).
 
-## Resultado da primeira versão validada
+## Resultado validado
 
-O instalador **1.0.89**, do commit [`c6d666f`](https://github.com/Tunuino/Tunuino/commit/c6d666fb6c785f4d78635f8d333817fd697c8893), passou a instalação limpa, atualização entre duas versões, verificação dos componentes e atalhos, abertura com Java incluído, descoberta do firmware, desinstalação e preservação dos ficheiros de utilizador. [Execução Windows aprovada](https://github.com/Tunuino/Tunuino/actions/runs/40351430390).
+O instalador **1.0.90**, do commit [`6d31d7a`](https://github.com/Tunuino/Tunuino/commit/6d31d7a75565a4f74dcffd61ddcd2c65c9e130f9), passou a instalação limpa, atualização entre duas versões, verificação dos componentes e atalhos, abertura com Java incluído, descoberta do firmware, desinstalação e preservação dos ficheiros de utilizador. [Execução Windows aprovada](https://github.com/Tunuino/Tunuino/actions/runs/40352791984).
 
 Os testes foram executados num runner Windows Server 2022. Falta o teste de utilização no computador do utilizador. A Console, o firmware F427 e os testes de núcleo, ferramentas desktop e TunerStudio também passaram no mesmo commit. Não foi realizada validação física da ECU nesta alteração.

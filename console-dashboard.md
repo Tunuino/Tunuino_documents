@@ -53,6 +53,8 @@ Os workflows Windows Console e Desktop geram capturas reais JavaFX, verificam a 
 
 O firmware novo inclui comando experimental de injetores, sinais de ignição, bomba, relé e ventoinha, com perfil configurável em Inputs / Outputs e armação explícita. A validação física continua pendente. O estado apresentado indica comandos lógicos do MCU e não mede corrente ou confirmação elétrica da carga. [Configuração, ensaio e limitações](controlo-motor.md).
 
-[Bundle Windows + firmware F427 + INI](https://github.com/Tunuino/Tunuino/releases/tag/nightly-2026-10-26-40305145956): publicado em 26 de outubro de 2026, um único ZIP, commit `85dc050`. A publicação verifica a origem comum dos componentes e os checksums; a validação física continua pendente.
+[Bundle Windows + firmware F427 + INI](https://github.com/Tunuino/Tunuino/releases/tag/nightly-2026-10-26-40342132371): publicado em 26 de outubro de 2026, um único ZIP, commit `8623c56`. A publicação verifica a origem comum dos componentes e os checksums; a validação física continua pendente.
+
+O novo controlo experimental do commit `8623c56` passou igualmente os testes C/Java, compilação F427, pacote Windows com teste de interface, Desktop, TunerStudio, Bundle e publicação. Estes são testes automatizados, sem ensaio físico das novas saídas.
 
 [Código da Console](https://github.com/Tunuino/Tunuino/tree/master/java_console) · [Releases](https://github.com/Tunuino/Tunuino/releases) · [Documentação do firmware](firmware-f427-progresso.md).

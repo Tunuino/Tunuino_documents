@@ -2,6 +2,8 @@
 
 Atualizado: **25 de outubro de 2026**. Alvo atual: **Proteus v0.7 / STM32F427**, firmware IO **0.1.0**. A versão 0.1.0 identifica a família de firmware, não cada revisão de código: para identificar um pacote concreto, verificar também o SHA do Release.
 
+A Console recebeu um **novo Dashboard JavaFX com instrumentos, heatmaps 16×16, superfície 3D, navegação e diagnósticos de leitura**. A referência das páginas e as limitações de telemetria estão descritas em [Console — interface ECU de 16×16](console-dashboard.md). Os canais não existentes continuam indisponíveis; não se apresentam valores de demonstração como se fossem leituras.
+
 ## Funcionalidades no código
 
 | Subsistema | Situação |

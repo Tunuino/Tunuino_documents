@@ -39,10 +39,12 @@ Os seis mostradores ajustam a largura para ocupar uma linha em janelas de deskto
 
 ## Testes e limites
 
-A alteração [3a75b18](https://github.com/Tunuino/Tunuino/commit/3a75b186dd9a9451bcbbbead4b02f6c8ee42c113) passou os testes locais do núcleo C/Java e os testes reais de interface JavaFX em Linux, com dados sintéticos. Foram verificados: botão de edição, duplo clique na célula 16/16, exclusão dos eixos, seleção da célula no editor, bloqueio durante operações USB, limpeza ao desligar/trocar de ECU e seis mostradores numa linha. Estes testes não ligaram uma ECU física. A compilação e a verificação do pacote Windows decorrem nos workflows associados ao commit.
+A alteração [7b53fbd](https://github.com/Tunuino/Tunuino/commit/7b53fbd9cec0668f94cb0776357fcbc1e26c3621) passou os testes locais do núcleo C/Java e os testes reais de interface JavaFX em Linux, com dados sintéticos. Foram verificados: botão de edição, duplo clique na célula 16/16, exclusão dos eixos, seleção da célula no editor, bloqueio durante operações USB, limpeza ao desligar/trocar de ECU e seis mostradores numa linha. Estes testes não ligaram uma ECU física. A compilação e a verificação do pacote Windows com o Java incluído passaram. Também passaram os workflows Firmware (imagem F427 e bibliotecas ARM), Unit tests, Desktop, TunerStudio, Bundle e Publish Release.
 
 Os workflows Windows Console e Desktop geram capturas reais JavaFX, verificam a navegação e a largura reduzida, mantêm o Autotune inativo e testam que os indicadores offline não exibem valores falsos. A disponibilidade de imagens e o sucesso de CI **não equivalem a ensaio na ECU física nem a funcionamento do TunerStudio Windows**.
 
 O firmware distribuído não controla injetores, ignição, bomba ou atuadores. A implementação completa desses sistemas exige hardware validado, limites de corrente e tempo, proteções, calibrações reais e ensaios em bancada.
+
+[Bundle Windows + firmware F427 + INI](https://github.com/Tunuino/Tunuino/releases/tag/nightly-2026-10-26-40301671104): publicado em 26 de outubro de 2026, um único ZIP, commit `7b53fbd`. A publicação verifica a origem comum dos componentes e os checksums; a validação física continua pendente.
 
 [Código da Console](https://github.com/Tunuino/Tunuino/tree/master/java_console) · [Releases](https://github.com/Tunuino/Tunuino/releases) · [Documentação do firmware](firmware-f427-progresso.md).

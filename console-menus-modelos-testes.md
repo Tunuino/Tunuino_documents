@@ -51,3 +51,9 @@ Capturas da aplicação em teste automatizado, sem ECU física ligada.
 ![Testes de relés e bomba separados](images/console/menu-testes.png)
 
 ![Modelos de roda fónica](images/console/menu-sensores.png)
+
+## Lançamento validado
+
+O instalador **1.0.93** e o ZIP de testes foram [publicados juntos](https://github.com/Tunuino/Tunuino/releases/tag/nightly-2026-10-26-40388373649), no commit `3fa168d35bc5cc0a79db14d31c69caf20456253d`. A Console Windows, a interface em janelas compactas, o firmware F427, o núcleo C/Java e as definições TunerStudio passaram. O [ensaio do instalador no Windows](https://github.com/Tunuino/Tunuino/actions/runs/40388042961) confirmou instalação, atualização, atalhos, runtime, desinstalação e preservação dos ficheiros do utilizador.
+
+A compilação e os testes simulados não substituem o teste elétrico dos novos pulsos temporizados na Proteus.

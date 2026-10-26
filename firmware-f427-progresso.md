@@ -11,8 +11,8 @@ Atualizado: **25 de outubro de 2026**. Alvo atual: **Proteus v0.7 / STM32F427**,
 | Sensores analógicos | ADC1 com DMA, 16 canais e máscaras de validade; precisão elétrica ainda por validar no veículo |
 | Cambota e cames | Captura EXTI e descodificação da roda com dentes em falta, com sincronização e deteção de falhas; referência real ao PMS pendente |
 | Curvas MAP, lambda e temperatura | Conversão e validação de calibrações; a configuração padrão mantém sensores desativados |
-| Mapas VE e ignição | Estruturas, validação, interpolação, leitura e escrita de configuração; mapas padrão são dados de teste, não afinação de motor |
-| Persistência | Journal de flash com CRC, recuperação após escrita interrompida e testes de desgaste/rotação de bancos |
+| Mapas VE e ignição | **16×16 nativos** no firmware IO 0.2.0; validação, interpolação, leitura e escrita pela Console; mapas padrão não são afinação de motor |
+| Persistência | **Schema 2**, registos de 1.440 bytes com CRC e proteção contra gravações interrompidas; versão antiga não é recuperada automaticamente |
 | Diagnóstico de comunicação | Reabertura de USB após erros terminais, controlo de timeouts, testes de modelos USB |
 | Leitura de indicadores TunerStudio | Comando `A` de 100 bytes preservado; acrescentado `O` com offset e comprimento, mantendo `ochBlockSize = 100` |
 | Pré-visualização de mapas | Acrescentado comando nativo `TUNUINO:E`: cálculos VE/avanço, indicador de validade, motivos de indisponibilidade, RPM/MAP e geração da configuração, **sem controlo de atuadores** |
@@ -41,7 +41,11 @@ A etapa de preparação implementa [conversão matemática C/Java](https://githu
 A conversão preserva os 64 valores originais nas interseções dos eixos e usa interpolação bilinear nas novas células, arredondando a três casas.
 Também valida valores negativos de avanço na implementação C e Java.
 
-**O firmware físico continua a utilizar páginas 8×8.** Não foram alterados o formato do journal de flash, a tabela ativa, a assinatura nem o INI. O ficheiro 16×16 é, nesta etapa, apenas uma cópia local para preparar a migração. A evolução do formato persistente exige recuperação compatível dos registos antigos e um ensaio de falhas de gravação. Nunca enviar um mapa 16×16 para um firmware que só aceite 8×8.
+**Atualização de 26 de outubro de 2026:** o firmware IO 0.2.0 passou a utilizar **exclusivamente mapas VE e ignição 16×16 nativos**. As páginas 2 e 3 têm agora 576 bytes cada, a configuração completa tem 1.408 bytes, o jornal de flash utiliza registos de 1.440 bytes e o schema foi atualizado para 2. A assinatura mudou para `Tunuino Proteus v0.7 F427 IO v2` e o INI para a revisão 5. A Tunuino Console lê, edita, envia e verifica mapas 16×16. O formato 8×8 não é suportado na ECU nova; apenas a ferramenta de importação local permite converter um ficheiro antigo numa direção.
+
+**Atenção antes da gravação:** a versão 0.2.0 não interpreta automaticamente os registos de flash gravados no formato anterior. Quando não encontra um registo do schema 2, arranca com sensores desativados e mapas 16×16 a zero. Guardar previamente mapas e calibrações da ECU atual e manter os atuadores desligados. A funcionalidade não constitui controlo de motor funcional.
+
+Implementação atual na `master`: [novo formato de firmware](https://github.com/Tunuino/Tunuino/commit/93af3b05f1dd9be5cca9b6d312736d3f17d4ccb3), [Console e INI 16×16](https://github.com/Tunuino/Tunuino/commit/9a6a0d8dc439f627b2c66b3c7d6c2465649a04bf).
 
 ## Funcionalidades que faltam para gestão completa do motor
 

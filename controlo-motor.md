@@ -1,3 +1,5 @@
+> Atualização: [perfil persistente, funcionamento autónomo, mapas base e tempos em ms](configuracao-persistente-mapas-base.md). As referências anteriores a perfil volátil aplicam-se às versões antigas.
+
 # Controlo experimental do motor — Proteus v0.7 F427
 
 A implementação [8623c56](https://github.com/Tunuino/Tunuino/commit/8623c56254da0e74b854afa9200c4bd6869eef8d) acrescenta saídas físicas à Tunuino. **Compilação e testes simulados não equivalem a validação na ECU.** Começa com cargas de ensaio e osciloscópio; não existe calibração predefinida do teu motor.

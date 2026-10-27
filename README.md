@@ -125,3 +125,5 @@ A ligação das RPM ao formato de datalog está em [telemetry-assembly.md](https
 - [Instalação Windows, atualizações e preservação de dados](console-instalacao-windows.md)
 
 - [Menus, modelos de configuração e testes de atuadores](console-menus-modelos-testes.md)
+
+- [Configuração persistente, modo autónomo e mapas base](configuracao-persistente-mapas-base.md)

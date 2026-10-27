@@ -1,3 +1,5 @@
+> Atualização: [perfil persistente, funcionamento autónomo, mapas base e tempos em ms](configuracao-persistente-mapas-base.md). As referências anteriores a perfil volátil aplicam-se às versões antigas.
+
 # Tunuino e TunerStudio — INI de bancada
 
 **[Descarregar o Bundle com Console, firmware e INI](https://github.com/Tunuino/Tunuino/releases/download/nightly-2026-10-24-40123914479/tunuino_bundle_proteus_v07_f427_usb_bench.zip)** · [Release](https://github.com/Tunuino/Tunuino/releases/tag/nightly-2026-10-24-40123914479) · build **e50a296**.

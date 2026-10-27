@@ -1,3 +1,5 @@
+> Atualização: [perfil persistente, funcionamento autónomo, mapas base e tempos em ms](configuracao-persistente-mapas-base.md). As referências anteriores a perfil volátil aplicam-se às versões antigas.
+
 # Menus, modelos e testes de atuadores
 
 A Console separa agora a configuração do motor, a calibração dos sensores e os ensaios físicos de saídas. A navegação usa grupos expansíveis com nomes em português.

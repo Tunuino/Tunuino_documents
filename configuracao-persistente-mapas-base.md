@@ -10,7 +10,7 @@ A Console passa a guardar o perfil do motor na flash, juntamente com sensores e 
 4. A base aspirada cobre 200–7000 rpm e 20–105 kPa absolutos. Não contém afinação para turbo. A referência plana usa VE 80% e avanço 10°. Ambas exigem ajustar mistura e avanço ao motor. Não são mapas de arranque certificados.
 5. Configurar roda fónica, curvas reais de MAP/temperatura e entradas. Guardar os dois mapas e o perfil do motor. A ativação autónoma exige perfil válido, captura, MAP, temperatura e todas as células VE preenchidas.
 
-ReqFuel é uma estimativa de massa de ar/combustível para gasolina AFR 14,7, densidade de ar 1,184 g/L e combustível 0,745 g/mL. O caudal deve corresponder à pressão diferencial usada. Não inclui compensação de tensão, IAT ou enriquecimentos. Não usar os valores do exemplo 2000 cm³ / 250 cm³/min como dados do motor sem os confirmar.
+ReqFuel é uma estimativa de massa de ar/combustível para gasolina AFR 14,7, densidade de ar 1,184 g/L e combustível 0,745 g/mL. O caudal deve corresponder à pressão diferencial usada. A estimativa não inclui compensação de tensão ou IAT. As correções de arranque/aquecimento são configuradas num separador próprio, descrito abaixo. Não usar os valores do exemplo 2000 cm³ / 250 cm³/min como dados do motor sem os confirmar.
 
 ## Tempos em milissegundos
 
@@ -34,6 +34,14 @@ As configurações anteriores de esquema 2 são preservadas e continuam com o pe
 
 Testes de código executam o adaptador real com GPIO/temporizadores simulados, independência de consultas USB, recusa de escritas com saídas ativas, corte e paragem sem reativação automática, recuperação USB com serviço contínuo, gravação interrompida em cada palavra do registo, leitura C/Java, backups e conversão exata de ms. A interface é exercitada por JavaFX; a compilação F427 e a instalação Windows são verificadas no CI.
 
-**Não foram realizados aqui ensaios elétricos nem ensaios num motor.** Faltam ainda controlo de ralenti, turbo, VVT, detonação, flex fuel, launch control, Lua, compensações IAT/tensão e enriquecimentos de arranque/aquecimento/aceleração, entre outras funções. Os menus desta versão só representam funções existentes.
+**Não foram realizados aqui ensaios elétricos nem ensaios num motor.** Faltam ainda controlo de ralenti, turbo, VVT, detonação, flex fuel, launch control, Lua, compensações IAT/tensão e enriquecimento de aceleração, entre outras funções. Os menus desta versão só representam funções existentes.
 
-Implementação: [commit ab6da89](https://github.com/Tunuino/Tunuino/commit/ab6da89cc1bca8f34d7c09f95b7eafe7b192ee81). O resultado do CI e a ligação ao pacote serão acrescentados após conclusão da compilação.
+Implementação: [commit ab6da89](https://github.com/Tunuino/Tunuino/commit/ab6da89cc1bca8f34d7c09f95b7eafe7b192ee81). Todos os testes do commit passaram e o [pacote correspondente foi publicado](https://github.com/Tunuino/Tunuino/releases/tag/nightly-2026-10-27-40463353146).
+
+## Arranque e aquecimento
+
+A implementação seguinte acrescenta combustível de arranque, enriquecimento após arranque com duração em ms, curva de aquecimento e avanço fixo de arranque opcional. [Configuração, exemplos e limites](arranque-aquecimento.md).
+
+![Modelos de mapas base](images/console/console-maps.png)
+
+![Configuração base do motor](images/console/console-generic-base.png)

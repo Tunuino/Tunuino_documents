@@ -1,3 +1,5 @@
+> Arranque e aquecimento: [configuração aplicada pelo firmware](arranque-aquecimento.md).
+
 > Atualização: [perfil persistente, funcionamento autónomo, mapas base e tempos em ms](configuracao-persistente-mapas-base.md). As referências anteriores a perfil volátil aplicam-se às versões antigas.
 
 # Controlo experimental do motor — Proteus v0.7 F427

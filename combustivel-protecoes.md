@@ -1,3 +1,5 @@
+> Atualização: [painel, calibrações centralizadas e estabilidade de Firmware/USB](console-calibracoes-estabilidade.md).
+
 # Combustível, lambda e proteções
 
 Esta implementação acrescenta onze estratégias opcionais ao cálculo real dos pulsos de injeção/ignição e à configuração persistente. Os testes automáticos usam relógios, sensores, flash e GPIO simulados. **Não foi realizado aqui ensaio elétrico na ECU nem ensaio num motor.**

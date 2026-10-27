@@ -1,3 +1,5 @@
+> Atualização: [painel, calibrações centralizadas e estabilidade de Firmware/USB](console-calibracoes-estabilidade.md).
+
 # Aspeto da Tunuino Console
 
 Revisão de 25 de outubro de 2026. A interface foi implementada e passou nos testes desktop e no runtime Windows do pacote; está preparada para integração no repositório principal. As imagens desta página são capturas da aplicação JavaFX real com dados de demonstração, sem ligação a uma ECU.

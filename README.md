@@ -4,13 +4,15 @@ Conteúdo transferido do README de [Tunuino/Tunuino](https://github.com/Tunuino/
 
 Firmware próprio para centralinas Proteus e uaEFI e Tunuino Console para Windows.
 
-Em revisão: [novo aspeto da Console](console-visual.md), com tema Tunuino, painel de sensores, datalogs, mapas e área de firmware. As capturas usam dados de demonstração.
+Atualização: [painel conforme a referência visual, calibrações dos sensores e correção do piscar de Firmware/USB](console-calibracoes-estabilidade.md). As capturas usam dados sintéticos de teste.
 
 O projeto tem firmware experimental de controlo sequencial para Proteus v0.7 F427, com perfil persistente e funcionamento autónomo. A validação elétrica e no motor continua pendente; as notas históricas abaixo descrevem etapas anteriores.
 
 Versão 1.0.99: [combustível, lambda, transientes, limites, imagens da Console e lista das funções pendentes](combustivel-protecoes.md).
 
-Console 1.0.103: [revisão dos 50 seletores, imagens Windows e identificação da aplicação aberta](verificacao-completa-seletores.md). [Ligações rápidas com recomendações por função e alternativas em Personalizar](ligacoes-rapidas-proteus.md). [Orientação das próximas funções e da Console](orientacao-software.md).
+Console 1.0.105: [sensores, painel e estabilidade USB/Firmware](console-calibracoes-estabilidade.md).
+
+Publicação anterior, Console 1.0.103: [revisão dos 50 seletores, imagens Windows e identificação da aplicação aberta](verificacao-completa-seletores.md). [Ligações rápidas com recomendações por função e alternativas em Personalizar](ligacoes-rapidas-proteus.md). [Orientação das próximas funções e da Console](orientacao-software.md).
 
 Estado atual: [estrutura e funções por pasta](estrutura-e-funcoes.md), [workflows separados e Bundle](workflows.md), [INI TunerStudio](tunerstudio.md), [aplicação Android offline por USB](android.md) e [gravação/arranque de bancada](proteus-v07-bringup.md). O arranque USB da versão 0.0.2 foi confirmado pelo utilizador; Android e TunerStudio ainda exigem ensaio físico.
 

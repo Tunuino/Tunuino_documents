@@ -6,7 +6,9 @@ Firmware próprio para centralinas Proteus e uaEFI e Tunuino Console para Window
 
 Em revisão: [novo aspeto da Console](console-visual.md), com tema Tunuino, painel de sensores, datalogs, mapas e área de firmware. As capturas usam dados de demonstração.
 
-O projeto tem uma imagem experimental USB para Proteus v0.7 F427. Ainda não produz firmware de controlo de motor.
+O projeto tem firmware experimental de controlo sequencial para Proteus v0.7 F427, com perfil persistente e funcionamento autónomo. A validação elétrica e no motor continua pendente; as notas históricas abaixo descrevem etapas anteriores.
+
+Versão 1.0.99: [combustível, lambda, transientes, limites, imagens da Console e lista das funções pendentes](combustivel-protecoes.md).
 
 Estado atual: [estrutura e funções por pasta](estrutura-e-funcoes.md), [workflows separados e Bundle](workflows.md), [INI TunerStudio](tunerstudio.md), [aplicação Android offline por USB](android.md) e [gravação/arranque de bancada](proteus-v07-bringup.md). O arranque USB da versão 0.0.2 foi confirmado pelo utilizador; Android e TunerStudio ainda exigem ensaio físico.
 
@@ -131,3 +133,5 @@ A ligação das RPM ao formato de datalog está em [telemetry-assembly.md](https
 - [Arranque, após arranque e aquecimento](arranque-aquecimento.md)
 
 - [TPS, ralenti PWM e controlo de turbo](ralenti-turbo-tps.md)
+
+- [Combustível, lambda, transientes, limites e estado das funções pendentes](combustivel-protecoes.md)

@@ -74,4 +74,4 @@ Implementação: [1e2c6f7](https://github.com/Tunuino/Tunuino/commit/1e2c6f7800f
 
 [Instalador Windows](https://github.com/Tunuino/Tunuino/releases/download/nightly-2026-10-27-40506620057/tunuino_setup_windows_x64.msi) · [Bundle ZIP](https://github.com/Tunuino/Tunuino/releases/download/nightly-2026-10-27-40506620057/tunuino_bundle_proteus_v07_f427_usb_bench.zip).
 
-Continuam por implementar VVT, controlo de detonação, flex fuel, launch control, borboleta eletrónica, compensações IAT/tensão e lambda em malha fechada, entre outras funções. Não foram acrescentados menus que apresentem estas funções como operacionais.
+Atualização seguinte: [combustível e proteções](combustivel-protecoes.md) acrescenta flex fuel analógico, launch, IAT/tensão, lambda e outras estratégias. VVT, detonação e borboleta eletrónica continuam pendentes, com dependências detalhadas nessa página.

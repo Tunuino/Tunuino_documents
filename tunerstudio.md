@@ -1,3 +1,5 @@
+> Atualização: [combustível, lambda, transientes, limites e funções pendentes](combustivel-protecoes.md). As novas opções ficam desativadas até configuração explícita.
+
 > Atualização: [TPS, ralenti PWM e controlo de turbo](ralenti-turbo-tps.md), com migração da flash e cópia `.tnaux` separada.
 
 > Atualização: [perfil persistente, funcionamento autónomo, mapas base e tempos em ms](configuracao-persistente-mapas-base.md). As referências anteriores a perfil volátil aplicam-se às versões antigas.

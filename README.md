@@ -10,7 +10,7 @@ O projeto tem firmware experimental de controlo sequencial para Proteus v0.7 F42
 
 Versão 1.0.99: [combustível, lambda, transientes, limites, imagens da Console e lista das funções pendentes](combustivel-protecoes.md).
 
-Console 1.0.101: [entradas e saídas com nomes de funções, sem códigos de pinos do MCU](funcoes-entradas-saidas.md).
+Console 1.0.102: [ligações rápidas com recomendações por função e alternativas em Personalizar](ligacoes-rapidas-proteus.md). [Orientação das próximas funções e da Console](orientacao-software.md).
 
 Estado atual: [estrutura e funções por pasta](estrutura-e-funcoes.md), [workflows separados e Bundle](workflows.md), [INI TunerStudio](tunerstudio.md), [aplicação Android offline por USB](android.md) e [gravação/arranque de bancada](proteus-v07-bringup.md). O arranque USB da versão 0.0.2 foi confirmado pelo utilizador; Android e TunerStudio ainda exigem ensaio físico.
 
@@ -137,3 +137,6 @@ A ligação das RPM ao formato de datalog está em [telemetry-assembly.md](https
 - [TPS, ralenti PWM e controlo de turbo](ralenti-turbo-tps.md)
 
 - [Combustível, lambda, transientes, limites e estado das funções pendentes](combustivel-protecoes.md)
+
+- [Ligações rápidas da Proteus: recomendada, atual e personalizada](ligacoes-rapidas-proteus.md)
+- [Orientação das próximas funções e da Console](orientacao-software.md)

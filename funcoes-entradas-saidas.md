@@ -1,3 +1,5 @@
+> Atualização: [ligações rápidas da Proteus](ligacoes-rapidas-proteus.md). A matriz de terminais passa a ficar fechada em Avançado; as escolhas normais são curtas e mostram a recomendação por contacto.
+
 # Escolher entradas e saídas pelo nome da função
 
 A Console passa a ter **Configuração → Funções de I/O**. Em vez de escolher códigos de pinos do microcontrolador, escolhe a função pelo nome. Cada ligação da ECU apresenta apenas as funções compatíveis com o seu tipo.

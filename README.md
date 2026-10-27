@@ -10,6 +10,8 @@ O projeto tem firmware experimental de controlo sequencial para Proteus v0.7 F42
 
 Versão 1.0.99: [combustível, lambda, transientes, limites, imagens da Console e lista das funções pendentes](combustivel-protecoes.md).
 
+Console 1.0.101: [entradas e saídas com nomes de funções, sem códigos de pinos do MCU](funcoes-entradas-saidas.md).
+
 Estado atual: [estrutura e funções por pasta](estrutura-e-funcoes.md), [workflows separados e Bundle](workflows.md), [INI TunerStudio](tunerstudio.md), [aplicação Android offline por USB](android.md) e [gravação/arranque de bancada](proteus-v07-bringup.md). O arranque USB da versão 0.0.2 foi confirmado pelo utilizador; Android e TunerStudio ainda exigem ensaio físico.
 
 As notas técnicas iniciais abaixo descrevem a evolução do núcleo; as páginas específicas acima contêm as instruções atuais.

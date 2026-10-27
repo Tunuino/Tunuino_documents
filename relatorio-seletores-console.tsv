@@ -1,0 +1,51 @@
+area	seletor	escolhas
+engine	engine-cylinder-channel-0-0	Recomendada · Preto 35/3
+engine	engine-cylinder-channel-0-1	Recomendada · Preto 35/35
+engine	engine-cylinder-channel-1-0	Recomendada · Preto 35/15
+engine	engine-cylinder-channel-1-1	Recomendada · Preto 35/34
+engine	engine-cylinder-channel-2-0	Recomendada · Preto 35/4
+engine	engine-cylinder-channel-2-1	Recomendada · Preto 35/22
+engine	engine-cylinder-channel-3-0	Recomendada · Preto 35/16
+engine	engine-cylinder-channel-3-1	Recomendada · Preto 35/33
+engine	engine-cylinder-channel-4-0	Recomendada · Preto 35/5
+engine	engine-cylinder-channel-4-1	Recomendada · Preto 35/32
+engine	engine-cylinder-channel-5-0	Recomendada · Preto 35/6
+engine	engine-cylinder-channel-5-1	Recomendada · Preto 35/31
+engine	engine-cylinder-channel-6-0	Recomendada · Preto 35/7
+engine	engine-cylinder-channel-6-1	Recomendada · Preto 35/30
+engine	engine-cylinder-channel-7-0	Recomendada · Preto 35/19
+engine	engine-cylinder-channel-7-1	Recomendada · Preto 35/29
+engine	engine-cylinder-channel-8-0	Recomendada · Preto 35/8
+engine	engine-cylinder-channel-8-1	Recomendada · Preto 35/28
+engine	engine-cylinder-channel-9-0	Recomendada · Preto 35/20
+engine	engine-cylinder-channel-9-1	Recomendada · Preto 35/27
+engine	engine-cylinder-channel-10-0	Recomendada · Preto 35/9
+engine	engine-cylinder-channel-10-1	Recomendada · Preto 35/26
+engine	engine-cylinder-channel-11-0	Recomendada · Preto 35/21
+engine	engine-cylinder-channel-11-1	Recomendada · Preto 35/25
+engine	engine-channel-pump	Desativada | Recomendada · Preto 35/20
+engine	engine-channel-fan	Desativada | Recomendada · Preto 35/9
+engine	engine-channel-relay	Desativada | Recomendada · Preto 35/21
+fuel-protections	feature-choice-IAT_INPUT	Desativada | Recomendada · Branco 35/30
+fuel-protections	feature-choice-VOLT_INPUT	Desativada
+fuel-protections	feature-choice-LAUNCH_INPUT	Desativada | Proposta · Branco 35/26
+fuel-protections	feature-choice-FLEX_INPUT	Desativada | Proposta · Branco 35/25
+io-functions	io-quick-ANALOG-1	Desativada | Recomendada · Branco 35/13
+io-functions	io-quick-ANALOG-3	Desativada | Recomendada · Branco 35/24
+io-functions	io-quick-TEMPERATURE-1	Desativada | Recomendada · Branco 35/20
+io-functions	io-quick-TEMPERATURE-2	Desativada | Recomendada · Branco 35/30
+io-functions	io-quick-ANALOG-2	Desativada | Recomendada · Branco 35/28
+io-functions	io-quick-POWER-13	Desativada | Recomendada · Preto 35/20
+io-functions	io-quick-POWER-14	Desativada | Recomendada · Preto 35/9
+io-functions	io-quick-POWER-15	Desativada | Recomendada · Preto 35/21
+io-functions	io-quick-POWER-16	Desativada | Proposta · Preto 35/10
+io-functions	io-quick-POWER-17	Desativada | Proposta · Preto 35/11
+io-functions	io-quick-ANALOG-4	Desativada
+io-functions	io-quick-ANALOG-5	Desativada | Proposta · Branco 35/25
+io-functions	io-quick-ANALOG-6	Desativada | Proposta · Branco 35/26
+sensors	config-map-channel	Desativada | Recomendada · Branco 35/13
+sensors	config-lambda-channel	Desativada | Recomendada · Branco 35/28
+sensors	config-coolant-channel	Desativada | Recomendada · Branco 35/20
+tps-idle-boost	aux-tps-channel	Desativada | Recomendada · Branco 35/24
+tps-idle-boost	aux-idle-channel	Desativada | Proposta · Preto 35/10
+tps-idle-boost	aux-boost-channel	Desativada | Proposta · Preto 35/11

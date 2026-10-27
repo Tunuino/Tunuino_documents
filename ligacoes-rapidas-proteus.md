@@ -1,6 +1,6 @@
 # Ligações rápidas da Proteus
 
-Disponível na **Console 1.0.102**, publicada em 27 de outubro de 2026. [Instalador Windows](https://github.com/Tunuino/Tunuino/releases/download/nightly-2026-10-27-40568652689/tunuino_setup_windows_x64.msi) · [Pacote e notas da versão](https://github.com/Tunuino/Tunuino/releases/tag/nightly-2026-10-27-40568652689).
+Introduzido na **Console 1.0.102**. A [revisão completa da Console 1.0.103](verificacao-completa-seletores.md) verifica os 50 seletores e identifica o build aberto. [Instalador Windows](https://github.com/Tunuino/Tunuino/releases/download/nightly-2026-10-27-40577389724/tunuino_setup_windows_x64.msi) · [Pacote e notas da versão](https://github.com/Tunuino/Tunuino/releases/tag/nightly-2026-10-27-40577389724).
 
 A configuração passa a apresentar uma linha por função e uma escolha curta. A lista normal contém apenas:
 

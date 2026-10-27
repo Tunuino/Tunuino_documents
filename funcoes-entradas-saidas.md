@@ -1,3 +1,5 @@
+> Console 1.0.103: [verificação completa das seleções e identificação do executável aberto](verificacao-completa-seletores.md).
+
 > Atualização: [ligações rápidas da Proteus](ligacoes-rapidas-proteus.md). A matriz de terminais passa a ficar fechada em Avançado; as escolhas normais são curtas e mostram a recomendação por contacto.
 
 # Escolher entradas e saídas pelo nome da função

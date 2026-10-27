@@ -1,3 +1,5 @@
+> Atualização: [TPS, ralenti PWM e controlo de turbo](ralenti-turbo-tps.md), com migração da flash e cópia `.tnaux` separada.
+
 # Arranque, após arranque e aquecimento
 
 A Console e o INI TunerStudio incluem configurações de arranque e aquecimento que o firmware aplica ao pulso real de injeção. O perfil, estas correções, sensores e mapas são guardados no mesmo registo protegido da flash. A configuração anterior continua com as correções desativadas.
@@ -27,7 +29,7 @@ As durações aparecem em **ms**. Percentagens e temperaturas aceitam ponto ou v
 
 Os testes automáticos verificam os cálculos, interpolação, transições de RPM, redução temporal, reinício, passagem do contador por zero, desativação com valores conservados, backups, gravação interrompida e aplicação do pulso ao agendador de GPIO simulado. **Precisão elétrica e funcionamento num motor real continuam por validar.**
 
-Continuam por implementar, entre outras funções, controlo de ralenti, turbo, VVT, detonação, flex fuel, launch control, Lua, correções de IAT/tensão, enriquecimento de aceleração e lambda em malha fechada.
+Continuam por implementar, entre outras funções, controlo VVT, detonação, flex fuel, launch control, Lua, correções de IAT/tensão, enriquecimento de aceleração e lambda em malha fechada.
 
 ![Arranque e aquecimento na Console](images/console/console-start-warmup.png)
 

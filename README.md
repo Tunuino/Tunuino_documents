@@ -129,3 +129,5 @@ A ligação das RPM ao formato de datalog está em [telemetry-assembly.md](https
 - [Configuração persistente, modo autónomo e mapas base](configuracao-persistente-mapas-base.md)
 
 - [Arranque, após arranque e aquecimento](arranque-aquecimento.md)
+
+- [TPS, ralenti PWM e controlo de turbo](ralenti-turbo-tps.md)

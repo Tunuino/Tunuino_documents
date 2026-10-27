@@ -1,3 +1,5 @@
+> Atualização: [TPS, ralenti PWM e controlo de turbo](ralenti-turbo-tps.md), com migração da flash e cópia `.tnaux` separada.
+
 > Arranque e aquecimento: [configuração aplicada pelo firmware](arranque-aquecimento.md).
 
 > Atualização: [perfil persistente, funcionamento autónomo, mapas base e tempos em ms](configuracao-persistente-mapas-base.md). As referências anteriores a perfil volátil aplicam-se às versões antigas.

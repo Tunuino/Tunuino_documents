@@ -1,3 +1,5 @@
+> Atualização: [TPS, ralenti PWM e controlo de turbo](ralenti-turbo-tps.md), com migração da flash e cópia `.tnaux` separada.
+
 # Configuração persistente e mapas base
 
 A Console passa a guardar o perfil do motor na flash, juntamente com sensores e mapas. A política autónoma permite ativar o perfil guardado ao ligar a alimentação e manter o funcionamento sem computador. A configuração de fábrica continua sem perfil ativo. Esta revisão não equivale ainda a uma gestão de motor completa e validada fisicamente.
@@ -34,7 +36,7 @@ As configurações anteriores de esquema 2 são preservadas e continuam com o pe
 
 Testes de código executam o adaptador real com GPIO/temporizadores simulados, independência de consultas USB, recusa de escritas com saídas ativas, corte e paragem sem reativação automática, recuperação USB com serviço contínuo, gravação interrompida em cada palavra do registo, leitura C/Java, backups e conversão exata de ms. A interface é exercitada por JavaFX; a compilação F427 e a instalação Windows são verificadas no CI.
 
-**Não foram realizados aqui ensaios elétricos nem ensaios num motor.** Faltam ainda controlo de ralenti, turbo, VVT, detonação, flex fuel, launch control, Lua, compensações IAT/tensão e enriquecimento de aceleração, entre outras funções. Os menus desta versão só representam funções existentes.
+**Não foram realizados aqui ensaios elétricos nem ensaios num motor.** Faltam ainda controlo VVT, detonação, flex fuel, launch control, Lua, compensações IAT/tensão e enriquecimento de aceleração, entre outras funções. Os menus desta versão só representam funções existentes.
 
 Implementação: [commit ab6da89](https://github.com/Tunuino/Tunuino/commit/ab6da89cc1bca8f34d7c09f95b7eafe7b192ee81). Todos os testes do commit passaram e o [pacote correspondente foi publicado](https://github.com/Tunuino/Tunuino/releases/tag/nightly-2026-10-27-40463353146).
 

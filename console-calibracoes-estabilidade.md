@@ -1,3 +1,5 @@
+> Atualização do painel: [apenas Estado do motor à direita, sem coluna Registo](console-painel-simplificado.md). A imagem abaixo documenta a versão 1.0.105 anterior a esta simplificação.
+
 > Atualização: [correção do firmware para a queda USB ao guardar na ECU](correcao-gravacao-usb.md).
 
 # Console: painel, calibrações e estabilidade USB

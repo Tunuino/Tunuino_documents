@@ -4,6 +4,8 @@ Conteúdo transferido do README de [Tunuino/Tunuino](https://github.com/Tunuino/
 
 Firmware próprio para centralinas Proteus e uaEFI e Tunuino Console para Windows.
 
+Pacote 1.0.106: [queda USB ao guardar mapas/configurações na ECU e atualização do firmware](correcao-gravacao-usb.md).
+
 Atualização: [painel conforme a referência visual, calibrações dos sensores e correção do piscar de Firmware/USB](console-calibracoes-estabilidade.md). As capturas usam dados sintéticos de teste.
 
 O projeto tem firmware experimental de controlo sequencial para Proteus v0.7 F427, com perfil persistente e funcionamento autónomo. A validação elétrica e no motor continua pendente; as notas históricas abaixo descrevem etapas anteriores.

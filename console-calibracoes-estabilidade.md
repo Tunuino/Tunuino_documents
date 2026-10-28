@@ -1,3 +1,5 @@
+> Atualização: [correção do firmware para a queda USB ao guardar na ECU](correcao-gravacao-usb.md).
+
 # Console: painel, calibrações e estabilidade USB
 
 **Console 1.0.105 · build 031a448**, para Proteus v0.7 STM32F427. Publicação de 28 de outubro de 2026.

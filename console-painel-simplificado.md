@@ -1,3 +1,5 @@
+> Atualização: [correção do tamanho das tabelas, separadores ajustáveis e logótipo original](console-tabelas-redimensionamento.md).
+
 # Painel: apenas Estado do motor
 
 **Console 1.0.107 · build ef50741.**

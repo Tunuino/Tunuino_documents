@@ -4,6 +4,8 @@ Conteúdo transferido do README de [Tunuino/Tunuino](https://github.com/Tunuino/
 
 Firmware próprio para centralinas Proteus e uaEFI e Tunuino Console para Windows.
 
+Console 1.0.110: [tabelas estáveis, painéis redimensionáveis e logótipo original](console-tabelas-redimensionamento.md).
+
 Console 1.0.107: [coluna Registo removida; apenas Estado do motor e mais espaço para as tabelas](console-painel-simplificado.md).
 
 Pacote 1.0.106: [queda USB ao guardar mapas/configurações na ECU e atualização do firmware](correcao-gravacao-usb.md).

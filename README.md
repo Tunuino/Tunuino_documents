@@ -1,4 +1,4 @@
-Atualização: [seletor Português/English, autocalibração assistida, mapas iniciais e Dead time em tabela](console-idiomas-calibracao-mapas.md).
+Console 1.0.116: [seletor Português/English, autocalibração assistida, mapas iniciais e Dead time em tabela](console-idiomas-calibracao-mapas.md).
 
 # Documentação e publicações Tunuino
 

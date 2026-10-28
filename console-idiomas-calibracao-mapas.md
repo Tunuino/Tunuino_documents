@@ -1,6 +1,8 @@
 # Console: Português / English, mapas iniciais e calibrações
 
-Atualização de **28 de outubro de 2026** para a Console Windows e Proteus v0.7 STM32F427. Alterações de apresentação e aquisição de calibrações; o formato do firmware permanece compatível.
+**Console 1.0.116 · build de46fe1**, publicada em **28 de outubro de 2026**, para Windows e Proteus v0.7 STM32F427. Alterações de apresentação e aquisição de calibrações; o formato do firmware permanece compatível.
+
+[Instalador Windows x64](https://github.com/Tunuino/Tunuino/releases/download/nightly-2026-10-28-40744940487/tunuino_setup_windows_x64.msi) · [Release com Bundle portátil](https://github.com/Tunuino/Tunuino/releases/tag/nightly-2026-10-28-40744940487).
 
 ## Língua da interface
 
@@ -52,6 +54,6 @@ São os valores genéricos que já existiam no esquema da Console, agora visíve
 
 Passaram localmente os testes do núcleo C/Java e da aplicação JavaFX real em modo headless Linux. Cobrem mapas preenchidos offline, proveniência independente VE/ignição, substituição por leitura, invalidação ao mudar de ECU, captura estável/instável, geração e relógio, TPS invertido, ordenação de NTC, ausência de aplicação prematura, bloqueio offline/ocupado e mudança de ligação. Verificam edição exata do Dead time em ms e alternância Português/English sem alteração de mapas ou bytes da configuração.
 
-A compilação e a verificação do pacote Windows são executadas pelo workflow Windows Console. O teste local não utiliza ECU física e não valida eletricamente sensores, injetores ou curvas de calibração. Os ensaios físicos na Proteus continuam necessários.
+Também passaram no GitHub: núcleo C/Java, firmware F427, Desktop, INI TunerStudio, compilação da Console e teste da interface com o Java do pacote Windows. O instalador 1.0.116 passou instalação, verificação do firmware/runtime instalado, atalhos, atualização, desinstalação e preservação de ficheiros. O Bundle verificou o mesmo commit e checksums antes da publicação. As primeiras tentativas da verificação Windows e do instalador encontraram um timeout na consulta DFU do Windows; a repetição dos jobs passou sem alterar nem remover esses testes ou os seus prazos. O teste local não utiliza ECU física e não valida eletricamente sensores, injetores ou curvas de calibração. Os ensaios físicos na Proteus continuam necessários.
 
 Implementação: [de46fe1](https://github.com/Tunuino/Tunuino/commit/de46fe1919182c558b5f7fa6d1a13145f089def7). [Verificações e capturas Windows](https://github.com/Tunuino/Tunuino/actions/workflows/build-console.yml).

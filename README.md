@@ -1,3 +1,5 @@
+Atualização: [seletor Português/English, autocalibração assistida, mapas iniciais e Dead time em tabela](console-idiomas-calibracao-mapas.md).
+
 # Documentação e publicações Tunuino
 
 Conteúdo transferido do README de [Tunuino/Tunuino](https://github.com/Tunuino/Tunuino) em 2026-10-22, a partir do commit `0043f5e1beb6f3f7c37e4913f15b9fe0c3fc0a36`. As próximas publicações e atualizações de progresso são mantidas neste repositório.

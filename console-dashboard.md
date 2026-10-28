@@ -1,3 +1,5 @@
+> Atualização de 28 de outubro: [Português/English, mapas preenchidos no arranque, autocalibração assistida e tabelas de Dead time](console-idiomas-calibracao-mapas.md).
+
 # Tunuino Console — interface ECU de 16×16
 
 Atualizado em **26 de outubro de 2026**. Referência visual: painel escuro com logótipo Tunuino azul, instrumentos, tabelas e representação 3D. Implementação: JavaFX 21 na aplicação Windows, não uma imagem estática.
@@ -25,7 +27,7 @@ O painel inclui locais para TPS, IAT, bateria, pressão de combustível, pressã
 
 ## Tabelas e protocolos
 
-As tabelas VE e ignição têm **16 pontos RPM × 16 pontos MAP** no firmware e na Console. São obtidas por `TUNUINO:M` com snapshot de geração e CRC32. A leitura é explícita e só ocorre com porta USB disponível, sem monitorização ou programação simultânea. As tabelas têm valores reais apenas depois de uma leitura validada. O dashboard destaca o quadrado de interpolação RPM/MAP a partir das últimas amostras válidas, sem modificar os mapas nem enviar escritas automáticas.
+As tabelas VE e ignição têm **16 pontos RPM × 16 pontos MAP** no firmware e na Console. São obtidas por `TUNUINO:M` com snapshot de geração e CRC32. A leitura é explícita e só ocorre com porta USB disponível, sem monitorização ou programação simultânea. As tabelas abrem preenchidas com a base genérica aspirada local, explicitamente identificada como **BASE GENÉRICA · POR AFINAR**. A leitura validada substitui apenas a tabela correspondente pelos dados reais da ECU. O destaque de célula ativa exige uma tabela efetivamente lida da ECU. O dashboard destaca o quadrado de interpolação RPM/MAP a partir das últimas amostras válidas, sem modificar os mapas nem enviar escritas automáticas.
 
 O editor de mapas utiliza um fluxo diferente: uma gravação explícita valida, persiste e confirma o conteúdo por leitura completa. O ficheiro 8×8 só é aceite como **importação histórica para conversão local**; não é um formato de funcionamento da ECU IO 0.2.0. A versão nova usa páginas 576/576 e esquema de flash 2. Deve-se guardar uma cópia dos mapas/configuração antigos antes de atualizar o firmware.
 
@@ -35,9 +37,9 @@ O logótipo original passou de 105 para **270 px de largura** na janela normal, 
 
 ## Edição a partir do painel
 
-No Dashboard, Fuel Tables e Ignition Tables, lê primeiro a tabela da ECU. Usa **Editar tabela** ou faz duplo clique numa das 256 células: o editor abre com a linha MAP e a coluna RPM escolhidas. A abertura e a edição são locais; **Guardar e verificar na ECU** é a ação explícita que escreve, persiste e compara a leitura completa com o mapa enviado. Após sucesso, as três páginas atualizam-se com o mapa verificado.
+No Dashboard, Fuel Tables e Ignition Tables, as referências base 16×16 já podem ser abertas offline por **Editar tabela** ou duplo clique. São locais e o editor aberto desta forma não oferece escrita na ECU. Para editar o mapa da centralina, lê primeiro essa tabela; o editor abre com a linha MAP e a coluna RPM escolhidas. A abertura e a edição são locais; **Guardar e verificar na ECU** é a ação explícita que escreve, persiste e compara a leitura completa com o mapa enviado. Após sucesso, as três páginas atualizam-se com o mapa verificado.
 
-A edição a partir do painel exige uma tabela lida na ligação identificada atual e a porta livre. Parar ou retomar uma operação USB preserva a cópia da mesma sessão. Desligar, perder a identificação ou mudar de ECU limpa os mapas apresentados e exige nova leitura. Um editor já aberto conserva a cópia local, mas não pode escrever depois de mudar a sessão ou a identificação. Se uma tentativa de gravação falhar, os mapas do painel são invalidados até nova leitura.
+A edição a partir do painel exige uma tabela lida na ligação identificada atual e a porta livre. Parar ou retomar uma operação USB preserva a cópia da mesma sessão. Desligar, perder a identificação ou mudar de ECU remove as cópias da sessão anterior e volta a mostrar as referências locais, identificadas como genéricas. Os dados da ECU exigem nova leitura. Um editor já aberto conserva a cópia local, mas não pode escrever depois de mudar a sessão ou a identificação. Se uma tentativa de gravação falhar, os mapas do painel são invalidados até nova leitura.
 
 Os seis mostradores ajustam a largura para ocupar uma linha em janelas de desktop com espaço suficiente; em janelas estreitas distribuem-se em duas linhas de três. Os cartões secundários também ajustam a largura. Os controlos das tabelas passam à linha seguinte quando necessário.
 

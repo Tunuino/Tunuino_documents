@@ -1,3 +1,5 @@
+> Atualização de 28 de outubro: [Português/English, mapas preenchidos no arranque, autocalibração assistida e tabelas de Dead time](console-idiomas-calibracao-mapas.md).
+
 > Atualização: [Autotune VE assistido com dados USB e novos modos de motor 360°](modos-360-autotune.md). A lista de funções pendentes nesta publicação refere-se à Console 1.0.105.
 
 > Atualização do painel: [apenas Estado do motor à direita, sem coluna Registo](console-painel-simplificado.md). A imagem abaixo documenta a versão 1.0.105 anterior a esta simplificação.

@@ -1,3 +1,5 @@
+> Atualização: [semi-sequencial/batch 360° e Autotune VE assistido](modos-360-autotune.md). A descrição de ausência de Autotune abaixo refere-se à versão 1.0.99.
+
 > Atualização: [painel, calibrações centralizadas e estabilidade de Firmware/USB](console-calibracoes-estabilidade.md).
 
 # Combustível, lambda e proteções

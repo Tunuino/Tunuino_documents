@@ -1,3 +1,5 @@
+> Atualização: [bobinas duplas por pares e projeto completo](bobinas-projeto-completo.md). A limitação de bobinas partilhadas abaixo refere-se à versão 1.0.112.
+
 # Modos 360° e Autotune VE com dados reais
 
 **Console 1.0.112 · build 190617e.**

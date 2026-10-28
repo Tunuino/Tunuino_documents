@@ -6,6 +6,8 @@ Firmware próprio para centralinas Proteus e uaEFI e Tunuino Console para Window
 
 Nova etapa: [aquisição da fase da árvore de cames na Proteus e leitura USB na Console](fase-cames.md). VVT ainda sem comando da válvula; ensaio físico pendente.
 
+Console 1.0.114: [bobinas duplas e cópia/restauro do projeto completo da ECU](bobinas-projeto-completo.md).
+
 Console 1.0.112: [modos 360° no firmware e Autotune VE com dados USB reais](modos-360-autotune.md).
 
 Console 1.0.110: [tabelas estáveis, painéis redimensionáveis e logótipo original](console-tabelas-redimensionamento.md).

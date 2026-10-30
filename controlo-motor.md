@@ -8,9 +8,8 @@
 
 # Controlo experimental do motor — Proteus v0.7 F427
 
-A implementação [8623c56](https://github.com/Tunuino/Tunuino/commit/8623c56254da0e74b854afa9200c4bd6869eef8d) acrescenta saídas físicas à Tunuino. **Compilação e testes simulados não equivalem a validação na ECU.** Começa com cargas de ensaio e osciloscópio; não existe calibração predefinida do teu motor.
 
-[Descarregar o Bundle correspondente](https://github.com/Tunuino/Tunuino/releases/tag/nightly-2026-10-26-40342132371). Windows Console, Firmware, Unit tests, Desktop, TunerStudio, Bundle e Publish Release passaram para o mesmo commit `8623c56`.
+[Descarregar o Bundle correspondente](https://github.com/Tunuino/Tunuino/releases/tag/nightly-2026-10-26-40342132371). Windows Console, Firmware, Unit tests, Desktop, TunerStudio, Bundle e Publish Release passaram para o mesmo alteração técnica.
 
 ## Sequência na Console
 

@@ -1,10 +1,6 @@
-> Atualização: [correção do tamanho das tabelas, separadores ajustáveis e logótipo original](console-tabelas-redimensionamento.md).
-
 # Painel: apenas Estado do motor
 
-**Console 1.0.107 · build ef50741.**
 
-[Instalador Windows](https://github.com/Tunuino/Tunuino/releases/download/nightly-2026-10-28-40610177017/tunuino_setup_windows_x64.msi) · [Bundle e notas da versão](https://github.com/Tunuino/Tunuino/releases/tag/nightly-2026-10-28-40610177017).
 
 A coluna Registo foi retirada do Painel e das páginas Combustível · VE e Ignição · avanço. À direita fica apenas Estado do motor, incluindo saídas, falhas, comunicação, porta e versão de firmware. A tabela ocupa agora 80% da largura central.
 

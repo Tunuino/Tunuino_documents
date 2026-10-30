@@ -1,6 +1,5 @@
 # Proteus v0.7 F427 — ensaio USB com ChibiOS
 
-**[Descarregar o Bundle com Console, firmware e INI](https://github.com/Tunuino/Tunuino/releases/download/nightly-2026-10-23-39927868860/tunuino_bundle_proteus_v07_f427_usb_bench.zip)** · [Release](https://github.com/Tunuino/Tunuino/releases/tag/nightly-2026-10-23-39927868860) · build **f105ed0**.
 
 O firmware **0.0.3** acrescenta identificação de bancada pelo TunerStudio, mantendo o protocolo da Tunuino Console. O ZIP inclui `firmware/tunuino_proteus_v07_f427_usb_bench.ini`, correspondente ao firmware distribuído. [Ligar no TunerStudio](tunerstudio.md).
 
@@ -58,6 +57,5 @@ O único ZIP anexo contém `console/`, `firmware/`, `kit-manifest.json`, `START-
 
 ## Histórico
 
-A imagem ChibiOS **0.0.2**, de **18 872 bytes**, foi a primeira com USB/identificação confirmados pelo utilizador, no [build 65472d5](https://github.com/Tunuino/Tunuino/releases/tag/nightly-2026-10-22-39842387200). Não implementa os comandos deste INI. As imagens anteriores de cerca de 16 KiB usavam startup próprio e TinyUSB e não são a imagem atual.
 
 A [AN2606 da ST](https://www.st.com/resource/en/application_note/an2606-introduction-to-system-memory-boot-mode-on-stm32-mcus-stmicroelectronics.pdf) documenta o DFU ROM dos STM32F42xxx/43xxx. A referência de hardware é o [esquema MCU Proteus](https://github.com/Tunuino/proteus/blob/383558bf7ca1c53ad8bbd8fdc9dd3a4187013c46/mcu.kicad_sch).

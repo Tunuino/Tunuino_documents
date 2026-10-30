@@ -33,7 +33,6 @@ O editor de mapas utiliza um fluxo diferente: uma gravação explícita valida, 
 
 ## Logótipo no cabeçalho
 
-O logótipo original passou de 105 para **270 px de largura** na janela normal, de 84 para **246 px** na janela compacta e de 68 para **228 px** nas janelas de menor altura. A proporção original é preservada. A alteração está no commit [85dc050](https://github.com/Tunuino/Tunuino/commit/85dc0503a75f4bda28043dea029859b6473500c9). A compilação limpa e os testes JavaFX locais passaram, incluindo os tamanhos compactos; a verificação do pacote Windows com o Java incluído também passou. Firmware, Unit tests, Desktop, TunerStudio, Bundle e Publish Release passaram para o mesmo commit.
 
 ## Edição a partir do painel
 
@@ -49,14 +48,13 @@ Em Inputs / Outputs, define o número de cilindros e os canais LS/IGN, PMS, jane
 
 ## Testes e limites
 
-A alteração [7b53fbd](https://github.com/Tunuino/Tunuino/commit/7b53fbd9cec0668f94cb0776357fcbc1e26c3621) passou os testes locais do núcleo C/Java e os testes reais de interface JavaFX em Linux, com dados sintéticos. Foram verificados: botão de edição, duplo clique na célula 16/16, exclusão dos eixos, seleção da célula no editor, bloqueio durante operações USB, limpeza ao desligar/trocar de ECU e seis mostradores numa linha. Estes testes não ligaram uma ECU física. A compilação e a verificação do pacote Windows com o Java incluído passaram. Também passaram os workflows Firmware (imagem F427 e bibliotecas ARM), Unit tests, Desktop, TunerStudio, Bundle e Publish Release.
 
 Os workflows Windows Console e Desktop geram capturas reais JavaFX, verificam a navegação e a largura reduzida, mantêm o Autotune inativo e testam que os indicadores offline não exibem valores falsos. A disponibilidade de imagens e o sucesso de CI **não equivalem a ensaio na ECU física nem a funcionamento do TunerStudio Windows**.
 
 O firmware novo inclui comando experimental de injetores, sinais de ignição, bomba, relé e ventoinha, com perfil configurável em Inputs / Outputs e armação explícita. A validação física continua pendente. O estado apresentado indica comandos lógicos do MCU e não mede corrente ou confirmação elétrica da carga. [Configuração, ensaio e limitações](controlo-motor.md).
 
-[Bundle Windows + firmware F427 + INI](https://github.com/Tunuino/Tunuino/releases/tag/nightly-2026-10-26-40342132371): publicado em 26 de outubro de 2026, um único ZIP, commit `8623c56`. A publicação verifica a origem comum dos componentes e os checksums; a validação física continua pendente.
+[Bundle Windows + firmware F427 + INI](https://github.com/Tunuino/Tunuino/releases/tag/nightly-2026-10-26-40342132371): publicado em 26 de outubro de 2026, um único ZIP, alteração técnica. A publicação verifica a origem comum dos componentes e os checksums; a validação física continua pendente.
 
-O novo controlo experimental do commit `8623c56` passou igualmente os testes C/Java, compilação F427, pacote Windows com teste de interface, Desktop, TunerStudio, Bundle e publicação. Estes são testes automatizados, sem ensaio físico das novas saídas.
+O novo controlo experimental do alteração técnica passou igualmente os testes C/Java, compilação F427, pacote Windows com teste de interface, Desktop, TunerStudio, Bundle e publicação. Estes são testes automatizados, sem ensaio físico das novas saídas.
 
 [Código da Console](https://github.com/Tunuino/Tunuino/tree/master/java_console) · [Releases](https://github.com/Tunuino/Tunuino/releases) · [Documentação do firmware](firmware-f427-progresso.md).

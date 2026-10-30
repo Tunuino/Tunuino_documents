@@ -71,7 +71,7 @@ O manifesto é um contrato local de alvo e integridade, não uma assinatura digi
 - CI Windows aprovada na revisão 67ddd5a: compilou e empacotou Java 21, repetiu os testes de manutenção e abriu os controlos JavaFX do pacote, enumerando COM e executando a pesquisa DFU do Windows. O runner não tem uma ECU ligada.
 - Kit final aprovado: firmware, manifesto de gravação e Console do mesmo commit; hashes validados. Verificação local adicional do empacotador: ausência de ferramentas opcionais, inclusão de distribuição e rejeição de ferramenta alterada.
 
-**Os testes automáticos e locais não usam uma ECU física.** O utilizador forneceu posteriormente fotografias de gravação verificada e, no build 65472d5, de ligação USB com identidade recebida da ECU. Os testes simulados não validam o controlador USB, a instalação dos drivers numa máquina real, a gravação em flash, o BootCommander com esta ECU ou funcionamento de um motor.
+**Os testes automáticos e locais não usam uma ECU física.** Há registo de identificação USB numa ECU física, mas esse resultado não valida automaticamente outras versões. Os testes simulados não validam o controlador USB, a instalação dos drivers numa máquina real, a gravação em flash, o BootCommander com esta ECU ou funcionamento de um motor.
 
 ## Validação da identificação antes da gravação
 

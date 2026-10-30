@@ -1,15 +1,6 @@
-> Atualização de 28 de outubro: [Português/English, mapas preenchidos no arranque, autocalibração assistida e tabelas de Dead time](console-idiomas-calibracao-mapas.md).
-
-> Atualização: [Autotune VE assistido com dados USB e novos modos de motor 360°](modos-360-autotune.md). A lista de funções pendentes nesta publicação refere-se à Console 1.0.105.
-
-> Atualização do painel: [apenas Estado do motor à direita, sem coluna Registo](console-painel-simplificado.md). A imagem abaixo documenta a versão 1.0.105 anterior a esta simplificação.
-
-> Atualização: [correção do firmware para a queda USB ao guardar na ECU](correcao-gravacao-usb.md).
-
 # Console: painel, calibrações e estabilidade USB
 
 
-[Instalador Windows](https://github.com/Tunuino/Tunuino/releases/download/nightly-2026-10-27-40603513940/tunuino_setup_windows_x64.msi) · [Bundle e notas da versão](https://github.com/Tunuino/Tunuino/releases/tag/nightly-2026-10-27-40603513940).
 
 ## Painel de afinação
 

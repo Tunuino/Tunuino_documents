@@ -1,10 +1,9 @@
 # Bobinas duplas e projeto completo da ECU
 
-Esta atualização acrescenta modos para bobinas partilhadas por pares e um ficheiro de cópia/restauro que reúne a configuração completa da Proteus v0.7 STM32F427.
+O firmware inclui modos para bobinas partilhadas por pares e um ficheiro de cópia/restauro que reúne a configuração completa da Proteus v0.7 STM32F427.
 
 ## Instalação
 
-Console **1.0.114**, build **9c2c1b7**: [instalador Windows x64](https://github.com/Tunuino/Tunuino/releases/download/nightly-2026-10-28-40738358853/tunuino_setup_windows_x64.msi) · [publicação e ZIP portátil](https://github.com/Tunuino/Tunuino/releases/tag/nightly-2026-10-28-40738358853).
 
 Instala a Console e grava na Proteus o firmware incluído na pasta `firmware` deste pacote, seguindo o [procedimento USB/DFU](console-firmware-usb.md). Atualizar apenas a Console não acrescenta os novos modos ao firmware antigo. Exporta as configurações e os mapas antes de atualizar. O instalador não grava a ECU automaticamente.
 
@@ -63,7 +62,6 @@ O projeto completo foi exercitado pelo dispatcher C real e pelos clientes Java, 
 
 VVT, detonação, borboleta eletrónica, ralenti stepper, flex fuel por frequência, rodas OEM adicionais, mapa lambda 16×16, compensação barométrica, CAN/Lua e estratégias de transmissão/tração continuam pendentes.
 
-Código: [9c2c1b7](https://github.com/Tunuino/Tunuino/commit/9c2c1b73fbfad004337f70aa62927f6f0975c547). A aquisição de fase de cames desta base foi preservada.
 
 [Teste Windows](https://github.com/Tunuino/Tunuino/actions/runs/40737664582) · [Firmware](https://github.com/Tunuino/Tunuino/actions/runs/40737664622) · [Núcleo C/Java](https://github.com/Tunuino/Tunuino/actions/runs/40737664520) · [Desktop](https://github.com/Tunuino/Tunuino/actions/runs/40737664946) · [INI](https://github.com/Tunuino/Tunuino/actions/runs/40737664669).
 

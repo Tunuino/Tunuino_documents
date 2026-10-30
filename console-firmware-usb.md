@@ -4,10 +4,10 @@ A Console disponibiliza as funções de ligação USB, deteção DFU e gravaçã
 
 Para instalação, utilizar o Bundle `Tunuino-F427-Bundle.zip` da versão aplicável, quando disponível, com Console, firmware e INI compatíveis.
 
-A confirmação física anterior do utilizador refere-se ao firmware **0.0.2**, no **build 65472d5**, com USB e identificação Proteus/F4 visíveis na fotografia. A versão 0.0.3 e a ligação pela aplicação TunerStudio ainda precisam de ensaio físico.
+A identificação USB/COM já foi observada numa Proteus F427, mas esse resultado não valida todas as versões do firmware nem a comunicação com TunerStudio.
 
 
-A distribuição publicada tem os separadores **Dados e mapas** e **Firmware e USB**, com tamanho inicial adaptado ao ecrã. A revisão visual substitui-os pela navegação lateral descrita acima.
+A localização dos controlos pode variar conforme a versão da Console.
 
 ## Implementado
 
@@ -100,20 +100,20 @@ O diagnóstico anterior juntava duas condições diferentes numa única mensagem
 
 O parser compara o valor hexadecimal numérico e aceita zeros iniciais, saída CRLF, cores ANSI e preenchimento NUL. IDs diferentes, linhas inválidas e identificações contraditórias continuam a ser recusados. A suite verifica estas condições com ferramentas simuladas. A pipeline executou a mesma suite contra o JAR compilado e confirmou que o seu manifesto identifica o commit publicado.
 
-Extrair a nova pasta e verificar **build 65472d5** no título antes de repetir a tentativa. Se continuar bloqueada, guardar a mensagem completa e o código de saída apresentado. Não se pode concluir, com a fotografia anterior, se a causa restante é uma versão antiga em execução, a saída da ferramenta ou uma diferença ainda não observada no texto devolvido. Naquele momento não havia confirmação de gravação física bem-sucedida; a fotografia posterior descrita abaixo já mostra verificação positiva.
+Se a gravação for recusada, guardar a mensagem completa, a identificação do dispositivo e o código de saída da ferramenta ST.
 
 
 ## Startup e USB com o repositório Tunuino/ChibiOS
 
 Antes da migração, uma fotografia mostrava **Download verified successfully** para a imagem anterior de cerca de 16 KiB, mas o utilizador relatava ausência de COM e STM32 bootloader depois do reset. A causa exata dessa falha anterior não foi isolada; o resultado posterior com a imagem ChibiOS está registado abaixo.
 
-A implementação ChibiOS substitui a imagem de bancada padrão por **ChibiOS HAL USB/SerialUSB** do próprio [Tunuino/ChibiOS](https://github.com/Tunuino/ChibiOS/tree/fd2e59c34878b1ef93ef5358f11fb5cc830027ff), fixado no commit indicado. O startup, kernel, relógio e driver CDC vêm dessa base. A sequência de inicialização é: inicializar HAL/kernel e serial USB, desligar o USB por 250 ms, iniciar o controlador e voltar a ligar. Usa PA11/PA12, HSE de 8 MHz, SYSCLK de 168 MHz e USB de 48 MHz, sem deteção externa de VBUS.
+A implementação de bancada com ChibiOS utiliza por **ChibiOS HAL USB/SerialUSB** do próprio [Tunuino/ChibiOS](https://github.com/Tunuino/ChibiOS/tree/fd2e59c34878b1ef93ef5358f11fb5cc830027ff). O startup, kernel, relógio e driver CDC vêm dessa base. A sequência de inicialização é: inicializar HAL/kernel e serial USB, desligar o USB por 250 ms, iniciar o controlador e voltar a ligar. Usa PA11/PA12, HSE de 8 MHz, SYSCLK de 168 MHz e USB de 48 MHz, sem deteção externa de VBUS.
 
 A Console continua a gravar pela ferramenta ST e a exigir verificação. A imagem continua a começar em **0x08000000** e substitui um bootloader existente na flash. Depois da escrita, repor BOOT0 e reiniciar a placa.
 
 
 
-Extrair tudo para uma pasta nova e confirmar **build 65472d5** no título e **ChibiOS USB bench** na descrição do firmware. Após gravação verificada, repor BOOT0 e reiniciar. A nova COM e a leitura de identidade já foram confirmadas pelo utilizador neste build. Se continuar sem dispositivo USB, o próximo diagnóstico útil é ler por ST-Link o PC, os registos de falha e o símbolo tunuino_bench_fault, cujo endereço consta do manifesto do firmware.
+Após gravação verificada, repor BOOT0 e reiniciar. Se continuar sem dispositivo USB, utilizar ST-Link para inspecionar o contador de programa e os registos de falha; os símbolos de diagnóstico dependem da imagem gravada.
 
 O primeiro ensaio físico de USB/identificação desta imagem foi confirmado pelo utilizador, conforme o registo seguinte. [Detalhes técnicos](https://github.com/Tunuino/Tunuino/blob/65472d5ec942eee82f8b8be3fb4be7c5d37c0d4a/docs/proteus-chibios-usb.md).
 

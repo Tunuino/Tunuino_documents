@@ -45,6 +45,5 @@ A auditoria percorre os controlos reais da aplicação, mesmo em separadores nã
 
 A execução é feita com dados sintéticos, sem ECU nem revisão elétrica. O teste Windows usa o runtime e o JAR da aplicação empacotada. Os testes do instalador verificam o conteúdo instalado e os atalhos, atualização, desinstalação e preservação de dados. Não confirmam qual cópia está aberta no computador do utilizador.
 
-Código: [e7a5a6c](https://github.com/Tunuino/Tunuino/commit/e7a5a6c08c08b9d142c23cdc1dd6dcb879086445). Passaram a revisão completa da interface no [Windows](https://github.com/Tunuino/Tunuino/actions/runs/40576951792) e no [Linux](https://github.com/Tunuino/Tunuino/actions/runs/40576951796), assim como testes unitários, firmware e validação do INI.
 
 O [Bundle 40577148949](https://github.com/Tunuino/Tunuino/actions/runs/40577148949) verificou o MSI **1.0.103**: instalação, conteúdo instalado/runtime, atalhos, atualização, desinstalação e preservação de ficheiros do utilizador.

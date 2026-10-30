@@ -53,7 +53,6 @@ Capturas do teste automático da Console, sem ECU ligada. O quadro começa sem a
 
 ## Publicação verificada — Console 1.0.101
 
-Código na `master`: [57b2ae5](https://github.com/Tunuino/Tunuino/commit/57b2ae571a1cd762f72854efde89005a04ddf81a); implementação principal: [71dda9a](https://github.com/Tunuino/Tunuino/commit/71dda9af6f6b931c85aae63dcffd3e173b9613a0). Passaram núcleo C/Java, INI, interface desktop, Console Windows e firmware. O [Bundle 40551648797](https://github.com/Tunuino/Tunuino/actions/runs/40551648797) confirmou instalação, atualização, atalhos, runtime instalado, desinstalação e preservação dos ficheiros do utilizador. O instalador é **1.0.101**.
 
 - [Instalador Windows x64](https://github.com/Tunuino/Tunuino/releases/download/nightly-2026-10-27-40551966727/tunuino_setup_windows_x64.msi)
 - [Bundle portátil ZIP](https://github.com/Tunuino/Tunuino/releases/download/nightly-2026-10-27-40551966727/tunuino_bundle_proteus_v07_f427_usb_bench.zip)

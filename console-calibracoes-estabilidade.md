@@ -84,6 +84,5 @@ A interface percorre as páginas reais, verifica os 50 seletores de ligação, t
 
 Autotune, VVT, controlo de detonação, borboleta eletrónica e sensores adicionais continuam a exigir implementação e validação próprias. Esta publicação corrige os percursos descritos; não declara essas funções operacionais.
 
-Código: [031a448](https://github.com/Tunuino/Tunuino/commit/031a448e71fd11b7a7e08d1b2010c0288978fbba), com a implementação funcional em [202ab2c](https://github.com/Tunuino/Tunuino/commit/202ab2c7ddb8ea675f07a31c5a1e46ef0e1b7958). Passaram [Console Windows](https://github.com/Tunuino/Tunuino/actions/runs/40603181525), [interface Linux/simulador](https://github.com/Tunuino/Tunuino/actions/runs/40603181401), testes unitários, firmware e validação do INI para o mesmo commit.
 
 O [Bundle 40603328892](https://github.com/Tunuino/Tunuino/actions/runs/40603328892) verificou o MSI **1.0.105**: instalação, conteúdo instalado/runtime, atalhos, atualização, desinstalação e preservação de ficheiros do utilizador. O cabeçalho identifica **build 031a448** no executável desta publicação.

@@ -73,7 +73,7 @@ O manifesto é um contrato local de alvo e integridade, não uma assinatura digi
 
 **Os testes automáticos e locais não usam uma ECU física.** O utilizador forneceu posteriormente fotografias de gravação verificada e, no build 65472d5, de ligação USB com identidade recebida da ECU. Os testes simulados não validam o controlador USB, a instalação dos drivers numa máquina real, a gravação em flash, o BootCommander com esta ECU ou funcionamento de um motor.
 
-## Correção do bloqueio antes da gravação — 22 de outubro de 2026
+## Validação da identificação antes da gravação
 
 A fotografia enviada pelo utilizador mostra uma ECU real detetada pelo CubeProgrammer v2.19.0, com `Device ID : 0x0419` e grupo `STM32F42xxx/F43xxx`. A Console anterior procurava literalmente `0x419` e rejeitava o zero inicial, embora o valor hexadecimal seja o mesmo. O bloqueio ocorria antes do comando de escrita; aquela tentativa não iniciou a gravação.
 
@@ -92,13 +92,13 @@ Verificação: suite completa C/Java/KiCad local, ensaios de registos USB com es
 
 Para ensaiar: extrair o ZIP conjunto desta revisão para uma pasta nova, gravar o `.bin` com o respetivo `.bin.properties`, confirmar a mensagem de verificação positiva, repor BOOT0 em modo normal e cortar e restabelecer toda a alimentação. Verificar se surge uma porta COM. Se não surgir, registar o final da gravação e as propriedades/IDs de hardware do dispositivo USB que aparece ou desaparece ao ligar/desligar a ECU.
 
-## Mesmo erro de identificação voltou a ser reportado
+## Diagnóstico de erros de identificação
 
-A nova fotografia volta a mostrar `Device ID : 0x0419` com recusa antes da escrita. Foi descarregado e inspecionado o Bundle da revisão 16caace: checksum do ZIP e do JAR corretos, manifesto da Console a apontar para 16caace e classe compilada a conter a correção de zeros iniciais. Isto confirma o conteúdo publicado; não permite identificar o executável aberto no computador do utilizador.
+Uma recusa de gravação com `Device ID : 0x0419` exige distinguir falha da ferramenta, incompatibilidade de alvo e versão da Console em execução.
 
 O diagnóstico anterior juntava duas condições diferentes numa única mensagem: saída não zero do CubeProgrammer e ausência do ID esperado. O diagnóstico de gravação passa a registar o build, a ferramenta, o firmware escolhido e o **código de saída ST**. A recusa por saída não zero mostra esse código explicitamente. A recusa por ID inválido, diferente ou contraditório tem mensagem própria. Não foi removido o bloqueio de escrita quando a ferramenta falha.
 
-O parser compara o valor hexadecimal numérico e aceita zeros iniciais, saída CRLF, cores ANSI e preenchimento NUL. IDs diferentes, linhas inválidas e identificações contraditórias continuam a ser recusados. A suite verifica estas condições com ferramentas simuladas. A pipeline executou a mesma suite contra o JAR compilado e confirmou que o seu manifesto identifica o commit publicado.
+O parser compara o valor hexadecimal numérico e aceita zeros iniciais, saída CRLF, cores ANSI e preenchimento NUL. IDs diferentes, linhas inválidas e identificações contraditórias continuam a ser recusados; estes casos devem ser cobertos por testes automatizados.
 
 Se a gravação for recusada, guardar a mensagem completa, a identificação do dispositivo e o código de saída da ferramenta ST.
 
@@ -107,7 +107,7 @@ Se a gravação for recusada, guardar a mensagem completa, a identificação do 
 
 Antes da migração, uma fotografia mostrava **Download verified successfully** para a imagem anterior de cerca de 16 KiB, mas o utilizador relatava ausência de COM e STM32 bootloader depois do reset. A causa exata dessa falha anterior não foi isolada; o resultado posterior com a imagem ChibiOS está registado abaixo.
 
-A implementação de bancada com ChibiOS utiliza por **ChibiOS HAL USB/SerialUSB** do próprio [Tunuino/ChibiOS](https://github.com/Tunuino/ChibiOS/tree/fd2e59c34878b1ef93ef5358f11fb5cc830027ff). O startup, kernel, relógio e driver CDC vêm dessa base. A sequência de inicialização é: inicializar HAL/kernel e serial USB, desligar o USB por 250 ms, iniciar o controlador e voltar a ligar. Usa PA11/PA12, HSE de 8 MHz, SYSCLK de 168 MHz e USB de 48 MHz, sem deteção externa de VBUS.
+A implementação de bancada com ChibiOS utiliza **ChibiOS HAL USB/SerialUSB** do próprio [Tunuino/ChibiOS](https://github.com/Tunuino/ChibiOS/tree/fd2e59c34878b1ef93ef5358f11fb5cc830027ff). O startup, kernel, relógio e driver CDC vêm dessa base. A sequência de inicialização é: inicializar HAL/kernel e serial USB, desligar o USB por 250 ms, iniciar o controlador e voltar a ligar. Usa PA11/PA12, HSE de 8 MHz, SYSCLK de 168 MHz e USB de 48 MHz, sem deteção externa de VBUS.
 
 A Console continua a gravar pela ferramenta ST e a exigir verificação. A imagem continua a começar em **0x08000000** e substitui um bootloader existente na flash. Depois da escrita, repor BOOT0 e reiniciar a placa.
 
@@ -118,10 +118,10 @@ Após gravação verificada, repor BOOT0 e reiniciar. Se continuar sem dispositi
 O primeiro ensaio físico de USB/identificação desta imagem foi confirmado pelo utilizador, conforme o registo seguinte. [Detalhes técnicos](https://github.com/Tunuino/Tunuino/blob/65472d5ec942eee82f8b8be3fb4be7c5d37c0d4a/docs/proteus-chibios-usb.md).
 
 
-## Primeiro ensaio físico USB/identificação confirmado — 22 de outubro de 2026
+## Limites da validação física USB
 
-Em 22 de outubro de 2026, o utilizador confirmou **«Já funciona»** e enviou uma fotografia da Console **build 65472d5** ligada à ECU. A interface apresenta **Proteus · STM32 F4 · revisão 7 · firmware 0.0.2**, um UID e a mensagem **«ECU identificada · firmware sem dados em tempo real»**. Este ensaio confirma execução da aplicação, porta COM/ligação USB e resposta de identificação nesta unidade. Não foi um teste físico executado pelo agente.
+Foi observada numa Proteus F427 uma ligação USB/COM com resposta de identificação da ECU. Esta observação não comprova funcionamento do motor, gravação de todas as imagens nem compatibilidade de todas as versões.
 
 A ausência de dados em tempo real é esperada nesta imagem de bancada, que só anuncia identificação. Ainda não foram demonstrados sensores, RPM, mapas, controlo de motor, estabilidade prolongada ou repetibilidade de vários ciclos de alimentação/religação USB.
 
-O Bundle e os manifestos originais mantêm os resultados e hashes registados no momento da compilação. Este resultado físico posterior é documentado aqui; não se altera o ZIP já publicado nem se declara validação integral da ECU.
+As verificações de integridade do Bundle e os testes físicos são evidências distintas; nenhuma delas, isoladamente, valida todas as funções da ECU.

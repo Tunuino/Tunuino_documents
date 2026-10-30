@@ -1,5 +1,3 @@
-> Atualização: [painel, calibrações centralizadas e estabilidade de Firmware/USB](console-calibracoes-estabilidade.md).
-
 # TPS, ralenti PWM e controlo de turbo
 
 A Console e o TunerStudio passam a configurar TPS, ralenti e turbo. O firmware executa o PWM nas saídas LS atribuídas e controla a rotação/pressão nos modos PI. Os dois controlos começam desativados. Não foi realizado aqui ensaio elétrico nem ensaio com motor/válvulas reais.

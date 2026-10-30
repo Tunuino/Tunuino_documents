@@ -42,7 +42,6 @@ Testes de código executam o adaptador real com GPIO/temporizadores simulados, i
 
 **Não foram realizados aqui ensaios elétricos nem ensaios num motor.** Faltam ainda controlo VVT, detonação, flex fuel, launch control, Lua, compensações IAT/tensão e enriquecimento de aceleração, entre outras funções. Os menus desta versão só representam funções existentes.
 
-Implementação: [commit ab6da89](https://github.com/Tunuino/Tunuino/commit/ab6da89cc1bca8f34d7c09f95b7eafe7b192ee81). Todos os testes do commit passaram e o [pacote correspondente foi publicado](https://github.com/Tunuino/Tunuino/releases/tag/nightly-2026-10-27-40463353146).
 
 ## Arranque e aquecimento
 

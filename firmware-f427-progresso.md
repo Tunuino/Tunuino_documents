@@ -2,12 +2,10 @@
 
 Atualizado em **26 de outubro de 2026**. Alvo: **Proteus v0.7 / STM32F427**, protocolo IO **0.2.0**, assinatura `Tunuino Proteus v0.7 F427 IO v2`. A versão do protocolo mantém compatibilidade de sensores/mapas; identifica o pacote concreto pelo SHA do Bundle.
 
-O commit [8623c56](https://github.com/Tunuino/Tunuino/commit/8623c56254da0e74b854afa9200c4bd6869eef8d) acrescenta **comando físico experimental de saídas**, com perfil de motor configurável na Console. Não se trata apenas de pré-visualização matemática. A validação física destas novas saídas ainda não foi realizada.
 
 | Subsistema | Implementação e limites |
 |---|---|
 | Arranque F427, ChibiOS e USB CDC | Implementados; ligação COM e identificação de versões anteriores confirmadas pelo utilizador; nova imagem exige ensaio próprio |
-| LEDs de estado PE3..PE6 | [Implementados no commit c589056](leds-proteus-v07.md): teste no arranque, comunicação, estado do motor, aviso e erro crítico; temporizadores independentes; testes simulados e compilação F427 passaram, confirmação física pendente |
 | Sensores | 16 ADC, máscaras de validade e calibração de MAP/lambda/temperatura; TPS/IAT e outras medições calibradas ainda faltam |
 | Cambota/cames | Captura EXTI, roda uniforme com dentes em falta, fase 720°; janela de cames e referência ao PMS configuráveis no perfil |
 | Mapas | VE e ignição 16×16 nativos; leitura, edição, persistência e verificação completa; mapas de fábrica a zero |
@@ -35,10 +33,10 @@ As consultas `TUNUINO:E` e `TUNUINO:T` continuam só de leitura. O comando de at
 
 ## Verificação desta alteração
 
-Passaram localmente a compilação ARM F427, inspeção da imagem e vetores de interrupção, a bateria C/Java e a interface real JavaFX com dados sintéticos. Os testes novos incluem 12 cilindros entre 400 e 12.000 rpm, flancos LS/IGN, rejeição de perfis, sobreposição de pulsos, dwell máximo, contador a dar a volta, atrasos, perda de fase, alterações de configuração, paragem, bloqueio da rotina principal e expiração da comunicação. Passaram também Windows Console (incluindo execução dos testes da UI no Java incluído no pacote), Firmware, Unit tests, Desktop, TunerStudio, Bundle e Publish Release para o commit `8623c56`.
+Passaram localmente a compilação ARM F427, inspeção da imagem e vetores de interrupção, a bateria C/Java e a interface real JavaFX com dados sintéticos. Os testes novos incluem 12 cilindros entre 400 e 12.000 rpm, flancos LS/IGN, rejeição de perfis, sobreposição de pulsos, dwell máximo, contador a dar a volta, atrasos, perda de fase, alterações de configuração, paragem, bloqueio da rotina principal e expiração da comunicação. Passaram também Windows Console (incluindo execução dos testes da UI no Java incluído no pacote), Firmware, Unit tests, Desktop, TunerStudio, Bundle e Publish Release para o alteração técnica.
 
 **Não houve ensaio físico destas saídas nem funcionamento confirmado num motor.** O firmware inicia desarmado e não inclui uma afinação para o motor do utilizador. Começar por cargas de ensaio e osciloscópio, com pinagem/polaridade verificadas e fontes/limites adequados.
 
-[Bundle Console + firmware + INI — commit 8623c56](https://github.com/Tunuino/Tunuino/releases/tag/nightly-2026-10-26-40342132371), publicado com um único ZIP em 26 de outubro de 2026.
+[Bundle Console + firmware + INI — alteração técnica](https://github.com/Tunuino/Tunuino/releases/tag/nightly-2026-10-26-40342132371), publicado com um único ZIP em 26 de outubro de 2026.
 
 [Configurar e testar saídas](controlo-motor.md) · [Contrato técnico e limites](https://github.com/Tunuino/Tunuino/blob/master/docs/engine-outputs.md) · [Mapa de pinos](https://github.com/Tunuino/Tunuino/blob/master/hardware/review/proteus-v07-outputs.json) · [Console](console-dashboard.md) · [Releases](https://github.com/Tunuino/Tunuino/releases).

@@ -1,6 +1,5 @@
 # Calibração de leituras brutas de sensores
 
-Implementação portátil: [commit b73283f](https://github.com/Tunuino/Tunuino/commit/b73283f613f096f9cd99f72f6c1727fc20b51d50).
 
 ## Implementado
 
@@ -36,7 +35,6 @@ Os novos testes cobrem todos os valores de uma curva sintética por troços, ext
 
 ## Integração simulada com o datalog
 
-Atualização de 2026-10-22: [commit ba30e61](https://github.com/Tunuino/Tunuino/commit/ba30e61b331cc609bfe6e12968d9a08ca30df74b).
 
 O peer C inclui agora o cenário `sensor-recover`: leituras brutas passam por `tunuino_analog_update`, montagem da telemetria, dispatcher, enquadramento binário, clientes Java e gravador CSV. As RPM provêm do descodificador de capturas de dentes simulados. MAP, lambda e temperatura resultam da interpolação de curvas sintéticas, incluindo uma curva de temperatura decrescente.
 

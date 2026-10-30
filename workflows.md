@@ -33,7 +33,6 @@ O APK Android experimental é um artefacto da execução **Android**, chamado `a
 
 ## Verificação desta revisão
 
-Implementação: [e2b1c65](https://github.com/Tunuino/Tunuino/commit/e2b1c65a8edd88a350c53aad6d65d856189b50e2), com seleção de empacotamento e testes em [e50a296](https://github.com/Tunuino/Tunuino/commit/e50a296189eb57fee8cfa0d35b3cdb4d2dfcbb00).
 
 A [execução completa 40123914479](https://github.com/Tunuino/Tunuino/actions/runs/40123914479) aprovou GCC/Clang, definições geradas, firmware ARM, Console/runtime Windows, módulos Gradle, ferramentas Java contra o simulador C real e montagem sincronizada. A [Release](https://github.com/Tunuino/Tunuino/releases/tag/nightly-2026-10-24-40123914479) contém um único anexo Bundle ZIP.
 

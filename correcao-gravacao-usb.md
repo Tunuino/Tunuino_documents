@@ -1,6 +1,5 @@
 # Correção da ligação USB ao guardar na ECU
 
-**Pacote 1.0.106 · build 6681cc9**, para Proteus v0.7 STM32F427. Publicação de 28 de outubro de 2026.
 
 [Bundle: Console e firmware](https://github.com/Tunuino/Tunuino/releases/download/nightly-2026-10-28-40607345974/tunuino_bundle_proteus_v07_f427_usb_bench.zip) · [Instalador Windows](https://github.com/Tunuino/Tunuino/releases/download/nightly-2026-10-28-40607345974/tunuino_setup_windows_x64.msi) · [Notas da versão](https://github.com/Tunuino/Tunuino/releases/tag/nightly-2026-10-28-40607345974).
 
@@ -36,7 +35,6 @@ Depois da alteração passaram os cenários de persistência de **2, 250, 1500 e
 
 Também passaram descoberta, comunicação TunerStudio, transmissão sem confirmação, perda/reconfiguração USB e recuperação. Os testes C/Java de mapas/configuração verificam gravação e releitura, precisão, preservação de mapas e manutenção dos dados pendentes quando a confirmação da flash falha.
 
-São testes de software e de um modelo de hardware. A flash e a ligação USB da ECU física do utilizador continuam a precisar de confirmação após a atualização.
 
 
 O [Bundle 40607141909](https://github.com/Tunuino/Tunuino/actions/runs/40607141909) verificou o MSI **1.0.106**, incluindo instalação, conteúdo instalado/runtime, atalhos, atualização, desinstalação e preservação de dados. Firmware e Console pertencem ao mesmo commit desta publicação.

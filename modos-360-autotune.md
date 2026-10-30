@@ -57,10 +57,8 @@ Os testes do Autotune verificam filtros, alvo/PI, limites, precisão, preservaç
 
 VVT, aquisição de detonação, borboleta eletrónica com supervisão redundante, ralenti stepper, flex fuel por frequência, rodas OEM adicionais, bobinas partilhadas por pares, mapa lambda 16×16, compensação barométrica, controlo por CAN, Lua e estratégias de transmissão/tração não ficam concluídos nesta atualização. Não são apresentados como funções operacionais nem substituídos por leituras fictícias.
 
-Código: [190617e](https://github.com/Tunuino/Tunuino/commit/190617e0efcb22ee60dcd30eb3222709d9c432a6).
 
 [Teste Windows](https://github.com/Tunuino/Tunuino/actions/runs/40668054494) · [Firmware](https://github.com/Tunuino/Tunuino/actions/runs/40668054476) · [Núcleo C/Java](https://github.com/Tunuino/Tunuino/actions/runs/40668054404) · [Desktop](https://github.com/Tunuino/Tunuino/actions/runs/40668054506) · [INI](https://github.com/Tunuino/Tunuino/actions/runs/40668054560).
 
 O arredondamento para 0,01% VE mantém o limite escolhido mesmo em células muito pequenas; quando não existe uma alteração representável dentro desse limite, a célula fica inalterada.
 
-O Bundle [40668215741](https://github.com/Tunuino/Tunuino/actions/runs/40668215741) aprovou instalação, atualização, runtime, atalhos, desinstalação e preservação dos ficheiros do utilizador do instalador 1.0.112.

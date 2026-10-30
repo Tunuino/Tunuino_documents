@@ -30,7 +30,6 @@ O teste do tamanho preferido falhou com o código anterior e passou após a corr
 
 Os testes usam dados sintéticos, sem ECU física. Esta alteração aplica-se ao atualizar a Console; o pacote continua a incluir a [correção USB ao guardar na ECU](correcao-gravacao-usb.md), que exige o firmware correspondente.
 
-Código: [d0e69b1](https://github.com/Tunuino/Tunuino/commit/d0e69b1a84f91e44b7e051e569ac306a25373f8d).
 
 [Teste Windows](https://github.com/Tunuino/Tunuino/actions/runs/40611732770) · [Desktop e simulador](https://github.com/Tunuino/Tunuino/actions/runs/40611732737) · [Testes do núcleo](https://github.com/Tunuino/Tunuino/actions/runs/40611732915).
 

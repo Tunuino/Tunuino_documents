@@ -22,7 +22,6 @@ Captura da Console JavaFX empacotada para Windows, build ef50741, com dados sint
 
 A aplicação JavaFX real passou na navegação entre páginas, leitura/edição de mapas, dimensões compactas e grandes, calibrações e descoberta de dispositivos. Os testes usam dados sintéticos, sem ECU física.
 
-Código: [ef50741](https://github.com/Tunuino/Tunuino/commit/ef50741bcc025dcece3a43f5499bc66bdf404f24).
 
 [Teste Windows](https://github.com/Tunuino/Tunuino/actions/runs/40609840133) · [Desktop e simulador](https://github.com/Tunuino/Tunuino/actions/runs/40609840138) · [Testes do núcleo](https://github.com/Tunuino/Tunuino/actions/runs/40609840127).
 

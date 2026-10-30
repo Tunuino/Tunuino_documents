@@ -1,8 +1,6 @@
 # Tabelas estáveis, redimensionamento e logótipo
 
-**Console 1.0.110 · build d0e69b1.**
 
-[Instalador Windows](https://github.com/Tunuino/Tunuino/releases/download/nightly-2026-10-28-40612015401/tunuino_setup_windows_x64.msi) · [Bundle e notas da versão](https://github.com/Tunuino/Tunuino/releases/tag/nightly-2026-10-28-40612015401).
 
 O desenho das tabelas usava o tamanho do contentor, mas também participava no cálculo do tamanho preferido desse contentor. Essa dependência fazia a área pedir um novo tamanho quando era redesenhada. Os desenhos VE, ignição e 3D passam a seguir apenas o espaço atribuído, respeitando as bordas, sem alterar as medidas pedidas ao layout.
 

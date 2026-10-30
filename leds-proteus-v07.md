@@ -68,10 +68,7 @@ Depois de instalar um pacote gerado a partir deste commit ou de um descendente:
 5. Fechar a ligação da Console antes de testar a mesma COM no TunerStudio.
 
 Os pacotes anteriores não incluem esta implementação. O
-[Release c589056](https://github.com/Tunuino/Tunuino/releases/tag/nightly-2026-10-26-40366536946)
 foi publicado com
-[instalador Windows](https://github.com/Tunuino/Tunuino/releases/download/nightly-2026-10-26-40366536946/tunuino_setup_windows_x64.msi)
-e [ZIP para testes](https://github.com/Tunuino/Tunuino/releases/download/nightly-2026-10-26-40366536946/tunuino_bundle_proteus_v07_f427_usb_bench.zip).
 Passaram no GitHub: Firmware, Unit tests (GCC/Clang), Desktop, TunerStudio,
 Windows Console, Bundle (incluindo instalação, atualização e desinstalação do
 MSI) e Publish Release. Os dois anexos foram confirmados como carregados e

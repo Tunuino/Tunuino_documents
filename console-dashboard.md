@@ -1,5 +1,3 @@
-> Atualização de 28 de outubro: [Português/English, mapas preenchidos no arranque, autocalibração assistida e tabelas de Dead time](console-idiomas-calibracao-mapas.md).
-
 # Tunuino Console — interface ECU de 16×16
 
 Atualizado em **26 de outubro de 2026**. Referência visual: painel escuro com logótipo Tunuino azul, instrumentos, tabelas e representação 3D. Implementação: JavaFX 21 na aplicação Windows, não uma imagem estática.

@@ -1,6 +1,5 @@
 # Origem de capturas e propagação de falhas
 
-Implementação portátil: [commit 9fac0d4](https://github.com/Tunuino/Tunuino/commit/9fac0d458e48fc3f38752087e0d84845657c39d2).
 
 O novo módulo C `capture_source.h/c` reúne a extensão do relógio de 32 bits, a resolução das capturas atrasadas e a publicação na fila do processador de cambota/cames.
 
@@ -55,7 +54,6 @@ Faltam a configuração dos timers STM32, leitura coerente dos registos, deteç�
 
 ## Capturas conjuntas do timer
 
-Implementado no commit 94d47c3a70135eb44760b375b4e7e1578dcb781f: `tunuino_capture_source_sample` recebe zero, uma ou duas capturas brutas e uma leitura atual do mesmo timer. Há no máximo uma captura por canal. O driver deve reter todos os registos pendentes antes de ler o contador atual, detetar overcapture/reset/perda temporal e garantir que não deixa uma captura mais antiga para a chamada seguinte.
 
 A função valida os dois timestamps antes de publicar qualquer evento e ordena-os pelo instante estendido de 64 bits, mesmo na passagem do contador por zero. Em empate publica cambota antes de cames. Sem capturas, a mesma API faz a observação periódica necessária com o motor parado.
 
@@ -69,7 +67,6 @@ Os workflows deste commit também concluíram com sucesso no GitHub: Core checks
 
 ## Capturas até ao CSV Java
 
-Integração de teste no [commit cd04251](https://github.com/Tunuino/Tunuino/commit/cd042510b4ac15a5767ae5c31f9efb58014f55b7).
 
 O processo C usado pelos testes Java deixou de injetar eventos diretamente no processador. Os cenários de cambota passam agora pela API `tunuino_capture_source_sample`, com capturas brutas de 32 bits, extensão do relógio, fila, descodificação, telemetria, dispatcher e comunicação entre processos, até aos clientes e ao gravador CSV reais da Console.
 
@@ -88,7 +85,6 @@ Esta alteração integra e alarga o ambiente de teste; não acrescenta um driver
 
 ## Telemetria coerente entre aquisição e USB
 
-Implementação portátil no [commit 6a2233f](https://github.com/Tunuino/Tunuino/commit/6a2233f8ceef138d27d567d8c5225b1e1962b82e): `live_mailbox.h/c`.
 
 A aquisição pode agora publicar uma amostra completa enquanto a tarefa USB lê outra, através de três buffers com transferência atómica de propriedade. Há exatamente um produtor serializado e um consumidor serializado. A inicialização, reinicialização e qualquer alteração da configuração exigem os dois lados parados; o objeto não pode ser copiado nem escrito por DMA. A inicialização recusa plataformas nas quais o índice atómico não é lock-free.
 
@@ -118,7 +114,6 @@ Esta etapa acrescenta o mecanismo portátil e a sua integração no ambiente sim
 
 ## Verificação de frescura no pedido completo
 
-Implementado no [commit 864d55d](https://github.com/Tunuino/Tunuino/commit/864d55def5d1232b41cada4dddfc8245742a447c): nova inicialização opcional `tunuino_link_init_mailbox`.
 
 O ciclo de comunicação pode agora ser ligado diretamente à mailbox de aquisição. Antes de executar o dispatcher de cada pedido completo, lê a amostra mais recente para um snapshot interno e verifica a idade com o instante atual da comunicação. Um pacote iniciado com a amostra ainda fresca e concluído no limite de idade recebe NOT_READY para o pedido de telemetria. O limite de idade é positivo e configurável; o relógio da comunicação tem de ser monotónico e pertencer ao mesmo domínio temporal da aquisição.
 

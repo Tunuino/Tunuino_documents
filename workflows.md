@@ -1,6 +1,6 @@
 # Workflows Tunuino
 
-O repositório tem oito ficheiros de workflow, separados por responsabilidade. O antigo `ci.yml` foi removido. A estrutura dos módulos e os comandos estão em [estrutura e funções](estrutura-e-funcoes.md).
+Os workflows estão organizados por responsabilidade. A lista abaixo descreve os pipelines existentes na estrutura documentada; confirmar os ficheiros atuais no repositório antes de executar. A estrutura dos módulos e os comandos estão em [estrutura e funções](estrutura-e-funcoes.md).
 
 | Ficheiro | Função |
 |---|---|
@@ -27,15 +27,12 @@ Mantêm-se a cache da toolchain ARM xPack e das dependências Maven; Android e d
 
 Uma distribuição conjunta deve utilizar firmware e Console provenientes da mesma revisão de código. A montagem usa exclusivamente os artefactos da execução atual, compara as revisões e verifica hashes, assinatura e layout do INI. Não reutiliza um componente de uma execução antiga.
 
-A Release continua a ter um único anexo: `tunuino_bundle_proteus_v07_f427_usb_bench.zip`. Contém `console/`, `firmware/`, o INI, fontes/licenças, instruções e checksums. O INI no código-fonte está em [`firmware/tunerstudio/generated/`](https://github.com/Tunuino/Tunuino/tree/master/firmware/tunerstudio/generated); dentro do Bundle mantém-se em `firmware/`, junto da imagem correspondente.
+O nome previsto para o Bundle F427 é `Tunuino-F427-Bundle.zip`. A publicação de um único anexo deve ser confirmada no workflow de Release. Contém `console/`, `firmware/`, o INI, fontes/licenças, instruções e checksums. O INI no código-fonte está em [`firmware/tunerstudio/generated/`](https://github.com/Tunuino/Tunuino/tree/master/firmware/tunerstudio/generated); dentro do Bundle mantém-se em `firmware/`, junto da imagem correspondente.
 
 O APK Android experimental é um artefacto da execução **Android**, chamado `android-debug-<SHA>`, com `tunuino-android-debug.apk` e `package-manifest.json`. Não é acrescentado como outro ZIP à Release. A assinatura debug serve para testes; ainda não existe uma chave de distribuição Android estável.
 
-## Verificação desta revisão
+## Verificação e limitações
 
+Confirmar o estado de cada execução em [GitHub Actions](https://github.com/Tunuino/Tunuino/actions) e os anexos em [Releases](https://github.com/Tunuino/Tunuino/releases). Uma execução antiga bem-sucedida não comprova o estado atual do código nem a criação do Bundle Qt.
 
-A [execução completa 40123914479](https://github.com/Tunuino/Tunuino/actions/runs/40123914479) aprovou GCC/Clang, definições geradas, firmware ARM, Console/runtime Windows, módulos Gradle, ferramentas Java contra o simulador C real e montagem sincronizada. A [Release](https://github.com/Tunuino/Tunuino/releases/tag/nightly-2026-10-24-40123914479) contém um único anexo Bundle ZIP.
-
-A [execução Android 40123809702](https://github.com/Tunuino/Tunuino/actions/runs/40123809702) passou na compilação do APK, testes unitários, interoperabilidade de identificação e Android lint.
-
-Os testes locais e no GitHub usam dados sintéticos e transportes simulados/processos locais. O arranque e a identificação USB do firmware anterior 0.0.2 na Proteus F427 foram confirmados pelo utilizador em 22 de outubro. Android, TunerStudio e firmware 0.0.3 ainda exigem validação física. A imagem da ECU continua de bancada, sem controlo de motor, sensores físicos ou mapas.
+Os testes automáticos podem utilizar dados sintéticos e transportes simulados. A identificação USB numa Proteus F427 não valida, por si só, o funcionamento do motor, os sensores físicos ou a compatibilidade com TunerStudio e Android.

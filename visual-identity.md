@@ -1,6 +1,6 @@
 # Identidade visual da Tunuino
 
-O logótipo fornecido pelo utilizador foi integrado no commit 6107a8f18aa10409224c899fe4e78fd8e53ffcf3.
+O logótipo fornecido pelo utilizador foi integrado no alteração técnica.
 
 - README principal: imagem acima da descrição curta, sem publicações de progresso.
 - Tunuino Console: ícone da janela principal e das janelas de edição de mapas.

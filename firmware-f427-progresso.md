@@ -37,6 +37,5 @@ Passaram localmente a compilação ARM F427, inspeção da imagem e vetores de i
 
 **Não houve ensaio físico destas saídas nem funcionamento confirmado num motor.** O firmware inicia desarmado e não inclui uma afinação para o motor do utilizador. Começar por cargas de ensaio e osciloscópio, com pinagem/polaridade verificadas e fontes/limites adequados.
 
-[Bundle Console + firmware + INI — alteração técnica](https://github.com/Tunuino/Tunuino/releases/tag/nightly-2026-10-26-40342132371), publicado com um único ZIP em 26 de outubro de 2026.
 
 [Configurar e testar saídas](controlo-motor.md) · [Contrato técnico e limites](https://github.com/Tunuino/Tunuino/blob/master/docs/engine-outputs.md) · [Mapa de pinos](https://github.com/Tunuino/Tunuino/blob/master/hardware/review/proteus-v07-outputs.json) · [Console](console-dashboard.md) · [Releases](https://github.com/Tunuino/Tunuino/releases).

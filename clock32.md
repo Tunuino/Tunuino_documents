@@ -1,6 +1,5 @@
 # Extensão do contador de microssegundos
 
-Implementação portátil: [commit 0dfc4b7](https://github.com/Tunuino/Tunuino/commit/0dfc4b7241492e30b9752d4f76137d4454ce4db7).
 
 O módulo C `clock32.h/c` transforma observações cronológicas de um contador livre de 32 bits, a 1 MHz, em timestamps de 64 bits. Mantém um tempo inicial explícito e soma a diferença modular entre observações, incluindo a passagem de UINT32_MAX para zero. O tempo inicial pode ter uma origem diferente do valor bruto.
 
@@ -38,7 +37,6 @@ Os testes também passaram com AddressSanitizer e UndefinedBehaviorSanitizer.
 
 ## Capturas atrasadas
 
-Atualização: [commit 7aaabda](https://github.com/Tunuino/Tunuino/commit/7aaabda40d0411e030c642dbef28822a3d01cb66).
 
 `tunuino_clock32_capture` associa o valor bruto de um registo de captura ao tempo de 64 bits da última observação do contador. Não avança nem recua o relógio. Calcula a idade modular e subtrai-a ao tempo observado; assim, uma captura anterior à volta do contador conserva o instante do impulso quando é lida depois da volta.
 

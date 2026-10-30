@@ -38,6 +38,5 @@ Também passaram descoberta, comunicação TunerStudio, transmissão sem confirm
 
 São testes de software e de um modelo de hardware. A flash e a ligação USB da ECU física do utilizador continuam a precisar de confirmação após a atualização.
 
-Código: [6681cc9](https://github.com/Tunuino/Tunuino/commit/6681cc933dfe7182388a747218519d9b35e72673). Passaram [firmware](https://github.com/Tunuino/Tunuino/actions/runs/40606999319), [testes unitários](https://github.com/Tunuino/Tunuino/actions/runs/40606999565), [Console Windows](https://github.com/Tunuino/Tunuino/actions/runs/40606999495), [interface/simulador](https://github.com/Tunuino/Tunuino/actions/runs/40606999645) e validação do INI para o mesmo commit.
 
 O [Bundle 40607141909](https://github.com/Tunuino/Tunuino/actions/runs/40607141909) verificou o MSI **1.0.106**, incluindo instalação, conteúdo instalado/runtime, atalhos, atualização, desinstalação e preservação de dados. Firmware e Console pertencem ao mesmo commit desta publicação.

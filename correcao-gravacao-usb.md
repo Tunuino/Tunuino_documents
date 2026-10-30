@@ -1,7 +1,6 @@
 # Correção da ligação USB ao guardar na ECU
 
 
-[Bundle: Console e firmware](https://github.com/Tunuino/Tunuino/releases/download/nightly-2026-10-28-40607345974/tunuino_bundle_proteus_v07_f427_usb_bench.zip) · [Instalador Windows](https://github.com/Tunuino/Tunuino/releases/download/nightly-2026-10-28-40607345974/tunuino_setup_windows_x64.msi) · [Notas da versão](https://github.com/Tunuino/Tunuino/releases/tag/nightly-2026-10-28-40607345974).
 
 ## Falha identificada
 

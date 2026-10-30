@@ -50,6 +50,5 @@ O teste de atualização usa o mesmo conteúdo com dois números de versão para
 
 ## Resultado validado
 
-O instalador **1.0.90**, do commit [`6d31d7a`](https://github.com/Tunuino/Tunuino/commit/6d31d7a75565a4f74dcffd61ddcd2c65c9e130f9), passou a instalação limpa, atualização entre duas versões, verificação dos componentes e atalhos, abertura com Java incluído, descoberta do firmware, desinstalação e preservação dos ficheiros de utilizador. [Execução Windows aprovada](https://github.com/Tunuino/Tunuino/actions/runs/40352791984).
 
 Os testes foram executados num runner Windows Server 2022. Falta o teste de utilização no computador do utilizador. A Console, o firmware F427 e os testes de núcleo, ferramentas desktop e TunerStudio também passaram no mesmo commit. Não foi realizada validação física da ECU nesta alteração.

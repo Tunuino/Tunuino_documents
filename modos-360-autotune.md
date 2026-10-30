@@ -1,10 +1,6 @@
-> Atualização: [bobinas duplas por pares e projeto completo](bobinas-projeto-completo.md). A limitação de bobinas partilhadas abaixo refere-se à versão 1.0.112.
-
 # Modos 360° e Autotune VE com dados reais
 
-**Console 1.0.112 · build 190617e.**
 
-[Instalador Windows](https://github.com/Tunuino/Tunuino/releases/download/nightly-2026-10-28-40668465000/tunuino_setup_windows_x64.msi) · [Bundle e notas da versão](https://github.com/Tunuino/Tunuino/releases/tag/nightly-2026-10-28-40668465000).
 
 **Para usar os modos 360°, instala a Console e grava o firmware incluído na Proteus por DFU.** Instalar apenas a Console não acrescenta os modos ao firmware antigo.
 

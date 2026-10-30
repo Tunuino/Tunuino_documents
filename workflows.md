@@ -25,7 +25,7 @@ Mantêm-se a cache da toolchain ARM xPack e das dependências Maven; Android e d
 
 ## Sincronização e downloads
 
-Uma alteração que exija distribuir firmware ou Console constrói os dois a partir do mesmo commit. A montagem usa exclusivamente os artefactos da execução atual, compara os commits e verifica hashes, assinatura e layout do INI. Não reutiliza um componente de uma execução antiga.
+Uma distribuição conjunta deve utilizar firmware e Console provenientes da mesma revisão de código. A montagem usa exclusivamente os artefactos da execução atual, compara as revisões e verifica hashes, assinatura e layout do INI. Não reutiliza um componente de uma execução antiga.
 
 A Release continua a ter um único anexo: `tunuino_bundle_proteus_v07_f427_usb_bench.zip`. Contém `console/`, `firmware/`, o INI, fontes/licenças, instruções e checksums. O INI no código-fonte está em [`firmware/tunerstudio/generated/`](https://github.com/Tunuino/Tunuino/tree/master/firmware/tunerstudio/generated); dentro do Bundle mantém-se em `firmware/`, junto da imagem correspondente.
 

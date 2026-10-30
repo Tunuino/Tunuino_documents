@@ -1,12 +1,11 @@
 # Tunuino Console — USB, DFU e gravação de firmware
 
-O [novo aspeto da Console](console-visual.md) está preparado para integração. A navegação lateral apresenta **Painel**, **Mapas** e **Firmware e USB**; a ligação COM fica no cabeçalho. As instruções de gravação abaixo mantêm-se aplicáveis, e o download indicado refere-se à versão já publicada.
+A Console disponibiliza as funções de ligação USB, deteção DFU e gravação de firmware. O aspeto da interface pode variar entre versões.
 
-**[Descarregar Console, firmware e INI num só ZIP](https://github.com/Tunuino/Tunuino/releases/download/nightly-2026-10-23-39927868860/tunuino_bundle_proteus_v07_f427_usb_bench.zip)**. Esta [Release](https://github.com/Tunuino/Tunuino/releases/tag/nightly-2026-10-23-39927868860) apresenta **build f105ed0** na Console e firmware **0.0.3**. A [pipeline 39927868860](https://github.com/Tunuino/Tunuino/actions/runs/39927868860) verifica a imagem ARM, o JAR e o runtime Windows. O [INI TunerStudio](tunerstudio.md) está incluído no mesmo Bundle.
+Para instalação, utilizar o Bundle `Tunuino-F427-Bundle.zip` da versão aplicável, quando disponível, com Console, firmware e INI compatíveis.
 
 A confirmação física anterior do utilizador refere-se ao firmware **0.0.2**, no **build 65472d5**, com USB e identificação Proteus/F4 visíveis na fotografia. A versão 0.0.3 e a ligação pela aplicação TunerStudio ainda precisam de ensaio físico.
 
-Implementação inicial: [89724f6](https://github.com/Tunuino/Tunuino/commit/89724f6f09236078c839630d7098db8a393ba5c2). Integração inicial ChibiOS USB: [65472d5](https://github.com/Tunuino/Tunuino/commit/65472d5ec942eee82f8b8be3fb4be7c5d37c0d4a), diretamente na master.
 
 A distribuição publicada tem os separadores **Dados e mapas** e **Firmware e USB**, com tamanho inicial adaptado ao ecrã. A revisão visual substitui-os pela navegação lateral descrita acima.
 
@@ -25,7 +24,7 @@ A distribuição publicada tem os separadores **Dados e mapas** e **Firmware e U
 
 ## Primeiro ensaio com a Proteus v0.7 STM32F427
 
-1. Descarregar o ZIP conjunto da Release corrigida indicada acima e extrair tudo para uma pasta nova. Contém `console/`, `firmware/`, manifesto comum e instruções. Usar o executável desta pasta, pois as versões antigas continuam com o erro de identificação DFU.
+1. Extrair o Bundle compatível para uma pasta nova. Confirmar que contém a Console, o firmware e o manifesto correspondente antes de iniciar a gravação.
 2. Guardar a instalação atual da ECU antes de a substituir. O ensaio continua a ser de bancada, com atuadores desligados.
 3. Executar `console/TunuinoConsole.exe` e abrir o separador **Firmware e USB**.
 4. A Console procura uma instalação normal do STM32CubeProgrammer. Se não a encontrar, usar **Ferramenta ST…** e selecionar o executável da instalação STM32CubeProgrammer. Manter todas as DLLs e a pasta `Data_Base` da ferramenta.
@@ -78,9 +77,8 @@ O manifesto é um contrato local de alvo e integridade, não uma assinatura digi
 
 A fotografia enviada pelo utilizador mostra uma ECU real detetada pelo CubeProgrammer v2.19.0, com `Device ID : 0x0419` e grupo `STM32F42xxx/F43xxx`. A Console anterior procurava literalmente `0x419` e rejeitava o zero inicial, embora o valor hexadecimal seja o mesmo. O bloqueio ocorria antes do comando de escrita; aquela tentativa não iniciou a gravação.
 
-A revisão [4a9b669](https://github.com/Tunuino/Tunuino/commit/4a9b669133dcaab9c12fcf0b09d7bba42f1e665a) aceita zeros iniciais e continua a exigir a linha de identificação completa e código de saída zero. Os testes reproduziram primeiro a falha anterior e passaram após a correção com `0x0419`, `0X000419` e saída CRLF do Windows. Identificadores diferentes, prefixos como `0x04190`, identificadores ausentes/inválidos e falhas da ferramenta continuam a impedir qualquer escrita. Estes ensaios usam ferramentas simuladas.
+A validação DFU aceita zeros iniciais e continua a exigir a linha de identificação completa e código de saída zero. Os testes reproduziram primeiro a falha anterior e passaram após a correção com `0x0419`, `0X000419` e saída CRLF do Windows. Identificadores diferentes, prefixos como `0x04190`, identificadores ausentes/inválidos e falhas da ferramenta continuam a impedir qualquer escrita. Estes ensaios usam ferramentas simuladas.
 
-Alterações ao backend de gravação passam a selecionar uma nova imagem de bancada junto da Console para publicar imediatamente um kit sincronizado. A [Release corrigida](https://github.com/Tunuino/Tunuino/releases/tag/nightly-2026-10-22-39829897109) está pública e o ZIP conjunto inclui ambos, sem necessidade de descarregar os ZIPs separados. A fotografia comprova a deteção e leitura da identificação física; não comprova gravação nem arranque do firmware. Naquele momento, a confirmação de escrita e arranque na ECU continuava pendente; o resultado posterior com ChibiOS está registado no fim desta página.
 
 ## USB sem porta COM após reset — configuração VBUS do F427
 
@@ -98,7 +96,7 @@ Para ensaiar: extrair o ZIP conjunto desta revisão para uma pasta nova, gravar 
 
 A nova fotografia volta a mostrar `Device ID : 0x0419` com recusa antes da escrita. Foi descarregado e inspecionado o Bundle da revisão 16caace: checksum do ZIP e do JAR corretos, manifesto da Console a apontar para 16caace e classe compilada a conter a correção de zeros iniciais. Isto confirma o conteúdo publicado; não permite identificar o executável aberto no computador do utilizador.
 
-O diagnóstico anterior juntava duas condições diferentes numa única mensagem: saída não zero do CubeProgrammer e ausência do ID esperado. A revisão [72e49b8](https://github.com/Tunuino/Tunuino/commit/72e49b8af471a29c16ddd025f8fb1272b552bf75) passa a registar o build, a ferramenta, o firmware escolhido e o **código de saída ST**. A recusa por saída não zero mostra esse código explicitamente. A recusa por ID inválido, diferente ou contraditório tem mensagem própria. Não foi removido o bloqueio de escrita quando a ferramenta falha.
+O diagnóstico anterior juntava duas condições diferentes numa única mensagem: saída não zero do CubeProgrammer e ausência do ID esperado. O diagnóstico de gravação passa a registar o build, a ferramenta, o firmware escolhido e o **código de saída ST**. A recusa por saída não zero mostra esse código explicitamente. A recusa por ID inválido, diferente ou contraditório tem mensagem própria. Não foi removido o bloqueio de escrita quando a ferramenta falha.
 
 O parser compara o valor hexadecimal numérico e aceita zeros iniciais, saída CRLF, cores ANSI e preenchimento NUL. IDs diferentes, linhas inválidas e identificações contraditórias continuam a ser recusados. A suite verifica estas condições com ferramentas simuladas. A pipeline executou a mesma suite contra o JAR compilado e confirmou que o seu manifesto identifica o commit publicado.
 
@@ -109,13 +107,11 @@ Extrair a nova pasta e verificar **build 65472d5** no título antes de repetir a
 
 Antes da migração, uma fotografia mostrava **Download verified successfully** para a imagem anterior de cerca de 16 KiB, mas o utilizador relatava ausência de COM e STM32 bootloader depois do reset. A causa exata dessa falha anterior não foi isolada; o resultado posterior com a imagem ChibiOS está registado abaixo.
 
-A revisão [65472d5](https://github.com/Tunuino/Tunuino/commit/65472d5ec942eee82f8b8be3fb4be7c5d37c0d4a) substitui a imagem de bancada padrão por **ChibiOS HAL USB/SerialUSB** do próprio [Tunuino/ChibiOS](https://github.com/Tunuino/ChibiOS/tree/fd2e59c34878b1ef93ef5358f11fb5cc830027ff), fixado no commit indicado. O startup, kernel, relógio e driver CDC vêm dessa base. A sequência de inicialização é: inicializar HAL/kernel e serial USB, desligar o USB por 250 ms, iniciar o controlador e voltar a ligar. Usa PA11/PA12, HSE de 8 MHz, SYSCLK de 168 MHz e USB de 48 MHz, sem deteção externa de VBUS.
+A implementação ChibiOS substitui a imagem de bancada padrão por **ChibiOS HAL USB/SerialUSB** do próprio [Tunuino/ChibiOS](https://github.com/Tunuino/ChibiOS/tree/fd2e59c34878b1ef93ef5358f11fb5cc830027ff), fixado no commit indicado. O startup, kernel, relógio e driver CDC vêm dessa base. A sequência de inicialização é: inicializar HAL/kernel e serial USB, desligar o USB por 250 ms, iniciar o controlador e voltar a ligar. Usa PA11/PA12, HSE de 8 MHz, SYSCLK de 168 MHz e USB de 48 MHz, sem deteção externa de VBUS.
 
 A Console continua a gravar pela ferramenta ST e a exigir verificação. A imagem continua a começar em **0x08000000** e substitui um bootloader existente na flash. Depois da escrita, repor BOOT0 e reiniciar a placa.
 
-Os testes locais e a [pipeline 39842387200](https://github.com/Tunuino/Tunuino/actions/runs/39842387200) passaram: imagem ARM de **18 872 bytes**, vetores reset/SysTick/USB e descritores CDC do binário, testes GCC/Clang, JAR e runtime Windows. O main real foi testado contra um modelo USB com dois pedidos juntos, conclusão atrasada, timeout, CRC inválido, desconexão e reconfiguração com uma conclusão antiga.
 
-O [Bundle desta revisão](https://github.com/Tunuino/Tunuino/releases/download/nightly-2026-10-22-39842387200/tunuino_bundle_proteus_v07_f427_usb_bench.zip) contém Console e firmware do mesmo commit, código-fonte correspondente e licenças ChibiOS dentro da pasta firmware. A Release tem apenas este anexo ZIP. Esta imagem continua a responder apenas à identificação Tunuino; não controla um motor.
 
 Extrair tudo para uma pasta nova e confirmar **build 65472d5** no título e **ChibiOS USB bench** na descrição do firmware. Após gravação verificada, repor BOOT0 e reiniciar. A nova COM e a leitura de identidade já foram confirmadas pelo utilizador neste build. Se continuar sem dispositivo USB, o próximo diagnóstico útil é ler por ST-Link o PC, os registos de falha e o símbolo tunuino_bench_fault, cujo endereço consta do manifesto do firmware.
 

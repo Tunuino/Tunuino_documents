@@ -1,7 +1,7 @@
 # LEDs de estado — Proteus v0.7 / STM32F427
 
 Atualizado em **26 de outubro de 2026**. Implementação no commit
-[c589056](https://github.com/Tunuino/Tunuino/commit/c589056bc2d069eba7836cc0c40216c986a67566),
+
 publicado na `master`. Os LEDs são indicadores do firmware; o LED de alimentação
 da placa continua separado.
 

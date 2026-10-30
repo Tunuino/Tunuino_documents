@@ -8,7 +8,6 @@
 
 # Console: painel, calibrações e estabilidade USB
 
-**Console 1.0.105 · build 031a448**, para Proteus v0.7 STM32F427. Publicação de 28 de outubro de 2026.
 
 [Instalador Windows](https://github.com/Tunuino/Tunuino/releases/download/nightly-2026-10-27-40603513940/tunuino_setup_windows_x64.msi) · [Bundle e notas da versão](https://github.com/Tunuino/Tunuino/releases/tag/nightly-2026-10-27-40603513940).
 

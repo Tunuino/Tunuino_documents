@@ -1,8 +1,6 @@
 # Console: Português / English, mapas iniciais e calibrações
 
-**Console 1.0.116 · build de46fe1**, publicada em **28 de outubro de 2026**, para Windows e Proteus v0.7 STM32F427. Alterações de apresentação e aquisição de calibrações; o formato do firmware permanece compatível.
 
-[Instalador Windows x64](https://github.com/Tunuino/Tunuino/releases/download/nightly-2026-10-28-40744940487/tunuino_setup_windows_x64.msi) · [Release com Bundle portátil](https://github.com/Tunuino/Tunuino/releases/tag/nightly-2026-10-28-40744940487).
 
 ## Língua da interface
 

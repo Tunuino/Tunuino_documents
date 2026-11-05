@@ -18,7 +18,7 @@ A implementação atual é específica para Proteus v0.7 com STM32F427, protocol
 
 A alimentação é medida no circuito 12V_RAW da placa. A referência é o esquema e PCB do hardware [Proteus](https://github.com/Tunuino/proteus/tree/383558bf7ca1c53ad8bbd8fdc9dd3a4187013c46): R1503 de 82 kΩ e R1504 de 10 kΩ, rede 12V_DIVIDED, U1501 contacto 43, ADC1_IN7. A sequência ADC do firmware coloca esta medição no índice 11; o runtime já transmite esse ADC no deslocamento 82. Não foi necessário alterar o firmware para disponibilizar a medição.
 
-A conversão usa referência nominal de 3,3 V e divisor de 9,2. Para entrar online, exige duas amostras válidas acima de 6 V, separadas por pelo menos 250 ms. Abaixo de 4 V fica offline. A histerese evita alternâncias durante pequenas quedas de tensão no arranque. ADC inválido, saturado, identidade incompatível ou perda da comunicação nunca confirmam online.
+A conversão usa referência nominal de 3,3 V e divisor de 9,2. Para entrar online, exige duas amostras válidas acima de 6 V, separadas por pelo menos 250 ms. Até 5,5 V fica offline, incluindo uma eventual tensão residual ao nível dos 5 V do USB. A histerese evita alternâncias durante pequenas quedas de tensão no arranque. ADC inválido, saturado, identidade incompatível ou perda da comunicação nunca confirmam online.
 
 Esta medição acompanha a alimentação externa da ECU. Não é uma entrada separada que leia diretamente a posição mecânica da chave. Numa instalação em que a chave comuta essa alimentação, acompanha ligar/desligar a ignição. USB sozinho permanece offline. O estado de alimentação não constitui uma proteção do motor nem arma saídas.
 

@@ -2,7 +2,7 @@
 
 ## Função atual na Console Qt
 
-**ECU → Write to ECU**, com atalho **F2**, guarda o mapa ativo na ECU. Estão disponíveis **Fuel Table** e **Ignition Table**, incluindo quando o respetivo gráfico 3D é a janela ativa. MAP, CLT, Lambda e TPS também podem ser guardados com a respetiva página de calibração ativa; consultar [Sensores e calibrações](console-calibracoes-estabilidade.md). AFR Target ainda não tem gravação ligada nesta interface.
+**ECU → Write to ECU**, com atalho **F2**, guarda o mapa ativo na ECU. Estão disponíveis **Fuel Table** e **Ignition Table**, incluindo quando o respetivo gráfico 3D é a janela ativa. MAP, CLT, Lambda, TPS, IAT e bateria também podem ser guardados com a respetiva página de calibração ativa; consultar [Sensores e calibrações](console-calibracoes-estabilidade.md). AFR Target ainda não tem gravação ligada nesta interface.
 
 A console deve estar ONLINE e ter lido o mapa da mesma ECU e geração. Editar uma tabela não envia dados automaticamente. Ao escolher Write to ECU, a confirmação identifica qual das duas tabelas será guardada.
 

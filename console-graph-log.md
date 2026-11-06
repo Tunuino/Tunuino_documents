@@ -44,3 +44,5 @@ Ainda não inclui gestão de presets, seleção e recorte de intervalos, condiç
 - Sem validação física de recolha na Proteus nesta alteração. Os testes sintéticos não demonstram o funcionamento físico dos sensores ou a precisão da aquisição.
 
 As tabelas e os seus redimensionamentos não foram alterados nesta implementação.
+
+O [Tune Display](console-tune-display.md) abre em Tools → Tune Display ou F7 e apresenta os mesmos canais reais em nove mostradores, com barras separadas de lambda e alvo. Esta primeira versão usa dados em tempo real; a ligação ao cursor histórico do Graph Log ainda não está implementada.

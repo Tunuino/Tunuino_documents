@@ -1,6 +1,6 @@
 # Tune Display da Tunuino Console
 
-Abre em **Tools → Tune Display**, com **F7**, ou na navegação **Gauges → Tune Display**. É uma janela independente na área de trabalho, com fecho, minimizar/maximizar, posição e tamanho ajustáveis. Fechar e voltar a abrir mantém os canais escolhidos.
+Abre em **Tools → Tune Display**, com **F7**, ou na navegação **Log → Tune Display**. É uma janela independente na área de trabalho, com fecho, minimizar/maximizar, posição e tamanho ajustáveis. Fechar e voltar a abrir mantém os canais escolhidos.
 
 ## Apresentação
 

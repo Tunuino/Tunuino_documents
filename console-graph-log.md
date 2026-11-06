@@ -18,7 +18,7 @@ O Graph Log substitui a página de registo que tinha o botão desativado. Abre e
 
 ## Canais e limites atuais
 
-O protocolo runtime atual permite RPM, MAP, Lambda e CLT, respeitando os indicadores de validade de cada resposta. RPM zero só é aceite quando validado pelo estado reportado pela ECU. TPS é calculado a partir do ADC real da entrada selecionada e da calibração TPS lida da mesma ECU e geração. Só fica disponível com ADC e curso válidos. IAT e Battery continuam indisponíveis nesta interface.
+O protocolo runtime atual permite RPM, MAP, Lambda e CLT, respeitando os indicadores de validade de cada resposta. RPM zero só é aceite quando validado pelo estado reportado pela ECU. TPS, IAT e Battery são calculados a partir do ADC real das entradas selecionadas e das calibrações lidas da mesma ECU e geração. TPS exige curso válido; IAT e bateria exigem amostras dentro dos limites da respetiva curva. ADC inválido, entrada desativada ou geração diferente deixam o canal indisponível. Battery usa a medição configurada por entrada AV com condicionamento externo; não substitui a deteção interna de alimentação da ECU.
 
 A consulta nominal é de 500 ms, aproximadamente 2 Hz; os tempos do CSV refletem a receção efetiva no PC. Não está implementada aquisição de alta frequência. Intervalos superiores a dois segundos e amostras inválidas interrompem a linha do gráfico, para não apresentar continuidade artificial.
 

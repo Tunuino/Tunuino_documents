@@ -10,7 +10,7 @@ O menu Tools conserva a ordem da referência fornecida. A tabela distingue funç
 | Test outputs | Pulsos físicos por protocolo nativo, com limites e verificações descritos abaixo; falta ensaio físico |
 | Diff. oil bleed | Não implementado: falta o serviço da bomba/diferencial do veículo |
 | Autotune | Recolha real, proposta limitada e aplicação ao editor local; limites abaixo |
-| Logbook | Não implementado: faltam estatísticas retidas na memória da ECU |
+| Logbook | Estatísticas retidas na ECU, leitura, checkpoint e reset; campos ainda sem aquisição aparecem indisponíveis |
 | User defined CAN stream | Não implementado: faltam transporte CAN e configuração persistente de frames |
 | Set EDL-1 datalogger time | Não implementado: falta comunicação com o datalogger |
 | Show assigned outputs | Lista real de funções, contactos e conflitos da configuração sincronizada |
@@ -23,8 +23,8 @@ O menu Tools conserva a ordem da referência fornecida. A tabela distingue funç
 | General options | Fonte da interface e modo claro/escuro; restantes opções do manual ainda não estão implementadas |
 | Available strategies | Mostrar/ocultar grupos na navegação, com persistência; não ativa estratégias da ECU |
 | Decode VW coding... | Não implementado: faltam transporte e definições de codificação CAN do veículo |
-| Vehicle VIN... | Não implementado: falta memória dedicada e transporte de diagnóstico na ECU |
-| Project comment... | Não implementado: falta guardar o comentário na ECU e no projeto |
+| Vehicle VIN... | Leitura/gravação de VIN dedicado na ECU; resposta de VIN por CAN/OBD ainda não implementada |
+| Project comment... | Comentário de até 64 caracteres Unicode na ECU e exportação de snapshot .tnproj; restauração ainda não disponível |
 
 ## Atribuições e nomes
 
@@ -54,12 +54,26 @@ A implementação atual exige alvo lambda habilitado na ECU e ausência de estra
 
 A proposta aplica 50% da correção lambda medida/alvo, limitada a ±10% por revisão. Zero VE não é inventado como base válida. A aplicação é permitida após parar a recolha, confirmar identidade/geração/páginas e verificar que a Fuel Table local não recebeu outras edições. Só modifica o editor local. Para tornar a alteração permanente, usar separadamente Write to ECU, com motor parado e saídas desarmadas; esse percurso preserva a cópia anterior e verifica as quatro páginas.
 
+## VIN, comentário e Logbook
+
+Exigem o novo firmware com capacidade 32 (perfil completo 63). Tools abre a página correspondente na janela de informação da ECU. A console congela a leitura por token, confere identidade/geração e verifica o valor depois de guardar. Revisões evitam que uma leitura antiga substitua dados entretanto alterados. Uma resposta perdida não repete a gravação.
+
+O VIN tem 17 caracteres alfanuméricos, sem I/O/Q; vazio apaga-o. É independente dos mapas e excluído dos ficheiros de projeto. Não há ainda resposta de VIN por CAN/OBD. O comentário admite até 64 caracteres Unicode imprimíveis. A exportação .tnproj contém as quatro páginas completas sincronizadas, comentário, alvo, UID/geração de origem, CRC32 e SHA-256; não inclui VIN ou Logbook. Esta janela ainda não abre nem restaura esses snapshots.
+
+O Logbook recolhe máximos de RPM/MAP/CLT/IAT, tempo acumulado acima de 95% TPS com RPM válido, maior contador observado de erros de trigger e bits retidos de falhas das saídas. EGT, velocidade, contador de reinícios watchdog e calibração do circuito WBO permanecem indisponíveis. O tempo indicado é o uptime da sessão em que se guardou, não uma data/hora nem horas totais de funcionamento.
+
+Os dados são recolhidos também sem a console ligada. O checkpoint automático exige alimentação externa válida, motor parado, ausência de flancos recentes, saídas desarmadas e configuração limpa durante dois segundos; fica limitado a uma gravação por minuto. Desligar abruptamente a alimentação pode perder observações posteriores ao último checkpoint. A janela mostra se há observações novas apenas em RAM. Reset exige confirmação e preserva VIN, comentário e mapas.
+
+A flash usa registos atómicos com CRC, marcador final e migração dos formatos anteriores. Guardar estes dados nunca torna uma calibração não gravada permanente; Write to ECU preserva os metadados. Uma falha de confirmação na flash bloqueia novas gravações até reiniciar e reler a ECU.
+
 ## Validação e limites
 
-Compilação local completa da console Qt e oito testes CTest, incluindo ToolsTest para ordem do menu, atribuições, conflitos, bobinas partilhadas, leitura Scope, verificações de pulsos e proveniência/limites de Autotune. Os ensaios de configuração existentes continuam a usar o dispatcher e os módulos C reais com persistência simulada.
+Compilação local completa da console Qt e nove testes CTest, incluindo ToolsTest para ordem do menu, atribuições, conflitos, bobinas partilhadas, leitura Scope, verificações de pulsos e proveniência/limites de Autotune. Os ensaios de configuração existentes continuam a usar o dispatcher e os módulos C reais com persistência simulada.
 
 O novo teste C de Scope cobre ordenação, rotação do buffer, imutabilidade da captura congelada, blocos, token/geração, limites e despacho do protocolo completo, incluindo compatibilidade com o perfil anterior. Passou com AddressSanitizer/UndefinedBehaviorSanitizer no computador; deteção de fugas desativada neste ambiente por limitação do LeakSanitizer. O workflow de firmware executa-o com GCC e Clang.
 
-Estes resultados não são validação física. O Scope precisa da versão de firmware que publica a capacidade 16. Testes físicos de saídas, aquisição USB e Autotune na Proteus continuam pendentes. Esta publicação não declara concluídas as dez funções marcadas como não implementadas, nem todos os detalhes de General options/User names do manual.
+Estes resultados não são validação física. O Scope precisa da versão de firmware que publica a capacidade 16. Testes físicos de saídas, aquisição USB e Autotune na Proteus continuam pendentes. Esta publicação não declara concluídas as sete funções marcadas como não implementadas, nem todos os detalhes de General options/User names do manual.
 
 A implementação das ferramentas passou a [compilação/instalador Windows](https://github.com/Tunuino/Tunuino/actions/runs/42281614256), os [testes C com GCC e Clang](https://github.com/Tunuino/Tunuino_Firmware/actions/runs/42281610313) e a [compilação ARM do firmware](https://github.com/Tunuino/Tunuino_Firmware/actions/runs/42281610496). O reforço posterior de ligação da captura Scope à identidade/geração sincronizada passou no ToolsTest local e tem nova execução de CI.
+
+VIN/comentário/Logbook: os nove testes Qt passaram localmente. ServiceDataTest usa transporte sintético e verifica leitura por blocos, independência dos campos, releitura, resposta perdida, estado incerto da flash e exclusão do VIN do projeto. O teste C de persistência usa os módulos reais com flash simulada e cobre migração, interrupção em cada palavra do registo, revisão desatualizada, Unicode, máximos retidos e resposta USB após gravação demorada; passou com ASan/UBSan, com a mesma limitação local de LeakSanitizer. Compilações Windows/ARM e GCC/Clang desta alteração estão em curso. Validação física na Proteus continua pendente.

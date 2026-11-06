@@ -1,4 +1,26 @@
-# Console: painel, calibrações e estabilidade USB
+# Sensores e calibrações na Console Qt
+
+A versão Qt atual lê automaticamente MAP, CLT, Lambda e TPS da ECU, permite editar a calibração e guarda cada sensor por **Write to ECU** ou **ECU → Write to ECU / F2** com a página do sensor ativa. IAT e tensão da bateria ainda não têm este percurso ligado na interface Qt. As imagens JavaFX mais abaixo são históricas e não representam a versão Qt atual.
+
+| Sensor | Edição atual |
+|---|---|
+| MAP | Dois pontos de tensão no conector / pressão em kPa |
+| CLT | Três pontos de tensão no conector / temperatura em °C |
+| Lambda | Dois pontos tensão/lambda; perfis por modelo de controlador e curva personalizada |
+| TPS | Captura de borboleta fechada e aberta; curso crescente ou decrescente |
+
+A escolha normal mostra Desativada e a ligação atual. **Customise input** abre os contactos AV1–AV11 ou AT1–AT4 do conector J103 da Proteus v0.7. As correspondências foram conferidas no PCB revisão 383558bf7ca1c53ad8bbd8fdc9dd3a4187013c46. Uma entrada ocupada por outra função é recusada ao validar a edição; não se desloca a função existente.
+
+A captura usa o ADC real da entrada selecionada. Exige amostra válida da mesma ECU e geração, recebida há no máximo dois segundos. A tensão apresentada corresponde ao conector, usando o divisor nominal 5,6 kΩ/10 kΩ da placa e a referência ADC guardada na configuração; não é uma medição independente por multímetro. As pressões e temperaturas de referência devem corresponder à condição conhecida do sensor instalado.
+
+Escolher um perfil Lambda apenas prepara os pontos; não escolhe a cablagem nem grava. Confirmar o modelo e a saída analógica configurada. Os valores são guardados em lambda, com três casas decimais. TPS em tempo real e no Graph Log é calculado a partir do ADC selecionado e da calibração lida da ECU; uma amostra inválida fica indisponível.
+
+A gravação exige motor parado, alimentação externa e saídas desarmadas. Confirma identidade/geração/base, preserva uma cópia interna da configuração anterior, altera apenas os campos do sensor, relê as quatro páginas, envia uma única gravação permanente e volta a confirmar todas as páginas. Não ativa estratégias ou saídas. A primeira configuração TPS pode inicializar uma página auxiliar vazia com todos os controlos desativados. A tolerância TPS existente é preservada.
+
+Passaram a compilação local Qt e os seis testes CTest. SensorCalibrationTest cobre conversão, conflitos, preservação de campos, TPS invertido, captura real simulada, rejeição de amostras antigas/inválidas e conservação de edições locais. As quatro gravações passaram também contra o dispatcher e os módulos C de Tunuino_Firmware fac3da2214abdea9bbeda3d0be42f4ae87bfb48e, com persistência e saídas simuladas no computador. **Ainda falta validação física na Proteus**, incluindo flash, USB e precisão dos sensores.
+
+## Registo histórico JavaFX
+
 
 
 

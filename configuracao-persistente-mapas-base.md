@@ -2,7 +2,7 @@
 
 ## Função atual na Console Qt
 
-**ECU → Write to ECU**, com atalho **F2**, guarda o mapa ativo na ECU. Estão disponíveis **Fuel Table** e **Ignition Table**, incluindo quando o respetivo gráfico 3D é a janela ativa. AFR Target e as configurações dos sensores ainda não têm gravação ligada nesta interface.
+**ECU → Write to ECU**, com atalho **F2**, guarda o mapa ativo na ECU. Estão disponíveis **Fuel Table** e **Ignition Table**, incluindo quando o respetivo gráfico 3D é a janela ativa. MAP, CLT, Lambda e TPS também podem ser guardados com a respetiva página de calibração ativa; consultar [Sensores e calibrações](console-calibracoes-estabilidade.md). AFR Target ainda não tem gravação ligada nesta interface.
 
 A console deve estar ONLINE e ter lido o mapa da mesma ECU e geração. Editar uma tabela não envia dados automaticamente. Ao escolher Write to ECU, a confirmação identifica qual das duas tabelas será guardada.
 
@@ -34,7 +34,7 @@ A gravação não permite afinação com o motor em funcionamento. Preserva sens
 ## Validação
 
 - Compilação local completa da console com Qt 6.4.2 em Linux; a cópia temporária de CMake usada no ensaio omite apenas a geração do script de distribuição da versão Qt do Windows.
-- Cinco testes locais: FrameCodecTest, LogDataTest, AutoConnectionTest, MapWriteTransactionTest e GraphLogWidgetTest.
+- Seis testes locais: FrameCodecTest, LogDataTest, AutoConnectionTest, MapWriteTransactionTest, SensorCalibrationTest e GraphLogWidgetTest.
 - MapWriteTransactionTest cobre Fuel e Ignition, células negativas de ignição, valores/eixos inválidos, identidade, base e geração antigas, alterações temporárias prévias, saídas armadas, CRC, falha de cópia anterior, rejeição de blocos, mudança de ECU, arranque/perda de alimentação antes da gravação, diferenças em páginas não editadas, falha de persistência e perda de resposta sem repetir Burn.
 - O mesmo teste foi executado contra o dispatcher e os módulos C reais de Tunuino_Firmware, revisão fac3da2214abdea9bbeda3d0be42f4ae87bfb48e, para Fuel e Ignition. A persistência e as saídas desse ensaio são simuladas no computador; não usa o driver físico de flash, USB nem GPIO.
 - O harness opcional encontra-se em qt_console/tests/MapWriteFirmwareHarness.c; pode ser compilado com os ficheiros C de firmware/src e o include firmware/include. Definir TUNUINO_FIRMWARE_HARNESS com o caminho do executável ao correr MapWriteTransactionTest.

@@ -1,49 +1,43 @@
+# Gravação de mapas na Tunuino Console
 
+## Função atual na Console Qt
 
+**ECU → Write to ECU**, com atalho **F2**, guarda o mapa ativo na ECU. Estão disponíveis **Fuel Table** e **Ignition Table**, incluindo quando o respetivo gráfico 3D é a janela ativa. AFR Target e as configurações dos sensores ainda não têm gravação ligada nesta interface.
 
-# Configuração persistente e mapas base
+A console deve estar ONLINE e ter lido o mapa da mesma ECU e geração. Editar uma tabela não envia dados automaticamente. Ao escolher Write to ECU, a confirmação identifica qual das duas tabelas será guardada.
 
-A Console passa a guardar o perfil do motor na flash, juntamente com sensores e mapas. A política autónoma permite ativar o perfil guardado ao ligar a alimentação e manter o funcionamento sem computador. A configuração de fábrica continua sem perfil ativo. Esta revisão não equivale ainda a uma gestão de motor completa e validada fisicamente.
+Os eixos são guardados com as 256 células. RPM aceita valores inteiros de 0 a 20000; MAP aceita 0 a 500 kPa, com até duas casas decimais. Os dois eixos devem aumentar estritamente. Fuel aceita 0 a 300 e Ignition -90 a 90 graus, com até duas casas decimais. A disposição visual MAP de baixo para cima é convertida para a ordem de armazenamento do firmware.
 
-## Começar pela base
+## Sequência de gravação
 
-1. Em **Motor e saídas → Motor**, escolher cilindros e ordem de ignição. Introduzir cilindrada e caudal real dos injetores e usar **Preencher configuração base**.
-2. A base propõe atribuições LS/IGN, ReqFuel estimado, dwell de 3 ms, Dead time de 1 ms, pulso máximo de 20 ms, escorva de 2000 ms e ventoinha 95/90 °C. São valores iniciais editáveis, não especificações universais das cargas. A referência do dente zero e a janela de fase exigem medição/configuração do motor real.
-3. Ao abrir a Console, o painel e as páginas VE/ignição já mostram a **Base genérica aspirado** 16×16, identificada como referência local por afinar. Não é preciso criar ou carregar mapas para obter os valores iniciais. **Editar tabela** abre a referência já apresentada, apenas localmente. Ler a ECU substitui o mapa correspondente pelos dados reais. Os controlos **Criar mapa base** e **Referência plana** continuam disponíveis para criar outras cópias; não há escrita automática.
-4. A base aspirada cobre 200–7000 rpm e 20–105 kPa absolutos. Não contém afinação para turbo. A referência plana usa VE 80% e avanço 10°. Ambas exigem ajustar mistura e avanço ao motor. Não são mapas de arranque certificados.
-5. Configurar roda fónica, curvas reais de MAP/temperatura e entradas. Guardar os dois mapas e o perfil do motor. A ativação autónoma exige perfil válido, captura, MAP, temperatura e todas as células VE preenchidas.
+1. Confirmar a identidade completa da ECU, a geração, a ausência de alterações temporárias e a validação da configuração.
+2. Confirmar motor parado, alimentação externa válida e saídas desarmadas. A operação não envia comandos ARM, RUN, STOP nem testes de saídas.
+3. Ler as quatro páginas da configuração e confirmar que o mapa base coincide com o mapa anteriormente lido pela console.
+4. Preservar automaticamente uma cópia interna das quatro páginas e da identidade em AppLocalDataLocation/ecu-history. Não é pedido um ficheiro ao utilizador. Esta cópia é da configuração e não reintroduz a função de backup de firmware removida do DFU.
+5. Preparar apenas a página do mapa escolhido, em blocos de 64 bytes.
+6. Reler todas as páginas. O mapa deve coincidir com a edição e as restantes páginas devem permanecer iguais à base.
+7. Revalidar configuração, geração, identidade, alimentação, RPM e estado das saídas. Só então enviar uma única ordem de gravação permanente.
+8. Reler novamente as quatro páginas e confirmar configuração válida, persistência, geração seguinte e saídas desarmadas.
 
-ReqFuel é uma estimativa de massa de ar/combustível para gasolina AFR 14,7, densidade de ar 1,184 g/L e combustível 0,745 g/mL. O caudal deve corresponder à pressão diferencial usada. A estimativa não inclui compensação de tensão ou IAT. As correções de arranque/aquecimento são configuradas num separador próprio, descrito abaixo. Não usar os valores do exemplo 2000 cm³ / 250 cm³/min como dados do motor sem os confirmar.
+Durante a operação, a edição e os ficheiros dos dois mapas ficam bloqueados, bem como o fecho normal da aplicação e a instalação de uma atualização. No final, a console sincroniza novamente os dados.
 
-## Tempos em milissegundos
+## Falhas e limites
 
-Injeção, dwell e Dead time aparecem em **ms**, com resolução de 0,001 ms. O formulário aceita ponto ou vírgula decimal; 2,5 ms é convertido exatamente para o temporizador. Testes individuais e estado das saídas também usam ms. A representação interna preserva a resolução original.
+Uma recusa antes de começar a escrita não grava mapas e mantém a ligação quando a identidade já foi confirmada. Uma base ou geração diferente exige nova leitura. Não se substitui silenciosamente uma configuração diferente.
 
-## Guardar e usar sem USB
+Uma falha depois de preparar blocos pode deixar dados temporários na ECU, sem os tornar permanentes. A console assinala alterações temporárias e bloqueia novas escritas; com o motor parado, reiniciar a ECU e aguardar nova leitura antes de tentar outra vez. Desligar apenas a ignição pode não reiniciar o processador enquanto houver alimentação USB.
 
-**Guardar motor na ECU** valida, grava e lê novamente os valores. A operação deixa as saídas desarmadas. **Ler configuração do motor** recupera o perfil depois de desligar/religar a ECU. O backup `.tncfg` inclui o perfil e a política de ativação; os mapas são ficheiros separados.
+Se a resposta à ordem de gravação permanente se perder, o resultado fica incerto: a console orienta para releitura e nunca repete essa ordem automaticamente. Só uma nova ação explícita do utilizador pode iniciar outra transação, depois de recuperar uma base limpa.
 
-No modo manual, a ativação é explícita e há supervisão USB de dois segundos. No modo autónomo, o próximo arranque elétrico ativa o perfil guardado e a USB não determina a continuidade do motor. Uma reconexão USB não reinicia a captura nem arma saídas. A espera de recuperação USB de 250 ms já não bloqueia o serviço do motor.
+A gravação não permite afinação com o motor em funcionamento. Preserva sensores, perfil do motor, política autónoma e restantes mapas. Não ativa funções nem arma saídas.
 
-**PARAR TODAS AS SAÍDAS** e as falhas mantêm o corte até nova ativação explícita ou reinício elétrico. Não há recuperação automática de um motor parado por perda de sincronismo. As escritas e Burn são recusados enquanto armado; esta revisão não permite afinação em funcionamento.
+## Validação
 
-## TunerStudio
+- Compilação local completa da console com Qt 6.4.2 em Linux; a cópia temporária de CMake usada no ensaio omite apenas a geração do script de distribuição da versão Qt do Windows.
+- Cinco testes locais: FrameCodecTest, LogDataTest, AutoConnectionTest, MapWriteTransactionTest e GraphLogWidgetTest.
+- MapWriteTransactionTest cobre Fuel e Ignition, células negativas de ignição, valores/eixos inválidos, identidade, base e geração antigas, alterações temporárias prévias, saídas armadas, CRC, falha de cópia anterior, rejeição de blocos, mudança de ECU, arranque/perda de alimentação antes da gravação, diferenças em páginas não editadas, falha de persistência e perda de resposta sem repetir Burn.
+- O mesmo teste foi executado contra o dispatcher e os módulos C reais de Tunuino_Firmware, revisão fac3da2214abdea9bbeda3d0be42f4ae87bfb48e, para Fuel e Ignition. A persistência e as saídas desse ensaio são simuladas no computador; não usa o driver físico de flash, USB nem GPIO.
+- O harness opcional encontra-se em qt_console/tests/MapWriteFirmwareHarness.c; pode ser compilado com os ficheiros C de firmware/src e o include firmware/include. Definir TUNUINO_FIRMWARE_HARNESS com o caminho do executável ao correr MapWriteTransactionTest.
+- O novo teste integra o CTest do workflow Windows existente. Ainda falta validar gravação permanente e releitura numa Proteus física.
 
-O INI desta revisão acrescenta motor/política de ativação, cilindros/saídas/PMS, ReqFuel, dwell, Dead time, limite de pulso, sincronização, bomba, ventoinha e relé. Os botões de ativação/paragem usam o perfil guardado. O estado distingue espera de fase, sequencial, falha e teste. Atualizar firmware, Console e INI em conjunto. Os modelos estruturais da Console podem ser guardados na ECU e lidos pelo TunerStudio.
-
-As configurações anteriores de esquema 2 são preservadas e continuam com o perfil de motor desativado. Os nomes históricos dos ficheiros do Bundle ainda incluem `usb-bench`; isso não determina a política de funcionamento.
-
-## Validação e trabalho ainda necessário
-
-Testes de código executam o adaptador real com GPIO/temporizadores simulados, independência de consultas USB, recusa de escritas com saídas ativas, corte e paragem sem reativação automática, recuperação USB com serviço contínuo, gravação interrompida em cada palavra do registo, leitura C/Java, backups e conversão exata de ms. A interface é exercitada por JavaFX; a compilação F427 e a instalação Windows são verificadas no CI.
-
-**Não foram realizados aqui ensaios elétricos nem ensaios num motor.** Faltam ainda controlo VVT, detonação, flex fuel, launch control, Lua, compensações IAT/tensão e enriquecimento de aceleração, entre outras funções. Os menus desta versão só representam funções existentes.
-
-
-## Arranque e aquecimento
-
-A implementação seguinte acrescenta combustível de arranque, enriquecimento após arranque com duração em ms, curva de aquecimento e avanço fixo de arranque opcional. [Configuração, exemplos e limites](arranque-aquecimento.md).
-
-![Modelos de mapas base](images/console/console-maps.png)
-
-![Configuração base do motor](images/console/console-generic-base.png)
+Os redimensionamentos das tabelas permanecem em pausa. A documentação de arranque/aquecimento continua em [Arranque e aquecimento](arranque-aquecimento.md); a disponibilidade dos respetivos controlos na Console Qt é distinta do suporte no firmware.

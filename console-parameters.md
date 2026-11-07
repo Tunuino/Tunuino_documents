@@ -2,11 +2,11 @@
 
 A navegação principal abre cada bloco numa janela MDI independente, com fecho/reabertura sem perder a edição. Foi removida a janela Calibration & Setup e a sua segunda árvore. A pesquisa percorre os subgrupos. A seleção usa azul; os valores dos parâmetros usam verde.
 
-Os 19 blocos nativos têm duas colunas e quatro comandos: Open parameters, Save parameters, Restore to defaults e Help. Ficheiros .tnparams são específicos do bloco e validados antes de alterar a edição. Abrir ou repor valores não grava na ECU. Write to ECU guarda apenas o bloco da janela, não as edições pendentes noutras janelas.
+Os 20 blocos nativos têm duas colunas e quatro comandos: Open parameters, Save parameters, Restore to defaults e Help. Ficheiros .tnparams são específicos do bloco e validados antes de alterar a edição. Abrir ou repor valores não grava na ECU. Write to ECU guarda apenas o bloco da janela, não as edições pendentes noutras janelas.
 
 | Área | Blocos ligados ao protocolo |
 |---|---|
-| Fueling | General, Fuel cut, Acceleration, Warmup, Cylinders trim, Short term trim, Target lambda e Flex fuel |
+| Fueling | General, Fuel cut, Lambda guard, Acceleration, Warmup, Cylinders trim, Short term trim, Target lambda e Flex fuel |
 | Injectors | Atribuições e dead time |
 | Coils | Atribuições e dwell |
 | Compensação de tensão | Curva partilhada de dead time/dwell |
@@ -36,9 +36,21 @@ A revisão mostra valores guardados e propostos, UID/geração da leitura e a ú
 
 O hardware nativo usa flancos ascendentes condicionados e rodas de dentes em falta. A janela de cam refere o último dente físico observado, com zero no primeiro dente após a falha. O ângulo do dente zero é uma referência do ciclo nativo e não uma medição automática do PMS. O assistente não altera o modo autónomo nem arma saídas. A sequência segue o guia PDF, páginas 78–88, apenas nos passos suportados: configuração, fase e inspeção do Scope. Bloqueio do avanço para pistola de ponto, deteção automática de PMS, outros padrões e seleção de flancos/tipo elétrico continuam indisponíveis; não é equivalência completa com o assistente da referência.
 
+## Lambda guard
+
+Fueling - Lambda guard abre uma janela de parâmetros independente, com duas colunas, quatro comandos e Write to ECU. A proteção nativa está desativada por defeito. Define limite absoluto de lambda (0,650–2,000), atraso de deteção (20–5000 ms), mínimos de RPM, MAP, temperatura e TPS, e atraso após arranque. As referências iniciais ficam inativas e não representam calibração validada para um motor.
+
+Com as condições cumpridas, lambda acima do limite ou inválida durante o atraso dispara a falha Protection existente: para todas as saídas, mantém a falha e exige rearme explícito. TPS inválido sob as restantes condições também conta como falha. Não é um controlo de correção de combustível. Arranque, RPM/carga/temperatura/TPS abaixo dos mínimos, cortes de combustível, launch, enriquecimento de aceleração e respetivo holdoff reiniciam a deteção. O cálculo tem resolução de amostragem de 20 ms; pausas longas não contam integralmente para o atraso.
+
+Ativar exige perfil de motor e calibrações MAP, Lambda, CLT e TPS explícitas. A edição de sensores recusa remover uma entrada necessária enquanto a proteção está ativa. A escrita preserva mapas, cablagem, restantes flags e modo autónomo. A aplicação nunca arma saídas ao abrir ou gravar.
+
+Esta função exige firmware com capacidade Lambda guard (bit 64, total nativo 127). Firmware anterior continua utilizável para os outros blocos, mas a gravação deste bloco fica bloqueada. A extensão versionada ocupa os bytes 240–255 da página 4; flags anteriores e páginas mantêm o formato. Guardar estes parâmetros, mesmo desativados, cria uma configuração que requer o novo firmware. O firmware anterior recusa essa extensão; uma regressão exige recuperar uma configuração anterior compatível.
+
+O PDF define a organização e o formato das janelas, mas não descreve os parâmetros individuais de Lambda guard. Esta é uma proteção nativa com limite absoluto e paragem retida, sem alegar equivalência completa com os critérios ou opções da referência.
+
 ## Limites que continuam por resolver
 
-Não é ainda equivalência completa com todas as funções da referência. Lambda guard e secondary injectors continuam indisponíveis. Trigger wizard cobre agora o subconjunto nativo descrito abaixo. Firing order já permite criar/redimensionar o perfil e escolher 1–12 cilindros. General, atribuições, dwell e fase usam esse perfil. Os restantes campos e estratégias ainda não têm equivalência completa com a referência.
+Não é ainda equivalência completa com todas as funções da referência. Secondary injectors continuam indisponíveis. Trigger wizard cobre agora o subconjunto nativo descrito abaixo. Firing order já permite criar/redimensionar o perfil e escolher 1–12 cilindros. General, atribuições, dwell e fase usam esse perfil. Os restantes campos e estratégias ainda não têm equivalência completa com a referência.
 
 Flex fuel usa entrada analógica; não implementa sensor de frequência. Rev limiters usa corte de combustível; não implementa padrões de corte de ignição. IAT, compensação de tensão e trims têm flags partilhadas entre combustível/ignição, identificadas na ajuda. O alvo lambda nativo é uma curva MAP de três pontos; a grelha AFR Target permanece offline. Não foram adicionados parâmetros sem suporte como se fossem estratégias operacionais.
 
@@ -46,10 +58,12 @@ O guia PDF fornecido, páginas 21–22, define o formato das janelas e comandos,
 
 ## Verificação
 
-Compilação local completa e doze testes CTest aprovados. ParameterTest executou 19 gravações com dispatcher/validação C reais e flash/saídas simuladas. EngineProfileTest acrescentou sete gravações cobrindo criação, redimensionamento, os cinco modos, mudança de par e inversão de fase. Cada operação verificou uma gravação permanente, cópia anterior e preservação das restantes páginas. Também foram verificados conflitos, ângulos não uniformes, JSON, releitura e defaults sem alterar fuel/dwell.
+Compilação local completa e doze testes CTest aprovados. ParameterTest executou 20 gravações com dispatcher/validação C reais e flash/saídas simuladas. EngineProfileTest acrescentou sete gravações cobrindo criação, redimensionamento, os cinco modos, mudança de par e inversão de fase. Cada operação verificou uma gravação permanente, cópia anterior e preservação das restantes páginas. Também foram verificados conflitos, ângulos não uniformes, JSON, releitura e defaults sem alterar fuel/dwell.
 
 TriggerWizardTest acrescentou duas gravações com dispatcher C real e flash/saídas simuladas: geometria sem perfil e geometria/fase com perfil. Verificou cópia, uma gravação permanente e preservação dos mapas, auxiliares, contactos e modo autónomo. Também passou validação de limites, dependência do soft limiter, conflitos, confirmação cancelada, falha sem repetição, identidade/geração da captura e callback apenas após captura completa do Scope.
 
-O assistente e o bloco isolado foram renderizados com o tema da aplicação nas vistas normal e Advanced. O encaminhamento e a reabertura MDI de parâmetros, sensores e Trigger wizard passaram na verificação local; a captura completa via QWidget::grab falhou nesse Qt local, pelo que não se declara validação visual completa da janela principal.
+Lambda guard passou testes C locais com ASan/UBSan, incluindo limites de formato, requisitos de perfil/sensores, atraso, cancelamento por condições de carga, lambda/TPS inválidos, wrap do relógio, pausa longa e falha retida através do controlador real. Os testes de Scope, serviço/persistência/USB e dispatcher também passaram. A janela bloqueou gravação para firmware antigo e manteve a proteção desativada ao inicializar os parâmetros. Os testes de UI e gravação usam a simulação de flash/saídas; não há validação física.
 
-A [compilação Windows, os doze testes, o arranque e o instalador desta alteração](https://github.com/Tunuino/Tunuino/actions/runs/42359882869) foram aprovados. A atualização automática foi publicada. Os ensaios são simulações no computador, sem validação física na Proteus. Esta etapa usa o firmware já disponível; não altera o firmware.
+A janela Lambda guard, o assistente e o bloco isolado foram renderizados com o tema da aplicação nas vistas normal e Advanced. O encaminhamento e a reabertura MDI de parâmetros, sensores e Trigger wizard passaram na verificação local; a captura completa via QWidget::grab falhou nesse Qt local, pelo que não se declara validação visual completa da janela principal.
+
+A revisão anterior passou compilação Windows, testes, arranque e instalador. As compilações Windows e ARM desta alteração estão em curso. Os ensaios são simulações no computador, sem validação física na Proteus. Esta etapa acrescenta suporte no firmware; não foi gravada automaticamente nenhuma ECU.

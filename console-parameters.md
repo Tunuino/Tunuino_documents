@@ -28,9 +28,9 @@ Restore to defaults em Firing order repõe apenas a ordem de referência e a fas
 
 As janelas têm cabeçalho de secção cinzento, toolbar escura e cores por tipo de campo, sem cabeçalhos redundantes Parameter/Value. A altura inicial acompanha o número de linhas; fechar/reabrir preserva o tamanho escolhido. Advanced tem deslocamento próprio. Os redimensionamentos dos mapas continuam fora desta alteração.
 
-## Trigger wizard
+## Configuração manual de trigger
 
-Ignition - Trigger wizard abre uma janela MDI independente com três etapas: roda primária, fase e revisão em duas colunas. Inclui presets 36-1, 36-2, 60-2, 24-1 e 12-1, geometria personalizada de dentes em falta, captura e limite máximo de RPM. Com perfil existente permite ângulo do dente zero, janela de cam e Invert phase. Não cria nem altera número de cilindros, ordem, modo ou contactos; liga às janelas Firing order e Scope.
+O menu de contexto do Trigger wizard abre Manual trigger setup, uma janela MDI independente com três etapas: roda primária, fase e revisão em duas colunas. Inclui presets 36-1, 36-2, 60-2, 24-1 e 12-1, geometria personalizada de dentes em falta, captura e limite máximo de RPM. Com perfil existente permite ângulo do dente zero, janela de cam e Invert phase. Não cria nem altera número de cilindros, ordem, modo ou contactos; liga às janelas Firing order e Scope.
 
 A revisão mostra valores guardados e propostos, UID/geração da leitura e a última captura real do Scope compatível com essa configuração. Abrir um ficheiro de Scope não conta como captura da ECU. Uma captura anterior descreve a geometria guardada, não valida alterações locais. Mudanças de identidade/geração invalidam essa evidência; alterações externas dos campos em edição bloqueiam a escrita até descartar o rascunho. Write to ECU só fica disponível na revisão válida e usa a mesma cópia, releitura e gravação permanente única dos restantes blocos. Cancelar a confirmação não inicia a escrita; falhas não repetem automaticamente a operação.
 
@@ -127,3 +127,24 @@ Compilação local completa e 14 testes CTest aprovados. CompleteMapSmoke verifi
 A Console inicia sem Fuel Table e sem os painéis TUNUINO | Configuration e Engine Status. Nenhuma tabela ou gráfico abre automaticamente; a navegação à esquerda mantém-se disponível. Fuel Table abre pela navegação e os dois painéis laterais pelo menu View. A mudança limita-se à visibilidade inicial e preserva os dados e os comandos existentes.
 
 Compilação local da aplicação e CompleteMapSmoke aprovadas. Este ensaio usa a janela real, abertura pela navegação e fecho/reabertura, sem ligação física à ECU. A revisão visual anterior passou a compilação Windows, 14 testes, instalador e publicação automática: https://github.com/Tunuino/Tunuino/actions/runs/42415113581.
+
+## Trigger wizard por motor predefinido
+
+Ignition / Trigger wizard passa a abrir um diálogo modal compacto, com título Trigger wizard, linha Predefined triggers, oito opções Apply to e botões OK/Cancel, conforme as fotografias fornecidas. A ordem das linhas é primary trigger, secondary trigger, CAM#2 trigger, firing order, ignition outputs, injector phase, coil dwell time e VVTi CAMs offsets. A seleção é azul, os grupos disponíveis verdes e os indisponíveis cinzentos. As caixas marcadas mostram um visto.
+
+A lista contém os onze motores mostrados nas fotografias. Isto não significa onze configurações operacionais: apenas 2JZ VVTi e BMW E36 M52B20 têm nesta etapa dados confirmados para geometria primária e ordem de ignição. Os restantes nomes apresentam a limitação e não permitem OK. Os seis grupos sem dados completos ou suporte nativo ficam desativados, desmarcados e com explicação na tooltip.
+
+| Preset | Geometria primária | Ordem |
+|---|---|---|
+| 2JZ VVTi, variante com sensor de cambota 36-2 | 36 dentes nominais, 2 ausentes | 1-5-3-6-2-4 |
+| BMW E36 M52B20 | 60 dentes nominais, 2 ausentes | 1-5-3-6-2-4 |
+
+Dados factuais: [2JZ/1JZ](https://support.haltech.com/portal/en/kb/articles/2jz-1jz-engine), [2JZ VVT-i](https://support.haltech.com/portal/en/kb/articles/2jz-vvt-i-trigger) e [M52](https://support.haltech.com/portal/en/kb/articles/m52-engine). Não foram transferidos ângulos/offsets de outra ECU. O padrão OEM de cam de três dentes do 2JZ continua sem preset nativo; variantes com distribuidor não estão abrangidas. O M52 original pode ter sensor de cam por frequência que exige adaptação/substituição. A informação aparece no diálogo, que não apresenta estes presets parciais como configuração pronta a arrancar o motor.
+
+OK prepara apenas os editores locais selecionados. Primary modifica dentes/ausências no editor primário e no rascunho manual, preservando captura, RPM, bloqueio de avanço, referência absoluta e janela cam. Firing order modifica número/ordem, preservando os contactos existentes; novos cilindros ficam sem atribuição. Com o mesmo número, os ângulos de evento existentes são preservados; ao mudar a contagem aplica-se o espaçamento uniforme já usado pelo editor. Outros editores e os seus estados de conflito/base não são relidos ou alterados. Todos os destinos selecionados são validados antes da aplicação.
+
+Cancelar/fechar ou apenas escolher um motor não altera a configuração. Nenhuma página base é substituída e OK não envia gravação ou ARM/RUN. As edições ficam disponíveis para guardar no projeto e para a gravação explícita existente de cada bloco, com as suas validações. Operações ECU em curso bloqueiam a aplicação. O menu de contexto mantém Manual trigger setup para configurar a geometria e consultar Scope; Primary trigger mantém a sua janela de parâmetros direta.
+
+Compilação local e 14 testes CTest aprovados. A verificação da janela real inclui abertura modal pela árvore, onze nomes, motor indisponível, cancelamento, aplicação só de primary ou só de firing, igualdade completa do projeto com o resultado esperado, preservação das páginas e recusa de grupo sem suporte. Os testes anteriores da configuração manual e das duas gravações com dispatcher C/flash simulada continuam a passar. O diálogo foi renderizado e revisto com o tema real. Não há alteração de firmware nem ensaio físico nesta etapa.
+
+A atualização anterior de arranque limpo também passou a compilação Windows, testes, instalador e publicação: https://github.com/Tunuino/Tunuino/actions/runs/42416053319.

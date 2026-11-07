@@ -1,6 +1,6 @@
 # Janelas de Fueling, Ignition e sensores
 
-A navegação principal abre cada bloco numa janela MDI independente, com fecho/reabertura sem perder a edição. Foi removida a janela Calibration & Setup e a sua segunda árvore. A pesquisa percorre os subgrupos. A seleção usa azul; os valores dos parâmetros usam verde.
+A navegação principal abre cada bloco numa janela MDI independente, com fecho/reabertura sem perder a edição. Foi removida a janela Calibration & Setup e a sua segunda árvore. A pesquisa percorre os subgrupos. A seleção usa azul; as cores dos parâmetros distinguem números, listas, atribuições e caixas.
 
 Os 20 blocos nativos têm duas colunas e quatro comandos: Open parameters, Save parameters, Restore to defaults e Help. Ficheiros .tnparams são específicos do bloco e validados antes de alterar a edição. Abrir ou repor valores não grava na ECU. Write to ECU guarda apenas o bloco da janela, não as edições pendentes noutras janelas.
 
@@ -18,7 +18,7 @@ A escrita confere identidade/geração e base limpa, exige motor parado, aliment
 
 ## Perfil de motor e acabamento das janelas
 
-Firing order tem número de cilindros editável, ordem, slots None e Invert phase. A secção Advanced começa fechada e reúne modo, fuel/dwell/dead time/limite de injeção, geometria de trigger e matriz por cilindro. Criar um perfil usa referências editáveis e deixa todas as saídas por atribuir. Redimensionar preserva as atribuições existentes; novos cilindros exigem escolha explícita de contactos. A atribuição recusa uma saída ocupada por outra função.
+Firing order tem número de cilindros editável, ordem, slots None e Invert phase. A secção Advanced começa fechada, acessível pelo menu de contexto Advanced engine profile, e reúne modo, fuel/dwell/dead time/limite de injeção, geometria de trigger e matriz por cilindro. Criar um perfil usa referências editáveis e deixa todas as saídas por atribuir. Redimensionar preserva as atribuições existentes; novos cilindros exigem escolha explícita de contactos. A atribuição recusa uma saída ocupada por outra função.
 
 Ao reordenar um perfil, conservam-se os ângulos de evento existentes, incluindo espaçamentos não uniformes. Alterar o número de cilindros propõe espaçamento uniforme de 720 graus, indicado na janela; os ângulos TDC continuam editáveis e devem ser conferidos para o motor real.
 
@@ -26,7 +26,7 @@ Há cinco modos nativos: sequencial, semi-sequencial e batch com bobinas individ
 
 Restore to defaults em Firing order repõe apenas a ordem de referência e a fase; preserva fuel, dwell, cablagem, modo e geometria. Ficheiros do bloco podem transportar o perfil em edição. Uma mudança externa do perfil bloqueia uma edição antiga até descartar os dados locais; alterações auxiliares independentes podem ser relidas sem perder a edição.
 
-As janelas têm cabeçalho de secção cinzento, toolbar escura, valores/índices verdes e caixas ciano, sem cabeçalhos redundantes Parameter/Value. A altura inicial acompanha o número de linhas; fechar/reabrir preserva o tamanho escolhido. Advanced tem deslocamento próprio. Os redimensionamentos dos mapas continuam fora desta alteração.
+As janelas têm cabeçalho de secção cinzento, toolbar escura e cores por tipo de campo, sem cabeçalhos redundantes Parameter/Value. A altura inicial acompanha o número de linhas; fechar/reabrir preserva o tamanho escolhido. Advanced tem deslocamento próprio. Os redimensionamentos dos mapas continuam fora desta alteração.
 
 ## Trigger wizard
 
@@ -109,3 +109,15 @@ A exportação/importação JSON de uma tabela permanece apenas nos comandos da 
 Compilação local e 14 testes CTest aprovados. CompleteMapSmoke usa a janela real e o menu File, com Firing order ativa e um perfil de seis cilindros ainda sem atribuições completas: alterou as três tabelas e um parâmetro, guardou/reabriu o conjunto e confirmou igualdade dos dados, comentário e eixos. Verificou o filtro/sufixo do diálogo real e recusa atómica de um sensor inválido. MapProjectTest verificou checksum, páginas, todos os blocos/sensores, perfis offline, ficheiros inválidos e falha de gravação. Os testes existentes de escrita com dispatcher C e flash simulada também passaram. A [compilação Windows, os 14 testes incluindo CompleteMapSmoke, arranque, instalador e publicação automática](https://github.com/Tunuino/Tunuino/actions/runs/42410841069) foram aprovados. Não há alteração de firmware nem ensaio físico nesta etapa.
 
 Nomenclatura corrigida no menu e diálogos: Open Project… (Ctrl+O), Save Project as… (Ctrl+S) e filtro Tunuino project (*.tnproj). O teste da janela real passou a verificar os textos dos comandos. Verificação local de CompleteMapSmoke e MapProjectTest aprovada. A [compilação Windows, os 14 testes, arranque, instalador e publicação automática](https://github.com/Tunuino/Tunuino/actions/runs/42411595608) passaram. Esta correção altera apresentação, sem alterar o formato ou conteúdo dos projetos.
+
+## Aspeto das janelas conforme as fotografias
+
+A moldura MDI comum usa barra de título azul clara/cinzenta, contorno ciano, ícone de parâmetros e botões de minimizar, maximizar/restaurar e fechar. Aplica-se aos mapas, gráficos, sensores, parâmetros, ferramentas e Tune Display. Arrastar, redimensionar e os comandos de janela continuam a usar o comportamento MDI do Qt.
+
+Os blocos de parâmetros têm toolbar escura com quatro ícones vetoriais próprios: abrir, guardar, repor e ajuda; cabeçalho cinzento; grelha compacta de duas colunas e linhas de 30 px. Números usam ciano, listas rosa, atribuições/ordem verde e bloqueio de avanço amarelo. A edição focada usa fundo claro e texto escuro. A navegação usa ícones de bloco e grupos, fonte Segoe UI e espaçamento compacto. Dwell passa a Coil dwell time.
+
+Firing order mostra número de cilindros, pelo menos oito posições com None nos slots não usados, e Invert phase. Adapta-se até aos 12 cilindros nativos. Advanced engine profile passou para o menu de contexto, sem remover a edição avançada ou os dados. Write to ECU fica no menu ECU/F2 e no contexto da grelha; o botão de rodapé deixou de ocupar o formulário. Indicações de rotina passam para a tooltip; erros, conflitos e avisos de bloqueio continuam visíveis.
+
+Esta alteração corrige apresentação e não completa todas as estratégias da fotografia. Continuam em falta o assistente de dwell, correções dwell por RPM/MAP, custom corrections e três tabelas, segunda tabela de ignição e os limitadores adicionais por temperatura/etanol/custom. O trigger primário mantém os campos nativos: First Trigger Tooth/Trigger Angle não são substituídos pelo ângulo absoluto tooth-zero. A fase nativa não equivale à janela completa de Secondary trigger; CAM 2 não tem aquisição implementada. Não foram acrescentados controlos fictícios para essas funções.
+
+Compilação local completa e 14 testes CTest aprovados. CompleteMapSmoke verifica os cliques reais de maximizar, restaurar, minimizar, fechar e reabrir, mantendo o perfil de seis cilindros. A geometria dos botões também é usada nas consultas sem widget que o Qt faz para distinguir a barra de arrasto. Firing order e Primary trigger foram renderizadas e revistas com o tema real. Os ensaios são locais/simulados; não há alteração de firmware ou validação física nesta etapa.

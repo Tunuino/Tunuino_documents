@@ -67,3 +67,15 @@ Lambda guard passou testes C locais com ASan/UBSan, incluindo limites de formato
 A janela Lambda guard, o assistente e o bloco isolado foram renderizados com o tema da aplicação nas vistas normal e Advanced. O encaminhamento e a reabertura MDI de parâmetros, sensores e Trigger wizard passaram na verificação local; a captura completa via QWidget::grab falhou nesse Qt local, pelo que não se declara validação visual completa da janela principal.
 
 A [compilação Windows, os doze testes, arranque, instalador e publicação automática](https://github.com/Tunuino/Tunuino/actions/runs/42373358208) foram aprovados. O [firmware ARM Proteus](https://github.com/Tunuino/Tunuino_Firmware/actions/runs/42373355866) compilou e gerou o pacote. Os [testes nativos do firmware com GCC e Clang](https://github.com/Tunuino/Tunuino_Firmware/actions/runs/42373355855), incluindo Lambda guard e persistência/USB, passaram. Os ensaios são simulações no computador, sem validação física na Proteus. Esta etapa acrescenta suporte no firmware; não foi gravada automaticamente nenhuma ECU.
+
+## Guias adicionais recebidos
+
+Referências de trabalho: How-to_Configure_Trigger_in_EMU_BLACK.pdf (versão 1.0, 10 páginas) e EMU_PRO_Software_Guide.pdf (versão 261.2.2, 168 páginas). Complementam o guia BLACK V3 anterior e as fotografias aprovadas. A organização visual BLACK V3 pedida mantém prioridade; o Smart Grid do PRO não substitui automaticamente as janelas independentes.
+
+O guia de trigger distingue expressamente V2 e V3: em V3 a ordem está em Ignition / Firing order e a cablagem por cilindro em Ignition / Coils / Ignition Outputs; a configuração dos sensores está em Sensors and inputs / Digital inputs. Invert phase pertence a Firing order. A calibração física usa Ignition Angle Lock e Locked Angle, seguidos de verificação a outro avanço e desativação do bloqueio no fim. Os valores de exemplo não devem ser aplicados automaticamente à Tunuino. First Trigger Tooth e Trigger Angle da referência não são equivalentes diretos ao ângulo absoluto tooth-zero do motor nativo.
+
+A lacuna prioritária de ignição continua a ser o bloqueio real do avanço no firmware e a respetiva janela, com testes que confirmem o comportamento perante correções e trims. Seleção elétrica de Hall/VR, polaridade, filtros e outros padrões depende de suporte real do hardware/firmware; não basta copiar campos. A aquisição Scope não deve ser confundida com a autorização de saídas.
+
+O guia PRO acrescenta referências concretas para Tune Display (páginas 69–70: canais, propriedades, grelha e F7), Scope, Graph Log, APS/DBW Tuner, VE Tuner e Fuel Film (páginas 133–135). Fuel Film é um modelo de película por cilindro, distinto do enriquecimento TPS atual, e não deve ser apresentado como já implementado. O guia também remete grande parte das estratégias individuais para a ajuda interna; não resolve por si só todos os campos de Lambda guard ou secondary injectors.
+
+Esta revisão atualiza referências e lacunas; não altera código, firmware, calibrações ou funcionalidades publicadas.

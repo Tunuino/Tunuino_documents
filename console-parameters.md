@@ -52,4 +52,4 @@ TriggerWizardTest acrescentou duas gravações com dispatcher C real e flash/sa�
 
 O assistente e o bloco isolado foram renderizados com o tema da aplicação nas vistas normal e Advanced. O encaminhamento e a reabertura MDI de parâmetros, sensores e Trigger wizard passaram na verificação local; a captura completa via QWidget::grab falhou nesse Qt local, pelo que não se declara validação visual completa da janela principal.
 
-A revisão anterior passou compilação Windows, onze testes, arranque e instalador. A compilação Windows desta alteração está em curso. Os ensaios são simulações no computador, sem validação física na Proteus. Esta etapa usa o firmware já disponível; não altera o firmware.
+A [compilação Windows, os doze testes, o arranque e o instalador desta alteração](https://github.com/Tunuino/Tunuino/actions/runs/42359882869) foram aprovados. A atualização automática foi publicada. Os ensaios são simulações no computador, sem validação física na Proteus. Esta etapa usa o firmware já disponível; não altera o firmware.

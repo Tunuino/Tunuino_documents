@@ -121,3 +121,9 @@ Firing order mostra número de cilindros, pelo menos oito posições com None no
 Esta alteração corrige apresentação e não completa todas as estratégias da fotografia. Continuam em falta o assistente de dwell, correções dwell por RPM/MAP, custom corrections e três tabelas, segunda tabela de ignição e os limitadores adicionais por temperatura/etanol/custom. O trigger primário mantém os campos nativos: First Trigger Tooth/Trigger Angle não são substituídos pelo ângulo absoluto tooth-zero. A fase nativa não equivale à janela completa de Secondary trigger; CAM 2 não tem aquisição implementada. Não foram acrescentados controlos fictícios para essas funções.
 
 Compilação local completa e 14 testes CTest aprovados. CompleteMapSmoke verifica os cliques reais de maximizar, restaurar, minimizar, fechar e reabrir, mantendo o perfil de seis cilindros. A geometria dos botões também é usada nas consultas sem widget que o Qt faz para distinguir a barra de arrasto. Firing order e Primary trigger foram renderizadas e revistas com o tema real. Os ensaios são locais/simulados; não há alteração de firmware ou validação física nesta etapa.
+
+## Arranque com área de trabalho limpa
+
+A Console inicia sem Fuel Table e sem os painéis TUNUINO | Configuration e Engine Status. Nenhuma tabela ou gráfico abre automaticamente; a navegação à esquerda mantém-se disponível. Fuel Table abre pela navegação e os dois painéis laterais pelo menu View. A mudança limita-se à visibilidade inicial e preserva os dados e os comandos existentes.
+
+Compilação local da aplicação e CompleteMapSmoke aprovadas. Este ensaio usa a janela real, abertura pela navegação e fecho/reabertura, sem ligação física à ECU. A revisão visual anterior passou a compilação Windows, 14 testes, instalador e publicação automática: https://github.com/Tunuino/Tunuino/actions/runs/42415113581.

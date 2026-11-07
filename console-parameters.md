@@ -179,3 +179,43 @@ Cada entrada com dados tem fontes associadas e verificação estrutural: roda de
 Compilação local e 14 testes CTest aprovados. TriggerWizardTest percorreu os 25 registos: confirmou 18 geometrias e 24 ordens, seleção independente de grupos, preservação de contactos/combustível/dwell/referência/comentário/páginas, novos cilindros sem atribuição, manutenção de eventos não uniformes e recusa de grupos sem suporte ou metadados inválidos. CompleteMapSmoke verificou a abertura modal real, motor indisponível, cancelar, aplicar primary isoladamente e aplicar firing isoladamente. Os ensaios anteriores de duas gravações pela configuração manual, com dispatcher C e flash/saídas simuladas, continuam a passar. O diálogo foi renderizado e revisto. Não há alteração de firmware nem validação física de motores nesta etapa.
 
 A primeira versão do diálogo passou a compilação Windows, os 14 testes, instalador e publicação automática: https://github.com/Tunuino/Tunuino/actions/runs/42417089018.
+
+## Sensors and inputs: organização e janelas
+
+A árvore foi reorganizada segundo as duas fotografias, incluindo a continuação até VSS and Gearbox. Os grupos e entradas mantêm a ordem da referência, com ícones próprios de bloco, pasta, curva e assistente. As entradas sem implementação ficam cinzentas/desativadas, com a razão na tooltip; não abrem formulários fictícios.
+
+| Grupo | Implementação disponível nesta etapa | Limites |
+|---|---|---|
+| Analog inputs | Monitor AV1–AV11 e AT1–AT4, contacto J103, função guardada e tensão real | Leitura apenas; não atribui entradas |
+| Digital inputs | Vistas Primary trigger e CAM 1, contactos J101, flanco/captura fixos e estado de sincronização partilhado; acesso ao Scope | CAM 2, VSS e curvas de sensibilidade indisponíveis |
+| Oxygen Sensor | Parameters abre a calibração Lambda, com os presets de controladores existentes | Apenas saída analógica externa; não acrescenta controlo interno da sonda |
+| TPS, PPS | Calibração TPS de dois pontos e captura ADC | PPS e curvas independentes de plausibilidade indisponíveis |
+| Switches | Organização Clutch/brake, Built-in, User, MUX, Latching e Rotary | Não há campos nativos para essas funções |
+| IAT, CLT | Dois assistentes NTC e duas calibrações de três pontos | Failsafe configurável indisponível |
+| MAP, BARO | Parameters e MAP calibration partilham o editor MAP existente, que contém entrada e curva | BARO separado indisponível |
+| Pressure | Assistente linear para MAP, explicitamente identificado | Parameters e as dez curvas de pressão adicionais indisponíveis |
+| Temperature | Assistente com alvo IAT/CLT e vista de entradas dos Standard sensors | Custom sensors e as oito curvas adicionais indisponíveis |
+| Other sensors | Battery conserva a calibração existente | Parameters, EWG, turboshaft e fuel level indisponíveis |
+| VSS and Gearbox | Nove entradas organizadas como na fotografia | Aquisição VSS, rodas, eixos, mudanças e sensores de caixa ainda sem implementação |
+
+As seis calibrações têm agora toolbar escura, ícones de abrir/guardar/repor/ajuda, cabeçalho cinzento, grelha de duas colunas, rótulos ciano e valores verdes. Capturas permanecem junto do ponto de tensão. Os contactos continuam identificados e Customise apresenta a escolha explícita de ligação. Os controlos conservam os mesmos modelos, máscaras e validações; as janelas continuam independentes no ambiente MDI.
+
+Write to ECU mantém-se no menu ECU/F2 e passa também ao contexto da grelha. O botão de rodapé deixou de ocupar a janela. Abrir/guardar na toolbar refere apenas a calibração desse sensor (.tnsensor, formato tunuino-sensor-v1); Save Project as continua a guardar o projeto completo. O ficheiro do sensor é verificado quanto ao formato, sensor, dimensões e valores antes de aplicar, e a gravação usa QSaveFile. Restore last loaded calibration repõe a base carregada apenas no editor, sem gravar na ECU. Não foi apresentado como um preset universal ou como leitura ADC.
+
+### Assistentes de curvas
+
+IAT sensor wizard e CLT sensor wizard calculam um modelo NTC personalizado a partir de R25, Beta, resistência de pull-up, tensão de excitação e três temperaturas. R25, Beta e pull-up começam por preencher; OK só fica ativo depois de introduzir dados válidos. O assistente geral Temperature permite escolher IAT ou CLT.
+
+O cálculo usa R(T)=R25×exp[Beta×(1/(T+273,15)−1/298,15)] e V=Vexc×R/(Rpull-up+R). Ordena os três resultados por tensão crescente e verifica valores finitos, temperaturas entre -40 e 150 °C e pontos distintos na precisão do editor. O firmware continua a interpolar linearmente entre apenas três pontos; o assistente não instala um novo algoritmo NTC. A excitação e o pull-up introduzidos descrevem o circuito real: não são programados na ECU nem apresentados como características universais da Proteus ou de um sensor.
+
+O assistente Pressure limita-se ao MAP nativo: dois pontos crescentes de tensão e pressão absoluta em kPa. Não cria fuel/oil/AC pressure ou outros sensores sem protocolo. Os limites de edição são 0–6 V e 0–500 kPa; a gravação continua a verificar a faixa ADC real com a referência lida.
+
+OK aplica a curva ao editor local correspondente, preserva a entrada escolhida e não envia escrita/ARM/RUN. As edições entram no projeto completo. Cancelar não altera o editor. Se existir uma operação ECU em curso, a aplicação é recusada e o rascunho do assistente fica disponível. O assistente não substitui medições físicas por amostras sintéticas.
+
+### Monitorização e verificação
+
+As vistas de inputs usam exclusivamente a configuração guardada e o pacote de runtime da ECU. Conferem identidade, geração e idade da amostra; tensões exigem ADC válido, referência de 2,8–3,6 V e contagem até 4095. Valores antigos, de outra sessão/geração, desligados ou inválidos aparecem como ---; não são simulados. As funções mostradas no monitor são as guardadas na ECU, não as atribuições locais ainda por gravar. A entrada interna de alimentação não é exposta como AV disponível. A vista digital identifica o estado como engine sync partilhado, não como nível lógico medido individualmente no CAM.
+
+Compilação local completa e 14 testes CTest aprovados. SensorCalibrationTest cobriu a fórmula NTC com ponto conhecido, ordem dos pontos, limites inválidos, assistente linear, contactos, identidade/geração/expiração das amostras, estado digital e monitor de temperaturas. Mantiveram-se as doze gravações dos seis sensores nas duas ordens, com dispatcher C, flash e saídas simuladas, uma gravação por operação e preservação de páginas. CompleteMapSmoke conferiu os onze grupos, os nós finais das duas fotografias, entradas indisponíveis, navegação, abertura modal, geração/aplicação IAT e MAP, entrada preservada, cancelar sem alterações e igualdade de parâmetros/páginas não abrangidos. As janelas de calibração e o assistente foram renderizados e revistos com o tema real.
+
+Não há alteração de firmware nem validação física de sensores/motor nesta etapa. A correção anterior da lista de motores passou a compilação Windows, os testes, instalador e publicação automática: https://github.com/Tunuino/Tunuino/actions/runs/42419345295.

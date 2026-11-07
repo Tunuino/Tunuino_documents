@@ -34,7 +34,7 @@ Ignition - Trigger wizard abre uma janela MDI independente com três etapas: rod
 
 A revisão mostra valores guardados e propostos, UID/geração da leitura e a última captura real do Scope compatível com essa configuração. Abrir um ficheiro de Scope não conta como captura da ECU. Uma captura anterior descreve a geometria guardada, não valida alterações locais. Mudanças de identidade/geração invalidam essa evidência; alterações externas dos campos em edição bloqueiam a escrita até descartar o rascunho. Write to ECU só fica disponível na revisão válida e usa a mesma cópia, releitura e gravação permanente única dos restantes blocos. Cancelar a confirmação não inicia a escrita; falhas não repetem automaticamente a operação.
 
-O hardware nativo usa flancos ascendentes condicionados e rodas de dentes em falta. A janela de cam refere o último dente físico observado, com zero no primeiro dente após a falha. O ângulo do dente zero é uma referência do ciclo nativo e não uma medição automática do PMS. O assistente não altera o modo autónomo nem arma saídas. A sequência segue o guia PDF, páginas 78–88, apenas nos passos suportados: configuração, fase e inspeção do Scope. Bloqueio do avanço para pistola de ponto, deteção automática de PMS, outros padrões e seleção de flancos/tipo elétrico continuam indisponíveis; não é equivalência completa com o assistente da referência.
+O hardware nativo usa flancos ascendentes condicionados e rodas de dentes em falta. A janela de cam refere o último dente físico observado, com zero no primeiro dente após a falha. O ângulo do dente zero é uma referência do ciclo nativo e não uma medição automática do PMS. O assistente não altera o modo autónomo nem arma saídas. A sequência segue o guia PDF, páginas 78–88, apenas nos passos suportados: configuração, fase e inspeção do Scope. O bloqueio do avanço para pistola de ponto está agora disponível em Primary trigger. Deteção automática de PMS, outros padrões e seleção de flancos/tipo elétrico continuam indisponíveis; não é equivalência completa com o assistente da referência.
 
 ## Lambda guard
 
@@ -44,9 +44,23 @@ Com as condições cumpridas, lambda acima do limite ou inválida durante o atra
 
 Ativar exige perfil de motor e calibrações MAP, Lambda, CLT e TPS explícitas. A edição de sensores recusa remover uma entrada necessária enquanto a proteção está ativa. A escrita preserva mapas, cablagem, restantes flags e modo autónomo. A aplicação nunca arma saídas ao abrir ou gravar.
 
-Esta função exige firmware com capacidade Lambda guard (bit 64, total nativo 127). Firmware anterior continua utilizável para os outros blocos, mas a gravação deste bloco fica bloqueada. A extensão versionada ocupa os bytes 240–255 da página 4; flags anteriores e páginas mantêm o formato. Guardar estes parâmetros, mesmo desativados, cria uma configuração que requer o novo firmware. O firmware anterior recusa essa extensão; uma regressão exige recuperar uma configuração anterior compatível.
+Esta função exige firmware com capacidade Lambda guard (bit 64; firmware desta etapa anuncia também bit 128 para bloqueio de avanço, total nativo 255). Firmware anterior continua utilizável para os outros blocos, mas a gravação deste bloco fica bloqueada. A extensão versionada ocupa os bytes 240–255 da página 4; flags anteriores e páginas mantêm o formato. Guardar estes parâmetros, mesmo desativados, cria uma configuração que requer o novo firmware. O firmware anterior recusa essa extensão; uma regressão exige recuperar uma configuração anterior compatível.
 
 O PDF define a organização e o formato das janelas, mas não descreve os parâmetros individuais de Lambda guard. Esta é uma proteção nativa com limite absoluto e paragem retida, sem alegar equivalência completa com os critérios ou opções da referência.
+
+## Bloqueio de avanço para calibração
+
+Ignition / Triggers / Primary trigger inclui Ignition angle lock e Locked angle, nas duas colunas existentes, com caixa ciano e ângulo verde. A janela mostra lembrete quando o bloqueio está selecionado e tem altura inicial suficiente para os seis campos. A referência visual e de organização continua a ser BLACK V3, o mais próxima possível das fotografias; a capacidade funcional acompanha a Proteus e os 1–12 cilindros do perfil nativo.
+
+O bloqueio é desativado por defeito, com referência de 0 graus. A faixa nativa é -10 a 60 graus, em passos de 0,01 grau. Quando ativo, substitui o avanço final depois do mapa, avanço de arranque, IAT, launch e trims de ignição por cilindro. Não altera correções de combustível, dwell, cablagem, modo ou proteções. A configuração não arma saídas. Após calibrar com pistola de ponto, desmarcar e gravar novamente para voltar ao avanço normal.
+
+A ativação exige perfil válido e captura de trigger ligada. O firmware anuncia capacidade 128; os restantes controlos de Primary trigger mantêm-se utilizáveis em firmware antigo. Edições/importações dos novos campos são recusadas nesses firmwares, também na transação de escrita. Mudança externa dos parâmetros ou do perfil durante a edição bloqueia a gravação; o menu de contexto permite descartar a edição e usar a leitura atual.
+
+Os cinco bytes 27–31 da página 1 passam a conter versão opcional, enable, reservado e ângulo S16 em centésimos de grau. Cinco zeros continuam a ser a configuração antiga desativada. A extensão é criada apenas ao guardar enable ou ângulo diferente de zero; uma vez presente é preservada mesmo desativada. Configurações com a extensão requerem o novo firmware; regressão exige configuração anterior compatível. Os restantes bytes e páginas são preservados.
+
+O fluxo de gravação continua a exigir motor parado, saídas desarmadas e cópia/releitura. Não há ajuste do bloqueio em tempo real durante o arranque: parar, editar/gravar e voltar a verificar fisicamente. Isto é uma diferença funcional em relação ao procedimento de referência. O Scope e os mapas de pré-visualização não medem nem certificam o ponto físico. O wizard indica quando a leitura guardada tem bloqueio ativo e remete a Primary trigger; não altera o bloqueio ao gravar geometria.
+
+Testes C com ASan/UBSan verificaram formato antigo, limites e campos inválidos, impedimento de mudar a configuração armada, todos os 12 slots nos cinco modos e a precedência final do bloqueio. Pulsos reais do controlador sobre saídas simuladas confirmaram 0, 10, -10 e 60 graus a 1000 RPM, além de 10 graus a 300 RPM com avanço de arranque, IAT, launch e trim ativos. A tolerância do ensaio é de 150 microssegundos pela amostragem simulada de 100 microssegundos. Testes de UI/transação cobriram firmware antigo, conflitos, ativação e desativação, uma gravação permanente por operação e preservação das restantes páginas. A janela isolada foi renderizada e revista. Não é validação com osciloscópio ou motor real.
 
 ## Limites que continuam por resolver
 
@@ -58,7 +72,7 @@ O guia PDF fornecido, páginas 21–22, define o formato das janelas e comandos,
 
 ## Verificação
 
-Compilação local completa e doze testes CTest aprovados. ParameterTest executou 20 gravações com dispatcher/validação C reais e flash/saídas simuladas. EngineProfileTest acrescentou sete gravações cobrindo criação, redimensionamento, os cinco modos, mudança de par e inversão de fase. Cada operação verificou uma gravação permanente, cópia anterior e preservação das restantes páginas. Também foram verificados conflitos, ângulos não uniformes, JSON, releitura e defaults sem alterar fuel/dwell.
+Compilação local completa e doze testes CTest aprovados. ParameterTest executou 21 gravações com dispatcher/validação C reais e flash/saídas simuladas. EngineProfileTest acrescentou sete gravações cobrindo criação, redimensionamento, os cinco modos, mudança de par e inversão de fase. Cada operação verificou uma gravação permanente, cópia anterior e preservação das restantes páginas. Também foram verificados conflitos, ângulos não uniformes, JSON, releitura e defaults sem alterar fuel/dwell.
 
 TriggerWizardTest acrescentou duas gravações com dispatcher C real e flash/saídas simuladas: geometria sem perfil e geometria/fase com perfil. Verificou cópia, uma gravação permanente e preservação dos mapas, auxiliares, contactos e modo autónomo. Também passou validação de limites, dependência do soft limiter, conflitos, confirmação cancelada, falha sem repetição, identidade/geração da captura e callback apenas após captura completa do Scope.
 
@@ -66,7 +80,7 @@ Lambda guard passou testes C locais com ASan/UBSan, incluindo limites de formato
 
 A janela Lambda guard, o assistente e o bloco isolado foram renderizados com o tema da aplicação nas vistas normal e Advanced. O encaminhamento e a reabertura MDI de parâmetros, sensores e Trigger wizard passaram na verificação local; a captura completa via QWidget::grab falhou nesse Qt local, pelo que não se declara validação visual completa da janela principal.
 
-A [compilação Windows, os doze testes, arranque, instalador e publicação automática](https://github.com/Tunuino/Tunuino/actions/runs/42373358208) foram aprovados. O [firmware ARM Proteus](https://github.com/Tunuino/Tunuino_Firmware/actions/runs/42373355866) compilou e gerou o pacote. Os [testes nativos do firmware com GCC e Clang](https://github.com/Tunuino/Tunuino_Firmware/actions/runs/42373355855), incluindo Lambda guard e persistência/USB, passaram. Os ensaios são simulações no computador, sem validação física na Proteus. Esta etapa acrescenta suporte no firmware; não foi gravada automaticamente nenhuma ECU.
+As compilações automáticas Windows e ARM e os testes GCC/Clang desta etapa estão em curso. Os ensaios locais são simulações no computador, sem validação física na Proteus. Esta etapa acrescenta suporte no firmware; não foi gravada automaticamente nenhuma ECU.
 
 ## Guias adicionais recebidos
 
@@ -74,7 +88,7 @@ Referências de trabalho: How-to_Configure_Trigger_in_EMU_BLACK.pdf (versão 1.0
 
 O guia de trigger distingue expressamente V2 e V3: em V3 a ordem está em Ignition / Firing order e a cablagem por cilindro em Ignition / Coils / Ignition Outputs; a configuração dos sensores está em Sensors and inputs / Digital inputs. Invert phase pertence a Firing order. A calibração física usa Ignition Angle Lock e Locked Angle, seguidos de verificação a outro avanço e desativação do bloqueio no fim. Os valores de exemplo não devem ser aplicados automaticamente à Tunuino. First Trigger Tooth e Trigger Angle da referência não são equivalentes diretos ao ângulo absoluto tooth-zero do motor nativo.
 
-A lacuna prioritária de ignição continua a ser o bloqueio real do avanço no firmware e a respetiva janela, com testes que confirmem o comportamento perante correções e trims. Seleção elétrica de Hall/VR, polaridade, filtros e outros padrões depende de suporte real do hardware/firmware; não basta copiar campos. A aquisição Scope não deve ser confundida com a autorização de saídas.
+O bloqueio real do avanço e a respetiva janela foram implementados, com os testes descritos acima. Seleção elétrica de Hall/VR, polaridade, filtros e outros padrões depende de suporte real do hardware/firmware; não basta copiar campos. A aquisição Scope não deve ser confundida com a autorização de saídas.
 
 O guia PRO acrescenta referências concretas para Tune Display (páginas 69–70: canais, propriedades, grelha e F7), Scope, Graph Log, APS/DBW Tuner, VE Tuner e Fuel Film (páginas 133–135). Fuel Film é um modelo de película por cilindro, distinto do enriquecimento TPS atual, e não deve ser apresentado como já implementado. O guia também remete grande parte das estratégias individuais para a ajuda interna; não resolve por si só todos os campos de Lambda guard ou secondary injectors.
 

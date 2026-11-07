@@ -130,21 +130,48 @@ Compilação local da aplicação e CompleteMapSmoke aprovadas. Este ensaio usa 
 
 ## Trigger wizard por motor predefinido
 
-Ignition / Trigger wizard passa a abrir um diálogo modal compacto, com título Trigger wizard, linha Predefined triggers, oito opções Apply to e botões OK/Cancel, conforme as fotografias fornecidas. A ordem das linhas é primary trigger, secondary trigger, CAM#2 trigger, firing order, ignition outputs, injector phase, coil dwell time e VVTi CAMs offsets. A seleção é azul, os grupos disponíveis verdes e os indisponíveis cinzentos. As caixas marcadas mostram um visto.
+Ignition / Trigger wizard abre um diálogo modal compacto com título Trigger wizard, linha Predefined triggers, oito opções Apply to e OK/Cancel, seguindo as fotografias fornecidas. A ordem das opções é primary trigger, secondary trigger, CAM#2 trigger, firing order, ignition outputs, injector phase, coil dwell time e VVTi CAMs offsets. Seleção azul, grupos disponíveis verdes, indisponíveis cinzentos e caixas com visto.
 
-A lista contém os onze motores mostrados nas fotografias. Isto não significa onze configurações operacionais: apenas 2JZ VVTi e BMW E36 M52B20 têm nesta etapa dados confirmados para geometria primária e ordem de ignição. Os restantes nomes apresentam a limitação e não permitem OK. Os seis grupos sem dados completos ou suporte nativo ficam desativados, desmarcados e com explicação na tooltip.
+O catálogo foi ampliado para 25 entradas: 18 têm geometria primária e ordem confirmadas em documentação técnica; seis têm apenas ordem; o 1G-FE permanece indisponível. Isto descreve os dados que o diálogo aplica e não certifica funcionamento completo de 24 motores com a Proteus. Todos os presets continuam sem configurar automaticamente cam, CAM2, referência absoluta de ponto, atribuições de saídas, fase dos injetores, dwell ou offsets de VVT. Os seis grupos correspondentes ficam desativados. A descrição mostra os dentes, número/ordem de cilindros, variante abrangida e lacunas; as fontes constam também da tooltip da entrada.
 
-| Preset | Geometria primária | Ordem |
-|---|---|---|
-| 2JZ VVTi, variante com sensor de cambota 36-2 | 36 dentes nominais, 2 ausentes | 1-5-3-6-2-4 |
-| BMW E36 M52B20 | 60 dentes nominais, 2 ausentes | 1-5-3-6-2-4 |
+| Motor / variante | Geometria primária aplicada | Ordem aplicada | Fontes técnicas |
+|---|---|---|---|
+| 2JZ VVTi | 36-2 | 1-5-3-6-2-4 | [1](https://support.haltech.com/portal/en/kb/articles/2jz-1jz-engine) · [2](https://support.haltech.com/portal/en/kb/articles/2jz-vvt-i-trigger) |
+| BMW E36 M52B20 | 60-2 | 1-5-3-6-2-4 | [1](https://support.haltech.com/portal/en/kb/articles/m52-engine) |
+| BMW E46 N42B18 | Não aplicada | 1-3-4-2 | [1](https://workshop-manuals.com/bmw/3_series_e46/316i_n42_tour/3_technical_data/12__engine_electrical_system_%28n42%29/12__ignition_wires_spark_plugs/2_td__ignition_harness_spark_plugs_e46/) |
+| BMW E46 M54B30 | 60-2 | 1-5-3-6-2-4 | [1](https://manuals.plus/m/076f9e1e05f1686beecceb8cfdf2d6b35d0ab37bfb5ed089ae94c8918a37aef6.pdf) |
+| FORD FOCUS MK2 ST225 B5254 | Não aplicada | 1-2-4-5-3 | [1](https://workshop-manuals.com/ford/focus_2004.75_07.2004/mechanical_repairs/3_powertrain/303_engine/303-01d_engine_2.5l_duratec-st_%28vi5%29/specifications/) |
+| LEXUS IS200 1G-FE | Não aplicada | Indisponível | Por confirmar |
+| LOTUS ELISE CUP 2ZR-FE | 36-2 | 1-3-4-2 | [1](https://pdfcoffee.com/fsm-workshop-manualpdf-pdf-free.html) · [2](https://charm.li/Toyota/2010/Corolla%20L4-1.8L%20%282ZR-FE%29/Repair%20and%20Diagnosis/Specifications/Mechanical%20Specifications/Firing%20Order/) |
+| MAZDA MX-5 NC LF-VE | Não aplicada | 1-3-4-2 | [1](https://support.haltech.com/portal/en/kb/articles/mazda-lf-mzr-engine) |
+| MINI COOPER R50 R53 | Não aplicada | 1-3-4-2 | [1](https://charm.li/Mini/2003/Cooper%20%28R50%29%20L4-1.6L%20%28W10%29/Repair%20and%20Diagnosis/Maintenance/Tune-up%20and%20Engine%20Performance%20Checks/Firing%20Order/Specifications/) · [2](https://charm.li/Mini/2002/Cooper%20S%20%28R53%29%20L4-1.6L%20SC%20%28W11%29/Repair%20and%20Diagnosis/Powertrain%20Management/Ignition%20System/Description%20and%20Operation/) |
+| NISSAN VQ35DE 350Z / Skyline | Não aplicada | 1-2-3-4-5-6 | [1](https://support.haltech.com/portal/en/kb/articles/vq35de-engine) |
+| VW R32 BUB BFH | Não aplicada | 1-5-3-6-2-4 | [1](https://www.billswebspace.com/R32TechnicalSpecifications.pdf) · [2](https://workshop-manuals.com/volkswagen/golf-mk5/power_unit/6-cylinder_injection_engine/technical_data/engine_data/sticky-snack.php) |
+| TOYOTA 1JZ VVTi | 36-2 | 1-5-3-6-2-4 | [1](https://support.haltech.com/portal/en/kb/articles/2jz-1jz-engine) |
+| TOYOTA 1NZ-FE | 36-2 | 1-3-4-2 | [1](https://support.haltech.com/portal/en/kb/articles/1nz-fe-engine) |
+| TOYOTA 2NZ-FE | 36-2 | 1-3-4-2 | [1](https://support.haltech.com/portal/en/kb/articles/1nz-fe-engine) |
+| TOYOTA 1AZ-FE | 36-2 | 1-3-4-2 | [1](https://support.haltech.com/portal/en/kb/articles/2az-fe-engine) |
+| TOYOTA 2AZ-FE | 36-2 | 1-3-4-2 | [1](https://support.haltech.com/portal/en/kb/articles/2az-fe-engine) |
+| TOYOTA 2ZZ-GE | 36-2 | 1-3-4-2 | [1](https://support.haltech.com/portal/en/kb/articles/2zz-ge-engine) |
+| TOYOTA 1UZ-FE VVTi (1998-on) | 36-2 | 1-8-4-3-6-5-7-2 | [1](https://support.haltech.com/portal/en/kb/articles/1uz-fe-engine) |
+| TOYOTA 2UZ-FE (1998-2005) | 36-2 | 1-8-4-3-6-5-7-2 | [1](https://support.haltech.com/portal/en/kb/articles/1uz-fe-engine) |
+| TOYOTA 2UZ-FE VVTi | 36-2 | 1-8-4-3-6-5-7-2 | [1](https://support.haltech.com/portal/en/kb/articles/1uz-fe-engine) |
+| TOYOTA 3UZ-FE VVTi | 36-2 | 1-8-4-3-6-5-7-2 | [1](https://support.haltech.com/portal/en/kb/articles/1uz-fe-engine) |
+| FORD ZETEC-E 2.0 | 36-1 | 1-3-4-2 | [1](https://support.haltech.com/portal/en/kb/articles/duratec-zeta-2-0l-4-cyl) |
+| FORD BARRA TURBO BA-BF-FG | 36-1 | 1-5-3-6-2-4 | [1](https://support.haltech.com/portal/en/kb/articles/4-0l-barra-engine) |
+| GM LS2 GEN IV 58x | 60-2 | 1-8-7-2-6-5-4-3 | [1](https://support.haltech.com/portal/en/kb/articles/ls2-ls3-gen-4-engine) · [2](https://support.haltech.com/portal/en/kb/articles/ls2-ls3-trigger) |
+| GM LS3 GEN IV 58x | 60-2 | 1-8-7-2-6-5-4-3 | [1](https://support.haltech.com/portal/en/kb/articles/ls2-ls3-gen-4-engine) · [2](https://support.haltech.com/portal/en/kb/articles/ls2-ls3-trigger) |
 
-Dados factuais: [2JZ/1JZ](https://support.haltech.com/portal/en/kb/articles/2jz-1jz-engine), [2JZ VVT-i](https://support.haltech.com/portal/en/kb/articles/2jz-vvt-i-trigger) e [M52](https://support.haltech.com/portal/en/kb/articles/m52-engine). Não foram transferidos ângulos/offsets de outra ECU. O padrão OEM de cam de três dentes do 2JZ continua sem preset nativo; variantes com distribuidor não estão abrangidas. O M52 original pode ter sensor de cam por frequência que exige adaptação/substituição. A informação aparece no diálogo, que não apresenta estes presets parciais como configuração pronta a arrancar o motor.
+Os dados usados são factos de documentação de fabricantes/fornecedores, incluindo manuais de oficina reproduzidos nos endereços indicados. Não foram copiados ângulos, polaridades ou contactos de outra ECU. As variantes importam: LS2/LS3 são exclusivamente 58x/60-2, excluindo 24x; UZ com 36-2 exclui o primeiro 1UZ de 12 dentes; Zetec-E não significa Mazda MZR/Duratec-HE; o 2JZ corresponde a variantes com sensor de cambota 36-2 e não ao distribuidor; VQ35DE não abrange VQ35HR. NZ/AZ/ZZ são os motores FE/GE nomeados, não híbridos ou de injeção direta.
 
-OK prepara apenas os editores locais selecionados. Primary modifica dentes/ausências no editor primário e no rascunho manual, preservando captura, RPM, bloqueio de avanço, referência absoluta e janela cam. Firing order modifica número/ordem, preservando os contactos existentes; novos cilindros ficam sem atribuição. Com o mesmo número, os ângulos de evento existentes são preservados; ao mudar a contagem aplica-se o espaçamento uniforme já usado pelo editor. Outros editores e os seus estados de conflito/base não são relidos ou alterados. Todos os destinos selecionados são validados antes da aplicação.
+O Mazda NC tem roda OEM de múltiplas falhas 36-2-2-2; o VQ35DE também necessita de decoder específico. Os respetivos presets aplicam apenas a ordem e deixam Primary desativado. N42, Focus ST225 HYDA, MINI W10/W11 e R32 BUB/BFH também aplicam apenas a ordem nesta etapa. O M52 pode ter sensor de cam por frequência que exige adaptação; o diálogo identifica essa limitação. Não se deduz geometria de cam ou referência de ponto a partir da marca ou da cilindrada.
 
-Cancelar/fechar ou apenas escolher um motor não altera a configuração. Nenhuma página base é substituída e OK não envia gravação ou ARM/RUN. As edições ficam disponíveis para guardar no projeto e para a gravação explícita existente de cada bloco, com as suas validações. Operações ECU em curso bloqueiam a aplicação. O menu de contexto mantém Manual trigger setup para configurar a geometria e consultar Scope; Primary trigger mantém a sua janela de parâmetros direta.
+OK prepara apenas os editores locais selecionados. Primary modifica dentes/ausências no editor primário e no rascunho manual, preservando captura, RPM, bloqueio de avanço, referência absoluta e janela cam. Firing order modifica número/ordem, preservando os contactos existentes; novos cilindros ficam sem atribuição. Com a mesma contagem, preserva os ângulos de evento existentes, incluindo os não uniformes; ao mudar a contagem usa o espaçamento uniforme já adotado pelo editor, a conferir para o motor real. Os outros editores e os seus estados de conflito/base não são relidos ou alterados. Todos os destinos selecionados são validados antes da aplicação.
 
-Compilação local e 14 testes CTest aprovados. A verificação da janela real inclui abertura modal pela árvore, onze nomes, motor indisponível, cancelamento, aplicação só de primary ou só de firing, igualdade completa do projeto com o resultado esperado, preservação das páginas e recusa de grupo sem suporte. Os testes anteriores da configuração manual e das duas gravações com dispatcher C/flash simulada continuam a passar. O diálogo foi renderizado e revisto com o tema real. Não há alteração de firmware nem ensaio físico nesta etapa.
+Cancelar/fechar ou apenas escolher um motor não altera a configuração. Nenhuma página base é substituída e OK não envia gravação ou ARM/RUN. As edições podem ser guardadas no projeto e gravadas depois pela operação explícita existente de cada bloco, com as suas validações. Operações ECU em curso bloqueiam a aplicação. Manual trigger setup continua acessível pelo contexto; Primary trigger conserva a sua janela direta.
 
-A atualização anterior de arranque limpo também passou a compilação Windows, testes, instalador e publicação: https://github.com/Tunuino/Tunuino/actions/runs/42416053319.
+Cada entrada com dados tem fontes associadas e verificação estrutural: roda dentro dos limites nativos, ordem como permutação de 1–12 cilindros e referências HTTPS. Uma entrada inválida não disponibiliza grupos.
+
+Compilação local e 14 testes CTest aprovados. TriggerWizardTest percorreu os 25 registos: confirmou 18 geometrias e 24 ordens, seleção independente de grupos, preservação de contactos/combustível/dwell/referência/comentário/páginas, novos cilindros sem atribuição, manutenção de eventos não uniformes e recusa de grupos sem suporte ou metadados inválidos. CompleteMapSmoke verificou a abertura modal real, motor indisponível, cancelar, aplicar primary isoladamente e aplicar firing isoladamente. Os ensaios anteriores de duas gravações pela configuração manual, com dispatcher C e flash/saídas simuladas, continuam a passar. O diálogo foi renderizado e revisto. Não há alteração de firmware nem validação física de motores nesta etapa.
+
+A primeira versão do diálogo passou a compilação Windows, os 14 testes, instalador e publicação automática: https://github.com/Tunuino/Tunuino/actions/runs/42417089018.

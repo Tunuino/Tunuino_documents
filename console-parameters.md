@@ -80,7 +80,7 @@ Lambda guard passou testes C locais com ASan/UBSan, incluindo limites de formato
 
 A janela Lambda guard, o assistente e o bloco isolado foram renderizados com o tema da aplicação nas vistas normal e Advanced. O encaminhamento e a reabertura MDI de parâmetros, sensores e Trigger wizard passaram na verificação local; a captura completa via QWidget::grab falhou nesse Qt local, pelo que não se declara validação visual completa da janela principal.
 
-As compilações automáticas Windows e ARM e os testes GCC/Clang desta etapa estão em curso. Os ensaios locais são simulações no computador, sem validação física na Proteus. Esta etapa acrescenta suporte no firmware; não foi gravada automaticamente nenhuma ECU.
+A [compilação Windows, os doze testes, arranque, instalador e publicação automática](https://github.com/Tunuino/Tunuino/actions/runs/42376210981) foram aprovados. O [firmware ARM Proteus](https://github.com/Tunuino/Tunuino_Firmware/actions/runs/42376174726) compilou e gerou o pacote. Os [testes do firmware com GCC e Clang](https://github.com/Tunuino/Tunuino_Firmware/actions/runs/42376174761), incluindo os testes novos de pulsos com bloqueio de avanço, passaram. Os ensaios locais são simulações no computador, sem validação física na Proteus. Esta etapa acrescenta suporte no firmware; não foi gravada automaticamente nenhuma ECU.
 
 ## Guias adicionais recebidos
 

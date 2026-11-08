@@ -2,7 +2,7 @@
 
 A navegação principal abre cada bloco numa janela MDI independente, com fecho/reabertura sem perder a edição. Foi removida a janela Calibration & Setup e a sua segunda árvore. A pesquisa percorre os subgrupos. A seleção usa azul; as cores dos parâmetros distinguem números, listas, atribuições e caixas.
 
-Os 26 blocos nativos têm duas colunas e quatro comandos: Open parameters, Save parameters, Restore to defaults e Help. Ficheiros .tnparams são específicos do bloco e validados antes de alterar a edição. Abrir ou repor valores não grava na ECU. Write to ECU guarda apenas o bloco da janela, não as edições pendentes noutras janelas.
+Os 27 blocos nativos têm duas colunas e quatro comandos: Open parameters, Save parameters, Restore to defaults e Help. Ficheiros .tnparams são específicos do bloco e validados antes de alterar a edição. Abrir ou repor valores não grava na ECU. Write to ECU guarda apenas o bloco da janela, não as edições pendentes noutras janelas.
 
 | Área | Blocos ligados ao protocolo |
 |---|---|
@@ -193,7 +193,7 @@ A árvore foi reorganizada segundo as duas fotografias, incluindo a continuaçã
 | Switches | Organização Clutch/brake, Built-in, User, MUX, Latching e Rotary | Não há campos nativos para essas funções |
 | IAT, CLT | Dois assistentes NTC e duas calibrações de três pontos | Failsafe configurável indisponível |
 | MAP, BARO | Parameters e MAP calibration partilham o editor MAP existente, que contém entrada e curva | BARO separado indisponível |
-| Pressure | Assistente linear MAP/Fuel/Oil, Parameters com monitor e calibrações Fuel pressure/Oil pressure | As outras oito curvas de pressão continuam indisponíveis |
+| Pressure | Parameters com atribuições Fuel/Oil, assistente próprio de Fuel/Oil e calibrações; monitor separado em View | As outras oito curvas de pressão continuam indisponíveis |
 | Temperature | Assistente com alvo IAT/CLT e vista de entradas dos Standard sensors | Custom sensors e as oito curvas adicionais indisponíveis |
 | Other sensors | Battery conserva a calibração existente | Parameters, EWG, turboshaft e fuel level indisponíveis |
 | VSS and Gearbox | Vehicle speed: relação de velocidade e prazo de perda de sinal ligados à aquisição VSS real | Rodas, eixos, mudanças e sensores de caixa ainda indisponíveis |
@@ -338,3 +338,22 @@ TUNUINO:J fornece resposta só de leitura de 28 bytes: estado/versão, flags/mot
 A escrita usa a cópia prévia, preparação, uma gravação e releitura existentes. A máscara abrange apenas a extensão CAM 2. Conflitos de edição exigem descartar o rascunho; outros blocos são preservados. Projetos antigos recebem o rascunho a partir das páginas guardadas, sem alterar essas páginas. Formatos desconhecidos são recusados antes de aplicar o projeto.
 
 Validação: compilação local e 14 testes CTest aprovados, incluindo migração, formato inválido, navegação e fecho/reabertura. ParameterTest completou 27 escritas contra o dispatcher C real com flash/saídas simuladas, uma gravação por operação e preservação integral dos restantes dados. Testes específicos verificam capacidade, máscara, conflito/descarte, coexistência com pressão, monitor a 25 Hz/40 ms e rejeição de geração antiga. Onze suites nativas passaram com GCC + AddressSanitizer/UndefinedBehaviorSanitizer (LeakSanitizer desligado localmente). CI aprovado: [ARM](https://github.com/Tunuino/Tunuino_Firmware/actions/runs/42500303716) e [GCC/Clang](https://github.com/Tunuino/Tunuino_Firmware/actions/runs/42500303649). Sem ensaio físico de sensor, ECU ou motor.
+
+
+## Pressure / Parameters e separação do assistente
+
+Pressure / Parameters abria um monitor de quatro colunas; passa agora a abrir configuração em duas colunas, com Fuel pressure input e Oil pressure input. A aquisição fica separada em View / Pressure monitor. Foram mantidos cabeçalho cinzento, toolbar escura com Open parameters / Save parameters / Restore to defaults / Help, seleção azul e cores dos parâmetros. A janela foi renderizada e inspecionada. Não se afirma paridade com campos de pressão que o protocolo ainda não implementa.
+
+Referências consultadas: EMU_BLACK_V3_Software_Guide.pdf, página 21 (formulário de parâmetros), e EMU_PRO_Software_Guide.pdf, página 27 (assistente linear de pressão com pontos de tensão e pressão). O guia BLACK consultado não enumera todos os campos Pressure / Parameters. A árvore segue as fotografias já fornecidas. O guia PRO usa bar no exemplo; a Tunuino mantém kPa explícitos, conforme as calibrações e leitura já existentes. Não se alteraram escalas guardadas ou unidades implicitamente.
+
+Cada função mostra apenas a entrada atual, Disabled quando diferente e Customise... para a lista completa AV1–AV11 com contactos J103. Não se propõe uma ligação universal para sensores de pressão. O circuito e os contactos continuam os já conferidos na implementação de pressão. Escolher uma entrada ocupada por MAP, Lambda, TPS, aquisição de tensão, Launch ou Flex fuel é recusado. Fuel e Oil não podem partilhar o mesmo canal. Uma troca explícita entre as duas funções é validada contra as atribuições finais; não retira entradas a outras funções.
+
+Gravar parâmetros altera apenas os canais Fuel/Oil (bytes 39 e 48) e mantém os pontos de calibração existentes. Numa extensão legada ausente, inicializa apenas o prefixo de pressão 38–56 com referências editáveis; as entradas começam desativadas. Essas referências não são calibração verificada de um sensor instalado. As curvas devem ser conferidas em Fuel pressure cal. e Oil pressure cal. Nenhuma gravação ativa proteção de pressão ou arma saídas. Restore to defaults desativa as duas entradas, conservando curvas já existentes.
+
+A capacidade Pressure existente continua obrigatória. Sem suporte, a janela retém a edição e bloqueia a escrita. Não se exige perfil de motor para configurar os sensores. A transação mantém cópia prévia, preparação, uma gravação e releitura. Conflitos externos nos canais/versão bloqueiam a escrita até descartar o rascunho; alterações de calibração independentes podem ser relidas sem substituir os canais em edição. Máscaras preservam CAM 2 em 57–63, filtros analógicos, VSS, CAM 1 e restantes páginas. Não foi alterado o firmware nem o formato.
+
+O assistente anterior já permitia escolher MAP/Fuel/Oil, mas o grupo Pressure começava em MAP e usava a mesma identificação. Pressure / Sensor wizard passa a abrir um assistente próprio, com Fuel pressure e Oil pressure; MAP mantém o seu assistente independente. Os rótulos de pressão deixam de dizer absoluta para Fuel/Oil, cuja referência depende do sensor instalado. O assistente prepara apenas a curva do sensor escolhido, preserva a atribuição e não grava na ECU. Não foram inventados presets de fabricante.
+
+Projetos anteriores recebem o rascunho inputs.pressure a partir dos canais guardados, sem alterar as páginas do projeto. O projeto completo guarda este rascunho juntamente com as calibrações; os ficheiros .tnparams deste bloco contêm apenas as duas escolhas de entrada.
+
+Validação: compilação local e 14 testes CTest aprovados. ParameterTest completou 28 operações contra o dispatcher C real, com flash e saídas simuladas, uma gravação por operação, cópia e releitura de todas as páginas. Cobertura específica de capacidade, inicialização legada, coexistência CAM 2, máscaras, canais duplicados/ocupados, troca explícita de Fuel/Oil preservando curvas, conflito/descarte e escolhas Current/Disabled/Customise. CompleteMapSmoke verificou a janela de parâmetros, migração de projeto e o assistente a preparar Fuel/Oil, mantendo páginas e outros parâmetros. Sem ensaio físico de ECU ou sensores.

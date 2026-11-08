@@ -2,7 +2,7 @@
 
 A navegação principal abre cada bloco numa janela MDI independente, com fecho/reabertura sem perder a edição. Foi removida a janela Calibration & Setup e a sua segunda árvore. A pesquisa percorre os subgrupos. A seleção usa azul; as cores dos parâmetros distinguem números, listas, atribuições e caixas.
 
-Os 25 blocos nativos têm duas colunas e quatro comandos: Open parameters, Save parameters, Restore to defaults e Help. Ficheiros .tnparams são específicos do bloco e validados antes de alterar a edição. Abrir ou repor valores não grava na ECU. Write to ECU guarda apenas o bloco da janela, não as edições pendentes noutras janelas.
+Os 26 blocos nativos têm duas colunas e quatro comandos: Open parameters, Save parameters, Restore to defaults e Help. Ficheiros .tnparams são específicos do bloco e validados antes de alterar a edição. Abrir ou repor valores não grava na ECU. Write to ECU guarda apenas o bloco da janela, não as edições pendentes noutras janelas.
 
 | Área | Blocos ligados ao protocolo |
 |---|---|
@@ -187,7 +187,7 @@ A árvore foi reorganizada segundo as duas fotografias, incluindo a continuaçã
 | Grupo | Implementação disponível nesta etapa | Limites |
 |---|---|---|
 | Analog inputs | Configuração em duas colunas: resistências fixas, filtros por AV1–AV11 e pull-ups de temperatura | Resistências sem comutação; monitor de tensões separado em View |
-| Digital inputs | Primary trigger, CAM 1 e VSS: configuração e filtros nativos; monitores separados em View | Comutação elétrica não disponível; CAM 2 e curvas de sensibilidade indisponíveis |
+| Digital inputs | Primary trigger, CAM 1, CAM 2 e VSS: configuração e filtros nativos; monitores separados em View | Comutação elétrica e curvas de sensibilidade indisponíveis. CAM 2 ainda sem descodificação de fase/VVT |
 | Oxygen Sensor | Parameters abre a calibração Lambda, com os presets de controladores existentes | Apenas saída analógica externa; não acrescenta controlo interno da sonda |
 | TPS, PPS | Calibração TPS de dois pontos e captura ADC | PPS e curvas independentes de plausibilidade indisponíveis |
 | Switches | Organização Clutch/brake, Built-in, User, MUX, Latching e Rotary | Não há campos nativos para essas funções |
@@ -317,3 +317,24 @@ TUNUINO:U fornece corpo de 28 bytes: estado/versão, flags e motivo, frequência
 Guardar usa a transação existente: snapshot atual, cópia, preparação, uma gravação e releitura integral. A máscara altera apenas o bloco editado e a inicialização mínima da extensão legada. Sem mudanças em filtros analógicos, CAM, cambota, perfil ou saídas. Projetos antigos recebem os dois novos rascunhos a partir da base guardada, sem modificar as páginas; formatos desconhecidos são recusados.
 
 Validação: compilação local e 14 testes CTest aprovados; 26 escritas de blocos contra o dispatcher C real com flash e saídas simuladas, uma gravação por operação e preservação das quatro páginas. Testes incluem máscaras, falta de capacidade, migração, formato inválido, frequência sem calibração e resposta tardia de outra identidade. Dez suites nativas passaram; AddressSanitizer/UndefinedBehaviorSanitizer locais com LeakSanitizer desligado. CI do firmware: [ARM aprovado](https://github.com/Tunuino/Tunuino_Firmware/actions/runs/42497495284) e [GCC/Clang aprovados](https://github.com/Tunuino/Tunuino_Firmware/actions/runs/42497495259). Sem ensaio físico de ECU, sensor ou veículo. O novo bloco requer o firmware com capacidade VSS.
+
+
+## Digital inputs / CAM 2
+
+Referências consultadas nesta alteração: EMU_BLACK_V3_Software_Guide.pdf, página 21 (parâmetros em duas colunas), página 79 (separação da configuração elétrica dos triggers) e EMU_PRO_Software_Guide.pdf, página 116 (entrada, tipo e flanco de sensor de posição, distintos do atuador VVT). O guia BLACK consultado não enumera um formulário CAM 2 completo; não se atribuem a essas páginas campos que não mostram. O estilo de duas colunas, toolbar de quatro comandos, cabeçalho cinzento, texto verde/ciano e listas com seleção azul foi conferido com a referência comum e as fotografias de CAM 1 já fornecidas. A janela e o popup de filtro foram renderizados para inspeção.
+
+Sensors and inputs / Digital inputs / CAM 2 abre agora configuração própria, com Sensor type, Pullup/Pulldown, Input filter, Input, Trigger edge e Signal timeout. Os três primeiros seguem a organização elétrica; entrada, flanco e prazo são os controlos necessários à aquisição nativa. View / CAM 2 monitor abre uma janela separada de frequência, período e pulsos aceites. As janelas mantêm edição e fecho/reabertura normais.
+
+A ligação foi conferida no PCB e esquema: Digital input 2, J101 / 1, U1207 SN74LVC2G17 não inversor, pull-up R1403 de 2,7 kΩ para 5V_SENSOR_1, R1404/RC e U1501 pad 64, PE11. O mapeamento PE11 também foi verificado no [datasheet STM32F427](https://www.st.com/resource/en/datasheet/stm32f427vi.pdf). Esta é uma entrada lógica Hall/óptica; VR exige condicionador externo. Tipo e resistências não são comutados por software. As alternativas indisponíveis permanecem identificadas, sem controlo fictício de sensibilidade VR.
+
+A entrada começa desativada. Selecionar Digital input 2 permite captura independente de cambota, CAM 1 e VSS, com flanco Rising/Falling. None/Low/Medium/High aplicam blanking nativo de 0/5/10/20 µs; não são uma alegação de equivalência ao filtro da referência. O prazo de perda de sinal é 100–5000 ms, inicialmente 1000 ms. Exigem-se dois pulsos e período mínimo de 100 µs. São invalidados sinais fora dos limites, relógio recuado, sinal perdido, geração antiga e configuração por gravar. Um contador que volta a zero não faz reaparecer um sinal expirado.
+
+Este bloco implementa configuração e aquisição de pulsos CAM 2. Ainda não implementa descodificação do padrão CAM 2, ângulo de fase, sincronização do motor por CAM 2, VVT nem comando de solenoides. A sincronização existente continua a usar CAM 1. O monitor declara esta limitação; não mostra ângulos calculados fictícios. Nenhuma abertura, leitura ou gravação arma saídas.
+
+Extensão da primeira página: bytes 57–63, versão/input/edge/filtro/prazo U16/reservado. Todos zero representam legado desativado; versão 1 aceita entrada 0/1, flanco 0/1, filtro 0–3, prazo 100–5000 e reservado zero. Pressão passa a possuir apenas o prefixo 38–56 (19 bytes); a extensão CAM 2 é validada separadamente. Inicializar ou editar pressão preserva CAM 2 e vice-versa. O total das quatro páginas permanece 1664 bytes. Capacidade CAM 2: 8192 (0x2000), total nativo 16383. Firmware sem capacidade bloqueia escrita antes de enviar comandos; software/firmware anteriores não suportam esta extensão e regressar exige configuração compatível.
+
+TUNUINO:J fornece resposta só de leitura de 28 bytes: estado/versão, flags/motivo, frequência mHz em 4–7, zero em 8–11, período µs em 12–15, idade ms em 16–19, geração em 20–23 e contador em 24–27, inteiros big-endian. Flag 1/motivo 0 indica frequência válida; flag 0 usa motivos 1 desativado, 2 aguardar dois pulsos, 3 sinal perdido, 4 fora dos limites, 5 relógio e 6 configuração/geração inválida. A leitura nunca ocupa o comando nem os dados de CAM 1. O monitor verifica identidade/geração, rejeita respostas tardias, limpa valores antigos e suspende pedidos quando oculto.
+
+A escrita usa a cópia prévia, preparação, uma gravação e releitura existentes. A máscara abrange apenas a extensão CAM 2. Conflitos de edição exigem descartar o rascunho; outros blocos são preservados. Projetos antigos recebem o rascunho a partir das páginas guardadas, sem alterar essas páginas. Formatos desconhecidos são recusados antes de aplicar o projeto.
+
+Validação: compilação local e 14 testes CTest aprovados, incluindo migração, formato inválido, navegação e fecho/reabertura. ParameterTest completou 27 escritas contra o dispatcher C real com flash/saídas simuladas, uma gravação por operação e preservação integral dos restantes dados. Testes específicos verificam capacidade, máscara, conflito/descarte, coexistência com pressão, monitor a 25 Hz/40 ms e rejeição de geração antiga. Onze suites nativas passaram com GCC + AddressSanitizer/UndefinedBehaviorSanitizer (LeakSanitizer desligado localmente). CI aprovado: [ARM](https://github.com/Tunuino/Tunuino_Firmware/actions/runs/42500303716) e [GCC/Clang](https://github.com/Tunuino/Tunuino_Firmware/actions/runs/42500303649). Sem ensaio físico de sensor, ECU ou motor.

@@ -2,7 +2,7 @@
 
 A navegação principal abre cada bloco numa janela MDI independente, com fecho/reabertura sem perder a edição. Foi removida a janela Calibration & Setup e a sua segunda árvore. A pesquisa percorre os subgrupos. A seleção usa azul; as cores dos parâmetros distinguem números, listas, atribuições e caixas.
 
-Os 23 blocos nativos têm duas colunas e quatro comandos: Open parameters, Save parameters, Restore to defaults e Help. Ficheiros .tnparams são específicos do bloco e validados antes de alterar a edição. Abrir ou repor valores não grava na ECU. Write to ECU guarda apenas o bloco da janela, não as edições pendentes noutras janelas.
+Os 25 blocos nativos têm duas colunas e quatro comandos: Open parameters, Save parameters, Restore to defaults e Help. Ficheiros .tnparams são específicos do bloco e validados antes de alterar a edição. Abrir ou repor valores não grava na ECU. Write to ECU guarda apenas o bloco da janela, não as edições pendentes noutras janelas.
 
 | Área | Blocos ligados ao protocolo |
 |---|---|
@@ -187,7 +187,7 @@ A árvore foi reorganizada segundo as duas fotografias, incluindo a continuaçã
 | Grupo | Implementação disponível nesta etapa | Limites |
 |---|---|---|
 | Analog inputs | Configuração em duas colunas: resistências fixas, filtros por AV1–AV11 e pull-ups de temperatura | Resistências sem comutação; monitor de tensões separado em View |
-| Digital inputs | Primary trigger: configuração de quatro campos com filtro nativo; monitor separado em View. CAM 1 tem configuração de três campos e monitor separado | Comutação elétrica não disponível; CAM 2, VSS e curvas de sensibilidade indisponíveis |
+| Digital inputs | Primary trigger, CAM 1 e VSS: configuração e filtros nativos; monitores separados em View | Comutação elétrica não disponível; CAM 2 e curvas de sensibilidade indisponíveis |
 | Oxygen Sensor | Parameters abre a calibração Lambda, com os presets de controladores existentes | Apenas saída analógica externa; não acrescenta controlo interno da sonda |
 | TPS, PPS | Calibração TPS de dois pontos e captura ADC | PPS e curvas independentes de plausibilidade indisponíveis |
 | Switches | Organização Clutch/brake, Built-in, User, MUX, Latching e Rotary | Não há campos nativos para essas funções |
@@ -196,7 +196,7 @@ A árvore foi reorganizada segundo as duas fotografias, incluindo a continuaçã
 | Pressure | Assistente linear MAP/Fuel/Oil, Parameters com monitor e calibrações Fuel pressure/Oil pressure | As outras oito curvas de pressão continuam indisponíveis |
 | Temperature | Assistente com alvo IAT/CLT e vista de entradas dos Standard sensors | Custom sensors e as oito curvas adicionais indisponíveis |
 | Other sensors | Battery conserva a calibração existente | Parameters, EWG, turboshaft e fuel level indisponíveis |
-| VSS and Gearbox | Nove entradas organizadas como na fotografia | Aquisição VSS, rodas, eixos, mudanças e sensores de caixa ainda sem implementação |
+| VSS and Gearbox | Vehicle speed: relação de velocidade e prazo de perda de sinal ligados à aquisição VSS real | Rodas, eixos, mudanças e sensores de caixa ainda indisponíveis |
 
 As oito calibrações têm agora toolbar escura, ícones de abrir/guardar/repor/ajuda, cabeçalho cinzento, grelha de duas colunas, rótulos ciano e valores verdes. Capturas permanecem junto do ponto de tensão. Os contactos continuam identificados e Customise apresenta a escolha explícita de ligação. Os controlos conservam os mesmos modelos, máscaras e validações; as janelas continuam independentes no ambiente MDI.
 
@@ -296,3 +296,24 @@ Input filter usa None / Low / Medium / High, com blanking nativo de 0/5/10/20 µ
 Extensão da primeira página: byte 98 versão, byte 99 nível. 0/0 é legado sem filtro; versão 1 aceita níveis 0–3. Capacidade 2048 (0x800), total nativo 4095. A Console grava apenas esses dois bytes, mediante o procedimento existente de cópia, preparação, gravação única e releitura. Sem capacidade, a escrita fica bloqueada antes de enviar comandos. Projetos anteriores ganham apenas o rascunho CAM a partir da base; versões desconhecidas são recusadas. Firmware antigo rejeita a extensão, pelo que regressar exige uma configuração anterior compatível.
 
 Compilação local e 14 testes CTest aprovados. ParameterTest completou 24 escritas de blocos contra o dispatcher C com flash/saídas simuladas, uma gravação por operação e preservação das quatro páginas/campos não abrangidos, incluindo o filtro primário ao gravar CAM. Cobertura de três campos, lista de sensibilidade desativada, falta de capacidade, conflito/descarte, migração do projeto e versão inválida. Janela e popup foram renderizados e comparados com as fotografias. Nove suites locais passaram com GCC + AddressSanitizer/UndefinedBehaviorSanitizer, LeakSanitizer desligado localmente. O teste CAM cobre versões, limites, ruído, contador, reinício e estados intercalados independentes. ARM e nove suites GCC/Clang aprovadas: https://github.com/Tunuino/Tunuino_Firmware/actions/runs/42495009021 e https://github.com/Tunuino/Tunuino_Firmware/actions/runs/42495008967. Windows em curso: https://github.com/Tunuino/Tunuino/actions/runs/42495337741. Sem ensaio físico da ECU/sensores.
+
+
+## VSS e Vehicle speed
+
+Referências consultadas: EMU_BLACK_V3_Software_Guide.pdf, página 21 (formulário de parâmetros), e [guia oficial de migração V3](https://ecumaster.com/files/EMU_BLACK/EMU_BLACK_Migration_Guide_to_V3_Software.pdf), página 11 (Digital inputs / VSS e reorganização do cálculo de velocidade). A [descrição oficial do software V3](https://community.ecumaster.com/t/emu-black-v3-software-informations/91) confirma a separação entre configuração das entradas e fontes de velocidade/rodas/eixos. Os PDFs fornecidos não enumeram o formulário completo VSS: o guia BLACK, página 70, refere o sinal em Logbook; o guia PRO, página 77, descreve velocidade no stream. Não se afirma reprodução integral de campos não documentados.
+
+Digital inputs / VSS tem Sensor type, Pullup/Pulldown, Input filter, Input e Trigger edge, em duas colunas, toolbar de quatro comandos e cores verde/ciano. VSS and Gearbox / Vehicle speed contém Source, Speed ratio e Signal timeout. As duas janelas foram renderizadas para conferir a organização e o estilo comum. View / Vehicle speed monitor é uma janela separada, só de leitura; não substitui configurações.
+
+A ligação foi conferida no PCB/esquema da Proteus suportada: Digital input 1, J101 / 10, condicionador SN74LVC2G17 U1202, PC6, com pull-up físico R1401 de 2,7 kΩ para 5V_SENSOR_1. Hall / Optical sensor e Pullup 2K7 são fixos. VR exige condicionador externo; não se oferece comutação elétrica fictícia. A entrada começa desativada. Escolher Digital input 1 ativa captura de entrada, sem armar saídas. Trigger edge permite Rising/Falling. Input filter usa None/Low/Medium/High como blanking nativo 0/5/10/20 µs; não se afirma equivalência de algoritmo com a referência.
+
+A relação km/h por Hz começa em 0 (sem calibração); aceita 0–1000, passo 0,001. A frequência pode ser mostrada antes da calibração; km/h exige relação positiva. O prazo de perda de sinal aceita 100–5000 ms, inicialmente 1000 ms. É necessária a relação real do sensor/transmissão/roda do veículo. Não se inventa uma relação universal. A falta de pulsos não distingue veículo parado de sensor desligado, pelo que após o prazo mostra indisponível, não velocidade zero confirmada. Não foram implementadas fontes CAN/GPS, agregação de rodas/eixos ou cálculo de mudança.
+
+A captura possui contador, período e blanking independentes da cambota e CAM. O processamento valida dois pulsos, máximo de 10 kHz e 500 km/h, tempo monotónico, perda de sinal e volta do contador. O primeiro pulso após perda de sinal exige novo par. A leitura antiga não reaparece após a volta do contador de 32 bits. Publicar configuração invalida a geração anterior.
+
+Extensão VSS na primeira página, bytes 82–95: versão em 82, entrada em 83, flanco em 84, filtro em 85, relação ×1000 U32 em 86–89, prazo U16 em 90–91 e reservados zero em 92–95. Todos os 14 bytes zero representam legado desativado; versão 1 valida todos os limites. Os filtros analógicos passam a possuir apenas o prefixo 70–81; as duas extensões são validadas e gravadas separadamente, preservando-se entre si. As quatro páginas continuam a ter 1664 bytes no total. Capacidade VSS 4096 (0x1000); total nativo 8191. Firmware antigo bloqueia a escrita antes de comandos; downgrade exige configuração anterior compatível.
+
+TUNUINO:U fornece corpo de 28 bytes: estado/versão, flags e motivo, frequência em mHz, velocidade em milésimos de km/h, período µs, idade ms, geração e contador. Flags 0 indicam leitura inválida; 1 frequência sem calibração; 3 frequência e velocidade. Motivos: 0 válido, 1 desativado, 2 aguardar dois pulsos, 3 perda de sinal, 4 fora dos limites, 5 relógio recuou, 6 configuração/geração desatualizada e 7 frequência sem calibração. Inteiros são big-endian. O monitor usa exclusivamente respostas da ECU, verifica identidade/geração, limpa respostas antigas e suspende pedidos quando oculto.
+
+Guardar usa a transação existente: snapshot atual, cópia, preparação, uma gravação e releitura integral. A máscara altera apenas o bloco editado e a inicialização mínima da extensão legada. Sem mudanças em filtros analógicos, CAM, cambota, perfil ou saídas. Projetos antigos recebem os dois novos rascunhos a partir da base guardada, sem modificar as páginas; formatos desconhecidos são recusados.
+
+Validação: compilação local e 14 testes CTest aprovados; 26 escritas de blocos contra o dispatcher C real com flash e saídas simuladas, uma gravação por operação e preservação das quatro páginas. Testes incluem máscaras, falta de capacidade, migração, formato inválido, frequência sem calibração e resposta tardia de outra identidade. Dez suites nativas passaram; AddressSanitizer/UndefinedBehaviorSanitizer locais com LeakSanitizer desligado. CI do firmware: [ARM aprovado](https://github.com/Tunuino/Tunuino_Firmware/actions/runs/42497495284) e [GCC/Clang aprovados](https://github.com/Tunuino/Tunuino_Firmware/actions/runs/42497495259). Sem ensaio físico de ECU, sensor ou veículo. O novo bloco requer o firmware com capacidade VSS.

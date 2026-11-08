@@ -2,7 +2,7 @@
 
 A navegação principal abre cada bloco numa janela MDI independente, com fecho/reabertura sem perder a edição. Foi removida a janela Calibration & Setup e a sua segunda árvore. A pesquisa percorre os subgrupos. A seleção usa azul; as cores dos parâmetros distinguem números, listas, atribuições e caixas.
 
-Os 21 blocos nativos têm duas colunas e quatro comandos: Open parameters, Save parameters, Restore to defaults e Help. Ficheiros .tnparams são específicos do bloco e validados antes de alterar a edição. Abrir ou repor valores não grava na ECU. Write to ECU guarda apenas o bloco da janela, não as edições pendentes noutras janelas.
+Os 22 blocos nativos têm duas colunas e quatro comandos: Open parameters, Save parameters, Restore to defaults e Help. Ficheiros .tnparams são específicos do bloco e validados antes de alterar a edição. Abrir ou repor valores não grava na ECU. Write to ECU guarda apenas o bloco da janela, não as edições pendentes noutras janelas.
 
 | Área | Blocos ligados ao protocolo |
 |---|---|
@@ -187,7 +187,7 @@ A árvore foi reorganizada segundo as duas fotografias, incluindo a continuaçã
 | Grupo | Implementação disponível nesta etapa | Limites |
 |---|---|---|
 | Analog inputs | Configuração em duas colunas: resistências fixas, filtros por AV1–AV11 e pull-ups de temperatura | Resistências sem comutação; monitor de tensões separado em View |
-| Digital inputs | Vistas Primary trigger e CAM 1, contactos J101, flanco/captura fixos e estado de sincronização partilhado; acesso ao Scope | CAM 2, VSS e curvas de sensibilidade indisponíveis |
+| Digital inputs | Primary trigger: configuração de quatro campos com filtro nativo; monitor separado em View. CAM 1 mantém a vista de aquisição | Comutação elétrica não disponível; CAM 2, VSS e curvas de sensibilidade indisponíveis |
 | Oxygen Sensor | Parameters abre a calibração Lambda, com os presets de controladores existentes | Apenas saída analógica externa; não acrescenta controlo interno da sonda |
 | TPS, PPS | Calibração TPS de dois pontos e captura ADC | PPS e curvas independentes de plausibilidade indisponíveis |
 | Switches | Organização Clutch/brake, Built-in, User, MUX, Latching e Rotary | Não há campos nativos para essas funções |
@@ -253,3 +253,31 @@ O estado do filtro reinicia com falha ADC, primeira amostra, mudança de geraç�
 Verificação: compilação local completa e 14 testes CTest aprovados. ParameterTest fez 22 escritas de blocos, incluindo filtros e uma desativação adicional do bloqueio de avanço, com dispatcher C e flash/saídas simuladas: uma gravação por operação e preservação das páginas não abrangidas. Testes cobrem as sete escolhas, resistências não editáveis, ficheiros inválidos, ausência de capacidade, conflito externo e descarte. CompleteMapSmoke confirma navegação para a configuração, migração do projeto anterior e recusa de extensão desconhecida. Sete suites nativas locais passaram com GCC + AddressSanitizer/UndefinedBehaviorSanitizer (LeakSanitizer desativado localmente); o novo teste cobre seis frequências, resposta conhecida a 1 Hz, convergência, bypass, intervalo repetido, falha/relógio/geração e uso da leitura filtrada no MAP. Janela e popup renderizados/revistos com o tema real.
 
 Compilação ARM aprovada: https://github.com/Tunuino/Tunuino_Firmware/actions/runs/42490334607. As sete suites também passaram em GCC e Clang no GitHub: https://github.com/Tunuino/Tunuino_Firmware/actions/runs/42490334627. Compilação Windows em curso: https://github.com/Tunuino/Tunuino/actions/runs/42490378955. Não houve gravação física na ECU nem validação do sinal/temporização num motor.
+
+
+## Digital inputs / Primary trigger
+
+A entrada Primary trigger em Sensors and inputs / Digital inputs abre Digital inputs - Primary trigger, uma janela MDI compacta com toolbar de quatro comandos, cabeçalho Primary trigger e quatro linhas em duas colunas, na ordem das cinco fotografias. Sensor type usa verde; as outras três linhas usam ciano. As listas têm texto escuro e seleção azul. O monitor anterior passa para View / Primary trigger monitor. A janela de geometria em Ignition / Triggers mantém as funções existentes; este bloco não substitui dentes, fase, captura ou bloqueio de avanço.
+
+| Campo | Apresentação e funcionamento na Proteus v0.7 |
+|---|---|
+| Sensor type | Hardware setting (not readable). VR Sensor e Hall / Optical sensor aparecem na lista, desativados e identificados como hardware only. Não se deduz o sensor instalado. |
+| Adaptive threshold | Hardware controlled. Low/High visíveis e indisponíveis; a Console não inventa um nível guardado. |
+| Pullup/Pulldown | Hardware / external wiring. None, Pullup 4K7/1K/820 Ohm e Pulldown 4K7/1K/820 Ohm aparecem como opções indisponíveis por software. |
+| Input filter | None, Low, Medium, High editáveis; filtragem nativa por intervalo mínimo entre flancos de cambota aceites: 0, 5, 10 e 20 µs. |
+
+As três listas de hardware abrem para consulta; as opções alternativas estão desativadas. Importar um ficheiro/projeto não pode convertê-las em parâmetros graváveis nem afirmar que uma seleção elétrica foi aplicada. O valor do hardware permanece desconhecido, sem leitura da posição do jumper.
+
+O circuito de referência Proteus v0.7, revisão 383558bf7ca1c53ad8bbd8fdc9dd3a4187013c46, liga J101 / 5 (+) e 13 (-) ao condicionador MAX9924 U1203. O modo depende do circuito e do jumper físico JP1201; os respetivos sinais de seleção não chegam a saídas de controlo ou entradas de leitura do MCU. R1215 de 4,7 kΩ liga a saída lógica VR1_OUT a 3,3 V: não corresponde a um pull-up selecionável no terminal do sensor. R1205/R1208 são resistências em série, não opções de pulldown do menu. O [datasheet do fabricante](https://www.analog.com/media/en/technical-documentation/data-sheets/MAX9924-MAX9927.pdf) descreve os modos do condicionador definidos pelos níveis elétricos de ZERO_EN/INT_THRS. Não existe suporte para trocar esses modos ou resistências pela ligação USB atual.
+
+O filtro nativo é blanking de flancos ascendentes, aplicado no callback de aquisição antes da fila de captura: aceita o primeiro flanco e recusa os seguintes dentro do intervalo escolhido, sempre a partir do último aceite. Os flancos recusados não entram no decoder nem no Scope. CAM continua sem alteração e não avança o estado de filtragem da cambota. A subtração do contador U32 mantém o intervalo através da volta do timer. Configurar/ressincronizar a captura reinicia o estado. None preserva a ausência de filtragem anterior.
+
+Estes tempos são uma implementação nativa explícita: as fotos não especificam o algoritmo nem os tempos da referência. Não é medição da largura de um impulso, filtro RC ou limiar adaptativo analógico, e não se afirma equivalência desses mecanismos. O flanco condicionado mantém-se ascendente. A mudança não seleciona automaticamente sensor, geometria, cablagem, ARM/RUN ou modo autónomo.
+
+A extensão usa byte 5 da primeira página como versão e byte 9 como nível. 0/0 é o formato legado sem filtro; versão 1 aceita níveis 0–3. Outras combinações são recusadas. A capacidade 1024 (0x400), total nativo 2047, permite à Console gravar apenas estes dois bytes com o escritor existente, cópia e verificação integral. Ausência da capacidade bloqueia a escrita antes de enviar comandos. Firmware anterior rejeita a extensão; regressar exige uma configuração anterior compatível. As quatro páginas e o formato do runtime mantêm tamanho.
+
+O rascunho fica no projeto completo. Abrir projetos anteriores acrescenta apenas o bloco Primary trigger a partir da página guardada, sem gravação ou alteração de outros editores. Extensões desconhecidas são recusadas. Alteração externa dos campos enquanto há edição bloqueia a gravação até descartar o rascunho. Configurar este filtro não exige criar um perfil de motor, mas a escrita mantém as condições existentes de motor parado e saídas desarmadas.
+
+Verificação: compilação local completa e 14 testes CTest aprovados. ParameterTest executou 23 escritas de blocos contra o dispatcher C com flash/saídas simuladas, incluindo este filtro: uma gravação permanente por operação, cópia prévia e preservação de todas as páginas/campos não abrangidos. Confirma os quatro campos, as escolhas, as alternativas elétricas desativadas, rejeição de dados importados fictícios, bloqueio sem capacidade e conflito/descarte. CompleteMapSmoke verifica a navegação real, janela de quatro linhas, migração do projeto anterior e versão inválida. Janela e lista Input filter renderizadas/revistas com o tema real.
+
+Oito suites nativas locais passaram com GCC + AddressSanitizer/UndefinedBehaviorSanitizer (LeakSanitizer desativado localmente). O novo teste cobre formatos, níveis, limites exatos, primeiro flanco, ruído, CAM independente, volta do contador, reinício e sequência de dentes com intervalo de 25 µs. São testes da função usada pelo callback e do protocolo em simulação, sem ensaio elétrico da placa ou do sensor. Compilação ARM e oito suites GCC/Clang aprovadas: https://github.com/Tunuino/Tunuino_Firmware/actions/runs/42492084776 e https://github.com/Tunuino/Tunuino_Firmware/actions/runs/42492084945. Compilação Windows em curso: https://github.com/Tunuino/Tunuino/actions/runs/42492212975.

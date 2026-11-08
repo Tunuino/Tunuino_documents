@@ -2,7 +2,7 @@
 
 A navegação principal abre cada bloco numa janela MDI independente, com fecho/reabertura sem perder a edição. Foi removida a janela Calibration & Setup e a sua segunda árvore. A pesquisa percorre os subgrupos. A seleção usa azul; as cores dos parâmetros distinguem números, listas, atribuições e caixas.
 
-Os 22 blocos nativos têm duas colunas e quatro comandos: Open parameters, Save parameters, Restore to defaults e Help. Ficheiros .tnparams são específicos do bloco e validados antes de alterar a edição. Abrir ou repor valores não grava na ECU. Write to ECU guarda apenas o bloco da janela, não as edições pendentes noutras janelas.
+Os 23 blocos nativos têm duas colunas e quatro comandos: Open parameters, Save parameters, Restore to defaults e Help. Ficheiros .tnparams são específicos do bloco e validados antes de alterar a edição. Abrir ou repor valores não grava na ECU. Write to ECU guarda apenas o bloco da janela, não as edições pendentes noutras janelas.
 
 | Área | Blocos ligados ao protocolo |
 |---|---|
@@ -187,7 +187,7 @@ A árvore foi reorganizada segundo as duas fotografias, incluindo a continuaçã
 | Grupo | Implementação disponível nesta etapa | Limites |
 |---|---|---|
 | Analog inputs | Configuração em duas colunas: resistências fixas, filtros por AV1–AV11 e pull-ups de temperatura | Resistências sem comutação; monitor de tensões separado em View |
-| Digital inputs | Primary trigger: configuração de quatro campos com filtro nativo; monitor separado em View. CAM 1 mantém a vista de aquisição | Comutação elétrica não disponível; CAM 2, VSS e curvas de sensibilidade indisponíveis |
+| Digital inputs | Primary trigger: configuração de quatro campos com filtro nativo; monitor separado em View. CAM 1 tem configuração de três campos e monitor separado | Comutação elétrica não disponível; CAM 2, VSS e curvas de sensibilidade indisponíveis |
 | Oxygen Sensor | Parameters abre a calibração Lambda, com os presets de controladores existentes | Apenas saída analógica externa; não acrescenta controlo interno da sonda |
 | TPS, PPS | Calibração TPS de dois pontos e captura ADC | PPS e curvas independentes de plausibilidade indisponíveis |
 | Switches | Organização Clutch/brake, Built-in, User, MUX, Latching e Rotary | Não há campos nativos para essas funções |
@@ -281,3 +281,18 @@ O rascunho fica no projeto completo. Abrir projetos anteriores acrescenta apenas
 Verificação: compilação local completa e 14 testes CTest aprovados. ParameterTest executou 23 escritas de blocos contra o dispatcher C com flash/saídas simuladas, incluindo este filtro: uma gravação permanente por operação, cópia prévia e preservação de todas as páginas/campos não abrangidos. Confirma os quatro campos, as escolhas, as alternativas elétricas desativadas, rejeição de dados importados fictícios, bloqueio sem capacidade e conflito/descarte. CompleteMapSmoke verifica a navegação real, janela de quatro linhas, migração do projeto anterior e versão inválida. Janela e lista Input filter renderizadas/revistas com o tema real.
 
 Oito suites nativas locais passaram com GCC + AddressSanitizer/UndefinedBehaviorSanitizer (LeakSanitizer desativado localmente). O novo teste cobre formatos, níveis, limites exatos, primeiro flanco, ruído, CAM independente, volta do contador, reinício e sequência de dentes com intervalo de 25 µs. São testes da função usada pelo callback e do protocolo em simulação, sem ensaio elétrico da placa ou do sensor. Compilação ARM e oito suites GCC/Clang aprovadas: https://github.com/Tunuino/Tunuino_Firmware/actions/runs/42492084776 e https://github.com/Tunuino/Tunuino_Firmware/actions/runs/42492084945. Compilação Windows em curso: https://github.com/Tunuino/Tunuino/actions/runs/42492212975.
+
+
+## Consulta dos PDFs e CAM 1
+
+A consulta dos documentos e a comparação visual antes de concluir cada bloco ficaram explícitas nas instruções do repositório. A configuração mantém-se separada da monitorização. As páginas usadas e as limitações são registadas; passar testes não é apresentado como prova de equivalência visual ou funcional.
+
+Referências consultadas nesta alteração: EMU_BLACK_V3_Software_Guide.pdf, página 21 (parâmetros em duas colunas), páginas 15–16 (ajuda dos parâmetros) e página 79 (configuração dos sensores primário/secundário em Sensors and inputs / Digital inputs / Primary Trigger e CAM 1). EMU_PRO_Software_Guide.pdf, página 116, foi consultado para distinguir configuração de posição de came de configuração elétrica. Não se importam para a interface BLACK as listas ou ligações elétricas de outro equipamento. As secções consultadas não enumeram todas as opções das fotografias; os três campos e listas CAM 1 foram conferidos também com as imagens fornecidas, sem alegar que o PDF descreve opções que não detalha.
+
+Digital inputs / CAM 1 abre agora uma janela compacta de configuração com Sensor type, Pullup/Pulldown e Input filter, em duas colunas, toolbar de quatro comandos e cores verde/ciano. Sensor type inclui VR Sensor, Hall / Optical sensor e VR Sensor sensitivity table, com alternativas elétricas desativadas. A entrada usa o condicionador MAX9924 U1204 em J101 / 4 (+), 12 (-); não há comando nativo para comutar o circuito, resistências ou programar uma tabela de sensibilidade VR. O estado elétrico não é inventado. O monitor anterior fica em View / CAM 1 monitor.
+
+Input filter usa None / Low / Medium / High, com blanking nativo de 0/5/10/20 µs entre flancos ascendentes CAM aceites. O estado CAM é separado do da cambota; flancos num canal não reiniciam o intervalo do outro. Configurar/ressincronizar a captura reinicia ambos. Não se afirma equivalência com os tempos/algoritmo do equipamento de referência. Não modifica fase, geometria, perfil, captura, saídas ou modo autónomo.
+
+Extensão da primeira página: byte 98 versão, byte 99 nível. 0/0 é legado sem filtro; versão 1 aceita níveis 0–3. Capacidade 2048 (0x800), total nativo 4095. A Console grava apenas esses dois bytes, mediante o procedimento existente de cópia, preparação, gravação única e releitura. Sem capacidade, a escrita fica bloqueada antes de enviar comandos. Projetos anteriores ganham apenas o rascunho CAM a partir da base; versões desconhecidas são recusadas. Firmware antigo rejeita a extensão, pelo que regressar exige uma configuração anterior compatível.
+
+Compilação local e 14 testes CTest aprovados. ParameterTest completou 24 escritas de blocos contra o dispatcher C com flash/saídas simuladas, uma gravação por operação e preservação das quatro páginas/campos não abrangidos, incluindo o filtro primário ao gravar CAM. Cobertura de três campos, lista de sensibilidade desativada, falta de capacidade, conflito/descarte, migração do projeto e versão inválida. Janela e popup foram renderizados e comparados com as fotografias. Nove suites locais passaram com GCC + AddressSanitizer/UndefinedBehaviorSanitizer, LeakSanitizer desligado localmente. O teste CAM cobre versões, limites, ruído, contador, reinício e estados intercalados independentes. ARM e nove suites GCC/Clang aprovadas: https://github.com/Tunuino/Tunuino_Firmware/actions/runs/42495009021 e https://github.com/Tunuino/Tunuino_Firmware/actions/runs/42495008967. Windows em curso: https://github.com/Tunuino/Tunuino/actions/runs/42495337741. Sem ensaio físico da ECU/sensores.

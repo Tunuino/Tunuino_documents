@@ -408,3 +408,12 @@ CAM 1 sensitivity mostra gráfico de área, doze pontos da fotografia e tabela V
 A curva está identificada como referência local: a Proteus suportada tem condicionamento MAX9924 fixo e não disponibiliza comando para aplicar limiares por RPM. F2 não grava esta janela na ECU. Não se apresenta a curva como sensibilidade aplicada nem como monitorização de sincronização. CAM 2 mantém a limitação do seu condicionador Hall/óptico.
 
 Validação: compilação local e 14 testes CTest aprovados. Testes de abertura/aplicação real de General Options, toolbar, persistência, campos indisponíveis, curva separada do monitor, validação e round-trip no projeto preservando páginas; pausa de recolha e CSV automático; psi/°F na apresentação mantendo CSV em kPa/°C; renderização dos três tipos/estilos de mostrador e limpeza sem ligação. Os dois componentes foram renderizados isoladamente para comparação visual. Sem alterações de firmware ou validação física da curva.
+
+
+## Correção do teste Windows de General Options
+
+A execução 42530876478 compilou com sucesso, mas CompleteMapSmoke atingiu o limite de 30 segundos; os outros 13 testes passaram. O teste integrado passa a registar etapas com tempo decorrido e dispõe de um limite finito de 120 segundos, para distinguir lentidão de bloqueio. As verificações existentes foram mantidas.
+
+A coloração dos mapas consultava QSettings por célula e o gráfico 3D por face/vértice. As preferências de paleta e proporção passam a ser lidas uma vez por coloração/frame, evitando essas leituras repetidas sem cache permanente: alterações de General Options continuam a refletir-se na atualização seguinte. Não altera valores de calibração, protocolo ou firmware.
+
+Compilação local completa e 14 testes CTest aprovados. CompleteMapSmoke passou de 4,15 para 1,29 segundos no mesmo ambiente local. Isto é um ensaio de software, sem validação física. A confirmação Windows desta correção está na [execução 42532274246](https://github.com/Tunuino/Tunuino/actions/runs/42532274246), ainda em curso no momento desta publicação.

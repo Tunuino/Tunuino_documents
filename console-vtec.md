@@ -39,6 +39,6 @@ Continuam pendentes: interruptor de confirmação hidráulica do VTEC, comutaç�
 - **Compilação ARM STM32F427 e verificação da imagem aprovadas** no workflow de firmware.
 - Configuração inspecionada visualmente. **Validação física na Proteus, com solenoide e motor, pendente**. Nenhum resultado simulado é apresentado como teste físico.
 
-A compilação, testes e instalador Windows desta alteração são acompanhados no [workflow da Console](https://github.com/Tunuino/Tunuino/actions).
+A compilação Windows, os 16 testes, o teste de arranque, o instalador e a publicação Beta **0.1.3.287** foram aprovados no [workflow da Console](https://github.com/Tunuino/Tunuino/actions/runs/42714368387). A atualização da Console não grava o firmware na ECU.
 
 Código: [Console master](https://github.com/Tunuino/Tunuino/commit/62af0df27f0d8d134d41cd92333c8ee22bd71c79), [firmware master](https://github.com/Tunuino/Tunuino_Firmware/commit/bd3e3dc72a65453a087294cdedd153e9c7858cb7). Testes e compilação ARM: [workflows do firmware](https://github.com/Tunuino/Tunuino_Firmware/actions).

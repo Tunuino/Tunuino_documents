@@ -19,7 +19,7 @@ O firmware atual não tem driver nativo da ponte H para DBW, regulador PID de bo
 
 APS e sinais de verificação ficam no projeto local: o protocolo atual só permite gravar o TPS principal através da calibração existente. Não se apresenta a gravação desse TPS como gravação de um controlador DBW completo. Curvas não lineares de verificação, dois corpos de borboleta e diagnóstico no firmware continuam pendentes.
 
-Em VVT, a navegação distingue **Continuous cam timing** de **Switched cam profile - VTEC**. Ambos continuam indisponíveis. A comutação VTEC não é tratada como ajuste contínuo de fase. Não foram implementados atuadores, histerese ou confirmação de pressão neste bloco.
+A atualização posterior implementou **Switched cam profile - VTEC**, com comando nativo do solenoide, histerese e requisito opcional de pressão de óleo: ver [VTEC](console-vtec.md). **Continuous cam timing** continua indisponível. A comutação VTEC mantém-se separada do ajuste contínuo de fase; o controlo do motor DBW continua pendente.
 
 ## Referência consultada
 

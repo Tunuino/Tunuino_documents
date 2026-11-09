@@ -455,4 +455,35 @@ Por indicação explícita do utilizador, a revisão Autotune passa a RPM em bai
 
 A transposição é apenas de apresentação: foram ajustados o mapeamento das células, seleção conjunta com Fuel Table, cobertura, valores medidos/diferenças e aplicação parcial de 50%/100%. Formato, dados de aquisição, proposta nativa e protocolo permanecem iguais. Não é uma simples troca dos nomes dos eixos.
 
-Compilação local completa e 14 testes CTest aprovados. O ensaio usa um ponto assimétrico, RPM 2500 / MAP 80 kPa, verifica cabeçalhos, sentidos dos eixos e aplicação na célula nativa correta, incluindo conflito e preservação das restantes células. A revisão foi renderizada e comparada com a disposição pedida. Sem alteração de firmware ou ensaio físico. [Execução Windows 42617484438](https://github.com/Tunuino/Tunuino/actions/runs/42617484438) em curso.
+Compilação local completa e 14 testes CTest aprovados. O ensaio usa um ponto assimétrico, RPM 2500 / MAP 80 kPa, verifica cabeçalhos, sentidos dos eixos e aplicação na célula nativa correta, incluindo conflito e preservação das restantes células. A revisão foi renderizada e comparada com a disposição pedida. Sem alteração de firmware ou ensaio físico. [Execução Windows 42617484438](https://github.com/Tunuino/Tunuino/actions/runs/42617484438) aprovada, incluindo testes, arranque, instalador e publicação Beta.
+
+
+## Project Comparator, Text Log e Scatter Plot
+
+Referências consultadas: EMU_BLACK_V3_Software_Guide.pdf, página 46 (comparação e importação seletiva), páginas 57–58 (Text Log, Custom 1/2/3 e cursor) e páginas 59–60 (Scatter Plot, canais X/Y/Z, filtros, tamanho e intervalo). As três janelas foram renderizadas com o tema da Console e inspecionadas. Todas são janelas MDI independentes, redimensionáveis e reabríveis.
+
+### File / Project Comparator
+
+Compara um .tnproj com a edição local atual. Open comparison project usa o formato/checksums/alvo existentes; Compare again atualiza a comparação. Variables mostra parâmetros, sensores, perfil/trigger, referência de sensibilidade e comentário; Tables mostra diferenças de eixos/células Fuel, Ignition e AFR Target. As linhas apresentam valor atual e valor do ficheiro, com nomes de parâmetros e coordenadas das células. Stored base (read only) permite consultar diferenças nas quatro páginas de base e no alvo, sem as importar.
+
+Selecionar linhas e usar a ação de aplicação ou o menu de contexto altera apenas os editores escolhidos. Antes da primeira alteração, são verificados operação ECU em curso, valor atual de cada diferença e validade de toda a seleção. Uma edição concorrente ou qualquer campo inválido recusa o conjunto sem aplicar parte dele. Células com eixos diferentes exigem selecionar também as diferenças dos eixos correspondentes. Valores de base e alvo nunca são substituídos. Os restantes rascunhos, mapas e respetivos estados de conflito não são recarregados. Não se chama Open Project nem se executa escrita/ARM/Burn. Comparações entre versões com campos ausentes exigem um bloco compatível; não se remove silenciosamente um campo atual.
+
+### Log / Text Log
+
+Janela com Channel, Value e Unit, grupos All channels, Fueling, Temperatures, Supply e Custom 1/2/3. Trabalha com os sete canais reais atualmente disponíveis: RPM, TPS, MAP, Lambda, CLT, IAT e Battery. Add to Custom adiciona o canal ao grupo escolhido sem duplicar; Remove from Custom e Move up/down organizam os grupos. Alt+Up/Down também altera a ordem. Grupos e ordem são guardados nas preferências locais.
+
+Dados USB recentes aparecem em verde, com fonte normal. Valores indisponíveis, desligamento ou dados com mais de dois segundos mostram —; a atualização da indicação é feita por temporizador de 250 ms. Ao passar o rato sobre o Graph Log, a janela apresenta a amostra gravada correspondente, em azul e itálico, com o respetivo instante. Ao sair da área do gráfico, regressa aos dados atuais, se ainda válidos. Funciona com o gráfico pausado ou a acompanhar a recolha, e com registos CSV abertos. Uma amostra gravada continua identificada como cursor, nunca como telemetria atual. O cursor não alimenta controlos de motor nem o Autotune.
+
+### Log / Scatter Plot
+
+Mostra uma amostra por ponto, com canal X, canal Y e canal Z opcional por cor. Os três canais podem ser escolhidos entre os sete canais do registo; Z pode ser None. Configuração inclui filtros de média móvel independentes de 1–1000 amostras e tamanho de ponto de 1–10 px, guardados localmente. Sem Z, os pontos têm uma cor fixa; com Z, existe escala de cor com valores/unidade. Clicar perto de um ponto disponibiliza instante e valores na dica de ferramenta.
+
+A fonte é o Graph Log atual, tanto de recolha real como de CSV aberto. Não há dados de demonstração ou canais de knock/ignição fabricados. Valores não finitos nos canais escolhidos são excluídos. Uma lacuna reinicia a janela do filtro desse canal; o início de uma janela usa as amostras disponíveis, sem inventar medições anteriores. As escalas seguem a configuração da aba ativa do Graph Log: escala manual disponível para o canal ou autoscale da área temporal visível, com a mesma margem de 5%. As unidades de apresentação seguem General Options; registos e cálculos continuam nas unidades nativas.
+
+Shift+arrastar no Graph Log seleciona um intervalo temporal, realçado no gráfico. O Scatter Plot mostra apenas os pontos desse intervalo; sem seleção, usa todo o registo. Clear selected time range no menu do gráfico repõe a análise completa. Abrir/limpar um registo remove a seleção anterior. O limite existente de 100000 amostras mantém-se. A vista guarda o resultado calculado e só o refaz quando dados, filtros, intervalo ou escalas mudam; a atualização periódica é suspensa quando está oculta. Não há qualquer escrita na ECU.
+
+### Verificação e limites
+
+Compilação local completa e 14 testes CTest aprovados na ronda final, com o tema da aplicação. CompleteMapSmoke verificou navegação, comparação de ficheiro real, aplicação seletiva de célula/parâmetros/comentário, conflito sem aplicação parcial, seleção inválida, eixos incompatíveis e preservação das quatro páginas e restantes editores. GraphLogWidgetTest verificou pontos com e sem Z, média móvel, NaN, intervalo temporal, escala manual, configurações inválidas, dados atuais/cursor/retorno, expiração, grupos Custom e persistência. As três janelas foram renderizadas isoladamente para inspeção. A configuração local do teste integrado foi alinhada com o limite de 120 segundos já existente no repositório; não se retiraram verificações.
+
+Estas funções são de edição/análise da Console e não acrescentam firmware ou canais de telemetria. Text Log ainda não apresenta os grupos completos de estratégias da referência porque esses canais não existem no protocolo nativo atual. Scatter Plot não certifica a origem física de um CSV; apenas representa o seu conteúdo validado pelo leitor de registos. Os testes usam dados simulados no computador; não houve ensaio físico de ECU ou motor. [Execução Windows 42641602747](https://github.com/Tunuino/Tunuino/actions/runs/42641602747) em curso no momento desta publicação.

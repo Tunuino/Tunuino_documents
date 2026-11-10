@@ -1,34 +1,38 @@
 # Ligação automática da Tunuino Console
 
-A console procura e liga-se automaticamente à ECU, sem selecionar uma porta COM nem confirmar a ligação. Mostra ONLINE ou OFFLINE na barra de estado.
+A Console procura a ECU e liga-se automaticamente, sem selecionar a porta COM. O indicador ONLINE representa uma comunicação USB validada; a alimentação externa é apresentada separadamente.
 
 ## Funcionamento
 
-1. Ao abrir a console, a descoberta procura o dispositivo USB da Tunuino.
-2. A ligação interna envia apenas o pedido de identidade, valida protocolo, hardware e UID e começa a consultar a telemetria.
-3. A presença do USB não é suficiente para ficar online. Só depois de confirmar a alimentação externa da Proteus a console entra online e lê automaticamente configuração, Fuel e Ignition.
-4. Se a alimentação externa desaparecer, a console passa a offline mesmo que continue alimentada por USB. Limpa as leituras atuais e a mira dos mapas, desativa leituras manuais e termina o registo ativo, preservando as amostras recolhidas.
-5. Quando a alimentação regressa, volta a entrar online e sincroniza automaticamente. Se houver perda da ligação USB ou erro de comunicação, tenta detetar e ligar novamente sem intervenção. Uma mudança do número COM não exige configuração.
+1. A descoberta procura o dispositivo USB da Tunuino.
+2. A Console pede a identidade, valida protocolo, hardware e UID e começa a consultar o runtime.
+3. Uma resposta de runtime válida da mesma ECU estabelece ONLINE, mesmo sem os 12 V externos ou com ADC indisponível. A identidade isolada ou uma porta USB presente não bastam.
+4. Com uma configuração limpa, a Console lê automaticamente as páginas suportadas de configuração, sensores e mapas. Leitura, edição e gravação explícita ficam disponíveis em bancada por USB, mantendo as verificações existentes de identidade, geração, motor parado, saídas desarmadas, cópia anterior e releitura.
+5. A perda ou o regresso da alimentação externa, enquanto a ECU continuar a responder por USB, atualiza apenas a indicação de alimentação. Não reinicia a sincronização, não limpa a configuração nem desliga o registo.
+6. Perda do transporte USB, erro de sessão, resposta inválida ou identidade diferente continuam a interromper a ligação. A descoberta retoma automaticamente e uma mudança do número COM não exige seleção manual.
 
-Abrir Firmware / USB DFU suspende a comunicação normal e a reconexão enquanto essa janela estiver visível. Fechá-la permite retomar a deteção normal. A pesquisa DFU não interfere com uma sessão serial aberta.
+Sem confirmação de alimentação externa, o estado mostra “Online | USB bench connection; external ECU power not confirmed”. Após identificar a ECU e antes do primeiro runtime, mostra “Connecting | ECU identified; waiting for runtime data”.
 
-## Origem da medição
+A janela Firmware / USB DFU continua a suspender a comunicação normal enquanto estiver visível. Fechá-la permite retomar a descoberta. A pesquisa DFU não interfere com uma sessão serial aberta.
 
-A implementação atual é específica para Proteus v0.7 com STM32F427, protocolo de identidade 1 e runtime de 100 bytes. A descoberta USB usa VID CAFE / PID 4001, conforme o descritor do firmware atual; não envia pedidos a outras portas nem ao bootloader DFU.
+## Alimentação e saídas
 
-A alimentação é medida no circuito 12V_RAW da placa. A referência é o esquema e PCB do hardware [Proteus](https://github.com/Tunuino/proteus/tree/383558bf7ca1c53ad8bbd8fdc9dd3a4187013c46): R1503 de 82 kΩ e R1504 de 10 kΩ, rede 12V_DIVIDED, U1501 contacto 43, ADC1_IN7. A sequência ADC do firmware coloca esta medição no índice 11; o runtime já transmite esse ADC no deslocamento 82. Não foi necessário alterar o firmware para disponibilizar a medição.
+A medição é específica da Proteus v0.7 STM32F427. O circuito 12V_RAW usa R1503 de 82 kΩ e R1504 de 10 kΩ, rede 12V_DIVIDED, U1501 contacto 43, ADC1_IN7, conforme o [hardware suportado](https://github.com/Tunuino/proteus/tree/383558bf7ca1c53ad8bbd8fdc9dd3a4187013c46). O firmware transmite esta entrada em raw[11], deslocamento 82 do runtime; na resposta com byte de estado está nos bytes 83–84.
 
-A conversão usa referência nominal de 3,3 V e divisor de 9,2. Para entrar online, exige duas amostras válidas acima de 6 V, separadas por pelo menos 250 ms. Até 5,5 V fica offline, incluindo uma eventual tensão residual ao nível dos 5 V do USB. A histerese evita alternâncias durante pequenas quedas de tensão no arranque. ADC inválido, saturado, identidade incompatível ou perda da comunicação nunca confirmam online.
+A conversão mantém a referência nominal de 3,3 V e divisor de 9,2. Duas amostras válidas de pelo menos 6 V, separadas por 250 ms, confirmam alimentação externa; até 5,5 V deixa de estar confirmada. ADC inválido ou saturado também não confirma alimentação. Estes critérios descrevem a alimentação, sem determinar se existe comunicação USB.
 
-Esta medição acompanha a alimentação externa da ECU. Não é uma entrada separada que leia diretamente a posição mecânica da chave. Numa instalação em que a chave comuta essa alimentação, acompanha ligar/desligar a ignição. USB sozinho permanece offline. O estado de alimentação não constitui uma proteção do motor nem arma saídas.
+Ligar a Console, ler um mapa ou reconhecer alimentação não envia comandos para armar saídas. Os testes de atuadores mantêm a sua verificação própria de tensão e de estado do motor. Esta alteração não modifica o firmware, os comandos dos atuadores ou os limiares de proteção.
 
-## Verificação
+## Correção da ausência da COM
 
-- Compilação local completa com Qt 6.4.2 em Linux: passou. Foi omitida apenas a geração do script de distribuição na cópia temporária do CMake usada para verificação local, conforme o teste anterior.
-- Arranque da console offscreen durante quatro segundos: passou.
-- FrameCodecTest, LogDataTest e GraphLogWidgetTest: passaram.
-- AutoConnectionTest: passou com portas e amostras sintéticas. Inclui descoberta seletiva, intervalo entre novas tentativas, mudança do número COM, reinserção USB, suspensão DFU, identidade, USB sem alimentação externa, alimentação válida, queda de tensão, perda e regresso da alimentação, ADC inválido, saturação e tempos de confirmação.
-- O novo teste integra o CTest do workflow Windows existente.
-- Ainda falta validação física na Proteus e confirmação dos limiares de alimentação em funcionamento real. Os testes simulados não demonstram o funcionamento físico da ignição.
+O firmware [b7a5dc9](https://github.com/Tunuino/Tunuino_Firmware/commit/b7a5dc94e793c8183df7de522a219d431ff607c1) corrige separadamente uma ultrapassagem da pilha antes de iniciar o USB. O caminho de validação no arranque desceu de 8656 para 5008 bytes, para uma pilha de 8192 bytes. A compilação ARM e os testes nativos GCC/Clang passaram. O utilizador confirmou depois que a porta USB Serial COM10 apareceu na Proteus. Isso valida a enumeração naquele ensaio, não o controlo do motor.
 
-Os redimensionamentos das tabelas não foram alterados.
+## Referência e verificação
+
+As páginas 7 e 15 do guia de software fornecido foram consultadas: descrevem deteção automática e o campo de estado da ligação. Essas secções não especificam a alimentação apenas por USB da Proteus. A separação entre comunicação e alimentação resulta do requisito de bancada e do protocolo Tunuino; não é uma capacidade atribuída ao PDF.
+
+O teste de integração da janela real injeta respostas simuladas no sinal da sessão. Verifica identidade sem runtime, runtime sem ADC, runtime com alimentação a zero, confirmação de 12 V, perda dos 12 V mantendo ONLINE e perda de transporte voltando a OFFLINE. Não usa uma ECU física nem comprova o driver Windows. Os testes existentes de descoberta, alimentação, escrita e ferramentas permanecem ativos.
+
+A validação física da nova Console em bancada ainda exige que a Proteus fique ONLINE, sincronize as páginas e permita uma leitura/gravação explícita por USB. O funcionamento do motor e das saídas não foi validado por estes testes.
+
+Correção da Console: [dd955d3](https://github.com/Tunuino/Tunuino/commit/dd955d37c0569af3434d0637ddd169f8257c8564). A compilação local Qt 6.4.2 e os 17 testes CTest passaram, incluindo o novo cenário de bancada na janela real com respostas simuladas. A compilação e publicação Windows são verificadas separadamente no workflow da Console.

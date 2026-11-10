@@ -81,7 +81,7 @@ Foram comparadas as capturas nativas de Parameters, PID e tabela/gráfico, inclu
 - **GCC e Clang aprovados** no [workflow nativo](https://github.com/Tunuino/Tunuino_Firmware/actions/runs/42811200164).
 - **Compilação ARM STM32F427 aprovada** no [workflow](https://github.com/Tunuino/Tunuino_Firmware/actions/runs/42811200209).
 
-Windows: compilação, testes, instalador e publicação Beta 0.1.3.290 em curso no [workflow](https://github.com/Tunuino/Tunuino/actions/runs/42811461825). A atualização da Console não grava o firmware na ECU.
+**Windows aprovado:** compilação, 17 testes, arranque automático, instalador e publicação **Beta 0.1.3.290** no [workflow](https://github.com/Tunuino/Tunuino/actions/runs/42811461825). A atualização da Console não grava o firmware na ECU; as novas funções exigem o firmware correspondente.
 
 **Validação física na Proteus/solenoide/motor pendente**. O monitor continua perto de 5 Hz; não é o registo de 100 Hz indicado para avaliar resposta rápida. Não foi demonstrada resposta de 200–300 ms num motor. Cames adicionais, CAM multi-aresta, afinador Relay/AMIGO e controlo do motor DBW continuam pendentes.
 

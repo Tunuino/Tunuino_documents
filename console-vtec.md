@@ -15,11 +15,11 @@ VTEC tem configuração própria em **VVT → Switched cam profile - VTEC** e um
 
 ## Gravação e compatibilidade
 
-A página de controlo 6 tem 256 bytes, versão 1, e é anunciada por uma capacidade própria do firmware. A Console lê-a automaticamente após as páginas existentes. Firmware sem essa capacidade mantém a edição local disponível e a gravação VTEC indisponível.
+A página de controlo 6 tem 256 bytes. Os campos VTEC são preservados na versão 2, que acrescenta [VVT de CAM 1 com alvo fixo](console-vvt.md); cada função tem uma capacidade própria do firmware. A Console lê-a automaticamente após as páginas existentes. Firmware sem essa capacidade mantém a edição local disponível e a gravação VTEC indisponível.
 
 A gravação usa a transação existente: verifica ECU/geração e saídas desarmadas, cria cópia anterior, prepara a alteração, relê todas as seis páginas, executa um único Burn e relê novamente. As outras páginas, incluindo AFR Target, são preservadas.
 
-A persistência passa ao registo 6. Os registos 2–5 continuam a ser lidos e são migrados para o outro banco, preservando a configuração anterior durante gravações interrompidas. A extensão VTEC começa vazia/desativada. O formato 6 não é lido por versões antigas do firmware: uma eventual reversão exige uma cópia compatível, não deve presumir que o firmware antigo recupera a configuração mais recente.
+A primeira implementação VTEC usou o registo 6; a extensão VVT atual usa o registo 7. Os registos 2–6 continuam a ser lidos e são migrados para o outro banco, preservando a configuração anterior durante gravações interrompidas. A extensão VTEC começa vazia/desativada. O registo 7 não é lido por firmwares anteriores à extensão VVT: uma eventual reversão exige uma cópia compatível, não deve presumir que o firmware antigo recupera a configuração mais recente.
 
 O projeto .tnproj inclui a página de controlo quando a ECU a fornece e os valores do editor VTEC. Projetos antigos recebem o editor desativado. Abrir um projeto não transfere valores para a ECU. Alterações da página enquanto existe edição local bloqueiam a gravação até descartar/rever a edição.
 
@@ -29,7 +29,7 @@ Consultado o PDF fornecido **EMU_PRO_Software_Guide.pdf**, Appendix D, páginas 
 
 A grelha e a toolbar seguem as janelas existentes da Console. Não se apresenta este bloco como uma reprodução integral de uma janela de comutação que o PDF não detalha.
 
-Continuam pendentes: interruptor de confirmação hidráulica do VTEC, comutação entre mapas de combustível/ignição, VVT contínuo e controlo de motor DBW/PID. Os valores iniciais são referências inativas, não uma calibração validada para um motor.
+Continuam pendentes: interruptor de confirmação hidráulica do VTEC, comutação entre mapas de combustível/ignição e controlo de motor DBW/PID. O primeiro controlador contínuo de CAM 1, com alvo fixo, está descrito em [VVT](console-vvt.md). Os valores iniciais são referências inativas, não uma calibração validada para um motor.
 
 ## Verificação
 

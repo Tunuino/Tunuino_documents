@@ -35,4 +35,6 @@ O teste de integração da janela real injeta respostas simuladas no sinal da se
 
 A validação física da nova Console em bancada ainda exige que a Proteus fique ONLINE, sincronize as páginas e permita uma leitura/gravação explícita por USB. O funcionamento do motor e das saídas não foi validado por estes testes.
 
-Correção da Console: [dd955d3](https://github.com/Tunuino/Tunuino/commit/dd955d37c0569af3434d0637ddd169f8257c8564). A compilação local Qt 6.4.2 e os 17 testes CTest passaram, incluindo o novo cenário de bancada na janela real com respostas simuladas. A compilação e publicação Windows são verificadas separadamente no workflow da Console.
+Correção da Console: [dd955d3](https://github.com/Tunuino/Tunuino/commit/dd955d37c0569af3434d0637ddd169f8257c8564). A compilação local Qt 6.4.2 e os 17 testes CTest passaram, incluindo o novo cenário de bancada na janela real com respostas simuladas.
+
+O [workflow Windows](https://github.com/Tunuino/Tunuino/actions/runs/42915844538) passou a compilação, testes, arranque offscreen, criação e validação do instalador e publicação do canal Beta 0.1.3.291. Para aplicar esta correção de estado, atualizar a Console pelo atualizador. A Proteus que já apresenta COM10 com o firmware b7a5dc9 não precisa de uma nova gravação por causa desta alteração da Console. O teste físico da comunicação e sincronização só por USB continua pendente.

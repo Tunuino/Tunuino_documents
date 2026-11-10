@@ -55,6 +55,6 @@ O editor reutiliza o desenho das tabelas já aprovado e foi inspecionado em dois
 
 Os testes nativos do firmware passaram com **GCC e Clang** no [workflow](https://github.com/Tunuino/Tunuino_Firmware/actions/runs/42803220069).
 
-Windows: a compilação, os testes e a publicação Beta estão em curso no [workflow 289](https://github.com/Tunuino/Tunuino/actions/runs/42803269434). A atualização da Console não grava o firmware na ECU.
+Windows: compilação, **17 testes**, teste de arranque, instalador e publicação **Beta 0.1.3.289 aprovados** no [workflow](https://github.com/Tunuino/Tunuino/actions/runs/42803269434). A atualização da Console não grava o firmware na ECU.
 
 Código: [Console](https://github.com/Tunuino/Tunuino/commit/af7750666de7e3496fd6a49cb8a2452619af1f01) e [firmware](https://github.com/Tunuino/Tunuino_Firmware/commit/872fe6bd91eabee1772e77bc2498b98a995b298e).

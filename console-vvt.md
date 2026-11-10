@@ -38,6 +38,6 @@ As janelas usam a grelha, cores e toolbar existentes; não são apresentadas com
 - **Testes do firmware com GCC e Clang e compilação ARM STM32F427 aprovados** nos workflows.
 - Inspeção visual da configuração realizada. **Validação física na Proteus/solenoide/motor pendente**; os testes no computador não a substituem.
 
-Windows: [compilação, testes e instalador](https://github.com/Tunuino/Tunuino/actions/runs/42786956380).
+Windows: compilação, **17 testes**, teste de arranque, instalador e publicação **Beta 0.1.3.288 aprovados** no [workflow](https://github.com/Tunuino/Tunuino/actions/runs/42786956380). A atualização da Console não grava o firmware na ECU.
 
 Código: [Console](https://github.com/Tunuino/Tunuino/commit/b4e9d08d1965f3794b3c67bc9667b722b8a692c1) e [firmware](https://github.com/Tunuino/Tunuino_Firmware/commit/4e59143504f6e607ef1d7a12a1069d7cc0d19c19).

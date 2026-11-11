@@ -48,3 +48,13 @@ O commit [5cc9a2b](https://github.com/Tunuino/Tunuino/commit/5cc9a2b700045c867d9
 Os 17 testes CTest locais passaram. A transação completa foi também executada com o dispatcher e validação reais do firmware compilados para o computador: Fuel/Ignition e AFR Target, em cenários de 12 V e de zero volts na entrada de alimentação externa. A persistência nesse ensaio é simulada em memória; não valida a escrita física da flash da Proteus. O teste sintético também verifica perda de tensão externa antes do Burn com USB mantido, e continua a rejeitar ADC inválido, mudança de identidade/geração, arranque do motor, saídas armadas e divergências de releitura.
 
 A [compilação Windows da Beta 0.1.3.292](https://github.com/Tunuino/Tunuino/actions/runs/42918690786) passou a compilação, testes, arranque offscreen, criação/validação do instalador e publicação no canal do atualizador. O firmware b7a5dc9 mantém-se; esta correção altera a Console. Falta confirmar a gravação e persistência físicas na Proteus apenas por USB.
+
+## Acesso às atribuições de cilindros
+
+A alteração e404b9b acrescenta uma ação visível nas páginas Injector outputs e Ignition outputs para abrir o perfil partilhado em Firing order, já expandido nas atribuições. O expansor desse perfil também deixa de estar escondido no menu de contexto. Assim, uma configuração ainda sem perfil gravado oferece um caminho explícito para escolher injetores e bobinas antes da primeira gravação.
+
+Não são inventados canais nem retiradas validações do perfil. Abrir a configuração não grava nem arma saídas. O seletor de predefinições continua a aplicar grupos localmente; esta alteração não confirma nem corrige por si só a falha de persistência do trigger relatada pelo utilizador.
+
+Foram consultadas as páginas 9–10 do guia de software fornecido, que distinguem sincronização, gravação e inspeção/teste de saídas. Essas páginas não especificam o arranque de um perfil Tunuino sem atribuições; o acesso direto é uma correção do fluxo da Console, não uma reprodução comprovada desse detalhe da referência.
+
+A compilação local passou e os 17 testes CTest passaram. O teste EngineProfileTest verifica que uma página sem perfil consegue abrir as atribuições sem emitir uma escrita, mantendo os testes de atribuições explícitas e conflitos. A compilação Windows e a validação física na Proteus continuam pendentes nesta publicação.

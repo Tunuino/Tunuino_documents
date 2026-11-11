@@ -40,11 +40,21 @@ Antes de cada pulso, confirmar identidade, runtime válido da mesma geração, a
 
 ## Scope
 
-Abre em Tools → Scope / F5 e Log → Scope. O novo bit de capacidade 16 identifica o suporte. Firmware anterior continua compatível com as restantes operações.
+Abre em Tools → Scope / F5 e Log → Scope. O bit de capacidade 16 identifica o suporte do firmware. Firmware anterior continua compatível com as restantes operações; sem essa capacidade a Console explica que a captura não está disponível.
 
-O firmware conserva os últimos 256 eventos de flanco ascendente efetivamente consumidos pela aquisição de cambota e cames. Uma consulta congela o conjunto; as leituras seguintes usam token e blocos de até 32 eventos, com tempos relativos em microssegundos. Geração, token e origem temporal são conferidos durante a transferência. Erros de aquisição invalidam o acesso. Não se alteram as interrupções, a configuração ou as saídas para obter uma captura.
+**Não exige sincronização do motor, perfil de cilindros nem tabelas de combustível/ignição/VVT carregadas.** Usa a configuração real e limpa da mesma ECU/geração (cabeçalho e página auxiliar), já lida antes dos mapas. A escrita e as ferramentas de acionamento/Autotune mantêm as verificações completas próprias.
 
-A apresentação mostra os eventos no tempo, com zoom e ficheiros .tnscope. Estes dados não são uma medição de tensão analógica. Capturas offline estão identificadas como offline. A transmissão é serializada com as outras operações USB.
+As mensagens distinguem configuração ainda não carregada, firmware sem Scope, operação ECU ocupada, captura de entradas desativada e resposta sem eventos. Com captura desativada na ECU, habilitar Enable trigger capture em Primary trigger e gravar esse bloco. Isso não arma injetores ou bobinas. Uma ECU parada e desligada do motor pode responder sem qualquer evento; esse resultado é apresentado como ausência de pulsos, não como necessidade de sincronização do motor.
+
+O firmware conserva os últimos 256 flancos ascendentes consumidos pela aquisição. Uma consulta congela o conjunto; as leituras seguintes usam token e blocos até 32 eventos, com tempos relativos em microssegundos. Geração, token, configuração e sequência são conferidos. Não se alteram interrupções, configuração ou saídas para obter uma captura; falhas de aquisição continuam a impedir uma captura válida.
+
+A vista tem zoom e ficheiros .tnscope e representa eventos digitais, não tensão analógica. Abrir ficheiros offline não cria evidência de captura atual no assistente. As operações USB continuam serializadas. Não se fabricam pulsos para preencher uma vista vazia.
+
+A correção foi testada na Console completa, com QSerialPort/pseudoporta e dispatcher C real no computador, sem perfil e sem alimentação externa, incluindo falhas de leitura em mapas independentes. Scope e revisão mantiveram-se acessíveis com as verificações próprias, sem escrita/Burn. Os 17 testes locais passaram e as janelas foram inspecionadas. Referência: fotografias recebidas e guia fornecido de configuração de trigger, páginas 3–4, que mostra a observação dos sinais durante arranque.
+
+A [compilação Windows e publicação Beta 0.1.3.294](https://github.com/Tunuino/Tunuino/actions/runs/42932229516) estão em curso.
+
+A confirmação física de aquisição na Proteus permanece pendente. A USB serve para comunicar; sem movimento/sinais de cambota ou cames não há pulsos para mostrar. Não é necessária nova gravação de firmware para esta alteração da Console.
 
 ## Autotune
 

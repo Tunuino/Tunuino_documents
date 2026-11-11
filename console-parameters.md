@@ -14,7 +14,7 @@ Os 27 blocos nativos têm duas colunas e quatro comandos: Open parameters, Save 
 
 TPS, MAP, CLT, IAT, Lambda e Battery mantêm calibração, captura ADC real e gravação existentes, agora em janelas separadas. As atribuições mostram o contacto J102/J103 e a lista completa fica em Customise. Os mapas e gráficos mantêm janelas próprias.
 
-A escrita confere identidade/geração e base limpa, exige motor parado, alimentação externa e saídas desarmadas, cria cópia das quatro páginas, prepara/rele as alterações, executa uma gravação permanente e verifica todas as páginas. A máscara do bloco preserva os restantes bytes e bits partilhados. Nunca altera o modo autónomo nem envia ARM/RUN.
+A escrita confere identidade/geração e base limpa, exige motor parado, ADC válido e saídas desarmadas, admite calibração por USB na bancada, cria cópia de todas as páginas suportadas, prepara/rele as alterações, executa uma gravação permanente e verifica todas as páginas. A máscara do bloco preserva os restantes bytes e bits partilhados. Nunca altera o modo autónomo nem envia ARM/RUN.
 
 ## Perfil de motor e acabamento das janelas
 
@@ -30,11 +30,23 @@ As janelas têm cabeçalho de secção cinzento, toolbar escura e cores por tipo
 
 ## Configuração manual de trigger
 
-O menu de contexto do Trigger wizard abre Manual trigger setup, uma janela MDI independente com três etapas: roda primária, fase e revisão em duas colunas. Inclui presets 36-1, 36-2, 60-2, 24-1 e 12-1, geometria personalizada de dentes em falta, captura e limite máximo de RPM. Com perfil existente permite ângulo do dente zero, janela de cam e Invert phase. Não cria nem altera número de cilindros, ordem, modo ou contactos; liga às janelas Firing order e Scope.
+Manual trigger setup abre um assistente MDI com configuração da roda, fase (quando existe perfil) e revisão. Inclui presets 36-1, 36-2, 60-2, 24-1 e 12-1, geometria personalizada de dentes em falta, captura e limite de RPM. Não cria nem altera cilindros, ordem, modo ou contactos.
 
-A revisão mostra valores guardados e propostos, UID/geração da leitura e a última captura real do Scope compatível com essa configuração. Abrir um ficheiro de Scope não conta como captura da ECU. Uma captura anterior descreve a geometria guardada, não valida alterações locais. Mudanças de identidade/geração invalidam essa evidência; alterações externas dos campos em edição bloqueiam a escrita até descartar o rascunho. Write to ECU só fica disponível na revisão válida e usa a mesma cópia, releitura e gravação permanente única dos restantes blocos. Cancelar a confirmação não inicia a escrita; falhas não repetem automaticamente a operação.
+**O trigger primário pode ser gravado antes do perfil do motor.** Sem perfil, o assistente passa da roda diretamente à revisão; a fase dos cilindros fica para depois de criar o perfil em Firing order. Com perfil existente mantém ângulo do dente zero, janela CAM e inversão de fase. Abrir/avançar um rascunho offline permite rever valores, mas não habilita escrita sem identidade, geração e configuração reais da ECU.
 
-O hardware nativo usa flancos ascendentes condicionados e rodas de dentes em falta. A janela de cam refere o último dente físico observado, com zero no primeiro dente após a falha. O ângulo do dente zero é uma referência do ciclo nativo e não uma medição automática do PMS. O assistente não altera o modo autónomo nem arma saídas. A sequência segue o guia PDF, páginas 78–88, apenas nos passos suportados: configuração, fase e inspeção do Scope. O bloqueio do avanço para pistola de ponto está agora disponível em Primary trigger. Deteção automática de PMS, outros padrões e seleção de flancos/tipo elétrico continuam indisponíveis; não é equivalência completa com o assistente da referência.
+A leitura automática carrega primeiro o cabeçalho e a página auxiliar, depois os mapas. Assim, uma falha de leitura de um mapa não impede o carregamento dos parâmetros primários. A configuração de base do assistente é reposta a partir da leitura atual quando uma edição offline tinha retirado a associação à ECU, conservando o rascunho. Campos alterados externamente continuam a exigir revisão/descarte.
+
+A revisão distingue valores guardados e propostos e conserva a evidência de Scope apenas quando obtida da mesma ECU, geração e configuração. Um ficheiro .tnscope não conta como captura atual. **Não é necessário ter sincronização de cambota/cames ou uma captura de Scope para guardar a roda primária.** A gravação continua a exigir motor parado, saídas desarmadas, ADC válido, cópia anterior, validação e releitura de todas as páginas suportadas, um Burn e releitura final. Um mapa inválido pode impedir essa gravação verificada; disponibilizar o diagnóstico não contorna a validação.
+
+O hardware nativo usa flancos ascendentes condicionados e rodas de dentes em falta. A janela CAM refere o último dente físico observado, com zero no primeiro dente após a falha. O ângulo do dente zero é uma referência do ciclo, não uma medição automática do PMS. Não se arma qualquer saída ao abrir, rever ou gravar. O bloqueio de avanço para pistola de ponto mantém-se em Primary trigger; deteção automática de PMS, outros padrões e seleção elétrica/flancos continuam indisponíveis.
+
+Referência desta correção: fotografias recebidas e PDF fornecido How-to_Configure_Trigger_in_EMU_BLACK.pdf, páginas 3–4, para configuração/Scope e observação durante arranque. A Tunuino conserva as limitações explícitas do seu hardware/protocolo; a alteração trata a leitura e a navegação da Console.
+
+Verificação: 17 testes locais aprovados, incluindo gravação do trigger com/sem perfil contra o dispatcher C real. Teste adicional da janela principal e QSerialPort através de uma pseudoporta serial, com firmware nativo no computador, USB a 0 V externos e perfil ausente: leitura normal, resposta inválida no mapa Fuel e resposta inválida na segunda tabela CAM. Os três casos carregaram a configuração, chegaram à revisão, conservaram a edição local e consultaram Scope sem escrita ou Burn. Foram inspecionadas as janelas de revisão e Scope.
+
+A [compilação Windows e publicação Beta 0.1.3.294](https://github.com/Tunuino/Tunuino/actions/runs/42932229516) estão em curso.
+
+A gravação e a aquisição na Proteus do utilizador ainda precisam de confirmação física. Esta correção é apenas da Console; mantém-se o firmware já instalado que recuperou a COM10.
 
 ## Lambda guard
 

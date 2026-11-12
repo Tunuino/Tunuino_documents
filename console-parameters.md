@@ -44,7 +44,7 @@ Referência desta correção: fotografias recebidas e PDF fornecido How-to_Confi
 
 Verificação: 17 testes locais aprovados, incluindo gravação do trigger com/sem perfil contra o dispatcher C real. Teste adicional da janela principal e QSerialPort através de uma pseudoporta serial, com firmware nativo no computador, USB a 0 V externos e perfil ausente: leitura normal, resposta inválida no mapa Fuel e resposta inválida na segunda tabela CAM. Os três casos carregaram a configuração, chegaram à revisão, conservaram a edição local e consultaram Scope sem escrita ou Burn. Foram inspecionadas as janelas de revisão e Scope.
 
-A [compilação Windows e publicação Beta 0.1.3.294](https://github.com/Tunuino/Tunuino/actions/runs/42932229516) estão em curso.
+A [compilação Windows, os testes, o instalador e a publicação Beta 0.1.3.294](https://github.com/Tunuino/Tunuino/actions/runs/42932229516) foram aprovados.
 
 A gravação e a aquisição na Proteus do utilizador ainda precisam de confirmação física. Esta correção é apenas da Console; mantém-se o firmware já instalado que recuperou a COM10.
 

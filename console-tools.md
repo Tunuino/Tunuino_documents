@@ -52,7 +52,7 @@ A vista tem zoom e ficheiros .tnscope e representa eventos digitais, não tensã
 
 A correção foi testada na Console completa, com QSerialPort/pseudoporta e dispatcher C real no computador, sem perfil e sem alimentação externa, incluindo falhas de leitura em mapas independentes. Scope e revisão mantiveram-se acessíveis com as verificações próprias, sem escrita/Burn. Os 17 testes locais passaram e as janelas foram inspecionadas. Referência: fotografias recebidas e guia fornecido de configuração de trigger, páginas 3–4, que mostra a observação dos sinais durante arranque.
 
-A [compilação Windows e publicação Beta 0.1.3.294](https://github.com/Tunuino/Tunuino/actions/runs/42932229516) estão em curso.
+A [compilação Windows, os testes, o instalador e a publicação Beta 0.1.3.294](https://github.com/Tunuino/Tunuino/actions/runs/42932229516) foram aprovados.
 
 A confirmação física de aquisição na Proteus permanece pendente. A USB serve para comunicar; sem movimento/sinais de cambota ou cames não há pulsos para mostrar. Não é necessária nova gravação de firmware para esta alteração da Console.
 

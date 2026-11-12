@@ -23,6 +23,8 @@ A compilação local, os 17 testes da Console e os três cenários de ligação 
 | Vehicle VIN... | Leitura/gravação de VIN dedicado na ECU; resposta de VIN por CAN/OBD ainda não implementada |
 | Project comment... | Comentário de até 64 caracteres Unicode na ECU e exportação de snapshot .tnproj; restauração ainda não disponível |
 
+O editor **Digital inputs → Primary trigger** apresenta a filtragem digital. O tipo de sensor, o limiar adaptativo e as resistências dependem do hardware da Proteus v0.7, conforme a folha de triggers do projeto KiCad. Estes elementos ficam descritos no Help e deixam de ocupar linhas de configuração. A mesma regra aplica-se às entradas analógicas, CAM 1, CAM 2 e VSS.
+
 ## Gravar configuração
 
 Os editores de parâmetros, calibrações e mapas têm o botão **Write to ECU**. O vermelho indica uma edição local diferente da última configuração confirmada. Repor o valor lido ou confirmar a gravação por releitura limpa o destaque. A porta série permanece aberta durante a edição. A consulta de dados em direto é feita a cada 500 ms e retoma após as operações que ocupam a porta.

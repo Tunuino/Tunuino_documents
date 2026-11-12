@@ -1,18 +1,16 @@
 # Ferramentas da Tunuino Console
 
-O menu Tools conserva a ordem da referência fornecida. A tabela distingue funções operacionais de dependências ainda ausentes. Uma entrada cinzenta não representa uma função implementada: o respetivo tooltip explica a dependência.
+Na Proteus v0.7, a navegação e o menu Tools apresentam as funções com suporte no firmware Tunuino. A revisão cruza os conectores e circuitos do projeto KiCad 383558bf com a aquisição e os drivers do firmware. A Proteus tem circuitos de borboleta eletrónica, detonação, saídas high-side e CAN, ainda sem controlo na versão atual do firmware.
+
+A CAM 1 conserva a filtragem digital, com sensibilidade analógica fixa. A CAM 2 continua disponível para leitura de pulsos e frequência. O controlo de fase VVT usa a CAM 1. A calibração da entrada de uma sonda lambda externa continua disponível. Os projetos antigos conservam os dados de referência da CAM 1 e do DBW.
+
+A compilação local, os 17 testes da Console e os três cenários de ligação série simulada passaram. Estes ensaios não incluem a placa física.
 
 | Entrada | Estado nesta versão |
 |---|---|
-| Device password | Não implementado: falta autenticação e armazenamento protegido na ECU |
-| DBW calibration tool | Não implementado: falta controlo DBW, sensores redundantes e driver de ponte H no firmware |
-| Calibrate WBO circuit | Não implementado: falta o driver de calibração do circuito WBO; calibração da entrada Lambda externa é uma função diferente |
 | Test outputs | Pulsos físicos por protocolo nativo, com limites e verificações descritos abaixo; falta ensaio físico |
-| Diff. oil bleed | Não implementado: falta o serviço da bomba/diferencial do veículo |
 | Autotune | Recolha real, proposta limitada e aplicação ao editor local; limites abaixo |
-| Logbook | Estatísticas retidas na ECU, leitura, checkpoint e reset; campos ainda sem aquisição aparecem indisponíveis |
-| User defined CAN stream | Não implementado: faltam transporte CAN e configuração persistente de frames |
-| Set EDL-1 datalogger time | Não implementado: falta comunicação com o datalogger |
+| Logbook | Estatísticas retidas na ECU, leitura, checkpoint e reset |
 | Show assigned outputs | Lista real de funções, contactos e conflitos da configuração sincronizada |
 | Show assigned inputs | Lista real de funções, contactos e conflitos da configuração sincronizada |
 | User names... | Nomes de entradas/saídas, até 16 caracteres, guardados no PC por identidade da ECU e usados nas listas de atribuição; ainda não são incluídos nos logs ou no projeto |
@@ -22,7 +20,6 @@ O menu Tools conserva a ordem da referência fornecida. A tabela distingue funç
 | Customize keys | Edição das teclas dos menus, deteção de conflitos, reposição das teclas predefinidas e persistência no PC |
 | General options | Fonte da interface e modo claro/escuro; restantes opções do manual ainda não estão implementadas |
 | Available strategies | Mostrar/ocultar grupos na navegação, com persistência; não ativa estratégias da ECU |
-| Decode VW coding... | Não implementado: faltam transporte e definições de codificação CAN do veículo |
 | Vehicle VIN... | Leitura/gravação de VIN dedicado na ECU; resposta de VIN por CAN/OBD ainda não implementada |
 | Project comment... | Comentário de até 64 caracteres Unicode na ECU e exportação de snapshot .tnproj; restauração ainda não disponível |
 

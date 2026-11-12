@@ -23,6 +23,10 @@ A compilação local, os 17 testes da Console e os três cenários de ligação 
 | Vehicle VIN... | Leitura/gravação de VIN dedicado na ECU; resposta de VIN por CAN/OBD ainda não implementada |
 | Project comment... | Comentário de até 64 caracteres Unicode na ECU e exportação de snapshot .tnproj; restauração ainda não disponível |
 
+## Gravar configuração
+
+Os editores de parâmetros, calibrações e mapas têm o botão **Write to ECU**. O vermelho indica uma edição local diferente da última configuração confirmada. Repor o valor lido ou confirmar a gravação por releitura limpa o destaque. A porta série permanece aberta durante a edição. A consulta de dados em direto é feita a cada 500 ms e retoma após as operações que ocupam a porta.
+
 ## Atribuições e nomes
 
 As listas usam uma leitura completa e limpa da mesma ECU/geração. Verde significa atribuído; amarelo, livre; vermelho, conflito. Uma bobina partilhada por um par de cilindros válido é apresentada como uma função, sem falso conflito. Os contactos J101/J102/J103 foram conferidos no PCB Proteus v0.7 revisão 383558bf7ca1c53ad8bbd8fdc9dd3a4187013c46. Atualizações inalteradas não reconstroem as listas.

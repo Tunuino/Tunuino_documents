@@ -52,3 +52,5 @@ A implementação suporta uma aresta selecionada por came por ciclo de 720° e u
 **São testes simulados e compilações, não validação elétrica na ECU.** A resposta física dos sensores, solenoides e motor continua pendente. A atualização da Console não grava firmware na Proteus; CAM 2 VVT e as novas leituras exigem o firmware correspondente.
 
 Código: [Console](https://github.com/Tunuino/Tunuino/commit/ac19f34b1023ac901ddc8d6c65468e898ff2fd3a) e [firmware](https://github.com/Tunuino/Tunuino_Firmware/commit/79b9eec35840751d0ac716606990187c26434b42). Compilação ARM [aprovada](https://github.com/Tunuino/Tunuino_Firmware/actions/runs/44180696305) e testes nativos GCC/Clang [aprovados](https://github.com/Tunuino/Tunuino_Firmware/actions/runs/44180696218).
+
+**Windows aprovado:** compilação, 17 testes, arranque e publicação do [instalador Beta 0.1.3.301](https://tunuino.github.io/Tunuino/updates/Tunuino-Console-Setup-0.1.3.301.exe), no [workflow](https://github.com/Tunuino/Tunuino/actions/runs/44180996924). A leitura inicial das 11 páginas e o Scope de três canais também foram exercitados pela porta série simulada, além da compatibilidade com firmware anterior.

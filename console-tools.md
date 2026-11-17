@@ -35,6 +35,16 @@ A navegação concentra calibrações em **Inputs and outputs**, leituras em **D
 
 A organização segue o pedido do utilizador. Foram consultadas as secções de configuração de entradas e sensores do guia fornecido e os contactos J101/J102/J103 do KiCad Proteus v0.7 383558bf. O guia não define o protocolo da Tunuino. A compilação local, os 17 testes, o ensaio de compatibilidade do perfil e os três cenários série simulados passaram. Falta validação na placa física.
 
+## Ligações físicas num único local
+
+A escolha de contactos AV, AT, LS e IGN é feita em **Inputs and outputs**. As janelas de calibração dos sensores apresentam os pontos e leituras. VTEC e VVT apresentam ativação, condições e controlo. Os seletores de entrada/saída foram retirados desses editores, incluindo os campos antes acessíveis ao expandir as opções do VVT.
+
+A janela de motor conserva o modo, cilindros e temporizações. As colunas de atribuição de injetores e bobinas foram retiradas dessa janela. No painel central, injetores, bobinas e relés editam diretamente o mesmo perfil de motor. A mudança de uma bobina partilhada atualiza o par correspondente. As antigas janelas de atribuição de injetores, bobinas e pressões deixam de ser criadas.
+
+Abrir um ficheiro de calibração de sensor conserva a entrada selecionada. Restaurar valores de referência nos controlos VTEC/VVT conserva as ligações físicas. Os dados dos formatos anteriores continuam disponíveis para a compatibilidade dos projetos.
+
+Passaram os 17 testes locais, incluindo a alteração de VTEC pelo painel central, a atribuição inicial de um injetor e a verificação de que os campos de ligação permanecem ocultos nos editores, incluindo a expansão do VVT. Os testes não incluem a placa física.
+
 ## Gravar configuração
 
 Os editores de parâmetros, calibrações e mapas têm o botão **Write to ECU**. O vermelho indica uma edição local diferente da última configuração confirmada. Repor o valor lido ou confirmar a gravação por releitura limpa o destaque. A porta série permanece aberta durante a edição. A consulta de dados em direto é feita a cada 500 ms e retoma após as operações que ocupam a porta.

@@ -1,88 +1,54 @@
-# VVT: CAM 1 Parameters, PID e duas tabelas de ângulo
+# VVT e sinais CAM 1 / CAM 2 na Proteus v0.7
 
-## Organização da Console
+## Configuração
 
-A navegação acompanha as fotografias fornecidas em 10/11/2026:
+A navegação VVT apresenta VTEC, CAM 1 control, CAM 1 PID, CAM 1 target 1/2 e os quatro blocos equivalentes para CAM 2. Cada controlador tem referência, curso, direção, frequência e limites PWM, PID, deadband, limites integral/correção, ativação por RPM/CLT/tempo, pressão de óleo opcional, overrides e proteção de seguimento independentes.
 
-- **VVT → VTEC Control**: controlo discreto do solenoide VTEC, preservado.
-- **VVT → CAM 1 → Parameters**.
-- **VVT → CAM 1 → PID**.
-- **VVT → CAM 1 → CAM1 angle 1 / CAM1 angle 2**.
-- **VVT → CAM 2**: estrutura visível, com opções indisponíveis enquanto não existir feedback de fase nativo.
-- **VVT → VVT**: monitor separado da configuração. O monitor VTEC também permanece separado.
+As ligações físicas são escolhidas **apenas em Inputs and outputs**. CAM 1 utiliza J101/4 (+), 12 (−), entrada condicionada dedicada. CAM 2 utiliza J101/1, entrada digital Hall/óptica com pull-up fixo de 2,7 kΩ. Não dispõe de condicionamento VR interno. Os solenoides CAM 1, CAM 2 e VTEC usam saídas LS distintas, selecionadas explicitamente. Nenhum canal ocupado é retirado a outra função.
 
-Os quatro blocos anteriores Position, Solenoid and PID, Activation e Target source foram reunidos em Parameters e PID. A importação migra os campos e converte o antigo tempo em milissegundos para a apresentação em segundos. Mantém os limites implícitos e a ausência de deadband dos controladores anteriores, em vez de lhes aplicar os novos valores de referência.
+Nos controlos VVT não se repete o seletor de saída. Configure abre o bloco correspondente; a gravação continua explícita em Write to ECU, com vermelho reservado a alterações locais relativamente à base lida. A comunicação permanece aberta durante a edição.
 
-## Parameters
+Cada came tem dois mapas independentes de 16×16, com RPM em baixo, MAP kPa à esquerda e gráfico 3D ajustável. Seleciona-se explicitamente alvo fixo, tabela 1 ou tabela 2. Ler, abrir um projeto ou mostrar uma janela não ativa controlos nem arma saídas. Os valores iniciais são referências inativas, não calibrações de um motor.
 
-A ordem principal é a das imagens: **CAM offset, Maximum retard/advance, Control type, Invert output, Output frequency, Min/Max solenoid DC, Override DC, Overridden DC, Override target, Overridden target, Steady pos DC, Higher DC, Min RPM, Min coolant temp, Min oil temp e Start delay**.
+## Aquisição e diagnóstico
 
-As cores e a toolbar Open / Save / Defaults / Help seguem o painel de referência. Os valores de override ficam editáveis apenas com a respetiva opção selecionada. O menu de contexto permite copiar a aresta real de CAM 1 como referência; exige VVT desativado na configuração lida, identidade/geração e medição atuais, e não escreve nem arma saídas.
+Diagnostics separa CAM 1 signal, CAM 1 pulses, CAM 2 signal, CAM 2 pulses e os estados de cada VVT. Pulsos mostram frequência, período e contagem reais; a fase utiliza a posição capturada em relação ao ciclo sincronizado de 720°. Não se converte frequência em fase nem se gera uma forma de onda fictícia.
 
-**Advanced / assignments and protections** conserva a escolha explícita de uma saída LS livre pelo contacto J102, limite inferior do curso, idade do feedback, histereses, pressão de óleo opcional, proteção de seguimento, alvo fixo de calibração e seleção da tabela. Não se atribui uma saída automaticamente.
+O sincronismo do motor continua dependente da CAM 1. A CAM 2 mede fase independentemente e qualifica uma aresta selecionada por ciclo de 720°, após duas ocorrências coerentes. Uma aresta adicional invalida a fase da CAM 2 sem alterar o sincronismo da CAM 1. O Scope nativo pode capturar cambota e as duas cames; os ficheiros/capturas antigos de dois canais continuam aceites.
 
-Control type disponibiliza **None** e **VVTi - single solenoid**. Double Vanos aparece indisponível: o driver de duplo solenoide não foi implementado. Min oil temp está visível mas desativado em −40 °C, com explicação: falta um canal nativo calibrado de temperatura do óleo; esse valor não é uma leitura nem uma proteção funcional.
+O controlo exige feedback atual, dentro do curso e da janela configurados. Perda de feedback ou alvo, curso excedido, erro persistente de seguimento e perda de pressão de óleo enquanto ativo cortam o respetivo solenoide e retêm a falha. Overrides mantêm as proteções e não dispensam armamento explícito.
 
-CAM offset continua a ser a referência medida da aresta sem comando, em graus de cambota no ciclo de 720°. O avanço medido é referência menos posição da aresta; não modifica o TDC da ignição. O limite inferior do curso está em Advanced, permitindo preservar configurações anteriores e definir cursos de atraso. O curso completo deve permanecer na janela de sincronização existente e na mesma revolução.
+## Protocolo, gravação e projetos
 
-A referência fica associada à roda fónica, dentes em falta, janela/fase CAM e filtros. Alterar essa geometria exige rever Parameters antes de ativar o controlo. Copiar uma aresta não prova que a came está no batente mecânico; essa condição exige verificação física.
-
-## PID
-
-Janela própria com os oito campos das imagens:
-
-| Campo | Função nativa |
+| Página | Conteúdo |
 |---|---|
-| Proportional gain | Correção proporcional ao erro de ângulo |
-| Integral gain | Integração por tempo entre novas arestas |
-| Derivative gain | Derivada da medição |
-| Integral term limit min/max | Limites assinados do termo integral |
-| Output min/max | Limites assinados da correção PID, somada a Steady pos DC |
-| Deadband | Anula P/D e mantém a integral dentro da banda de ângulo |
+| 6 | VTEC e controlo/PID CAM 1 |
+| 7 / 8 | Alvos CAM 1, tabelas 1 / 2 |
+| 9 | Controlo/PID CAM 2, janela e referência próprias |
+| 10 / 11 | Alvos CAM 2, tabelas 1 / 2 |
 
-Os novos valores de referência são P=1, I=0, D=0, integral ±5%, correção ±15% e deadband 0,5°. São referências inativas; não uma afinação para um motor. Configurações anteriores conservam o comportamento anterior até edição explícita.
+A página 9 não contém um segundo VTEC. As novas capacidades anunciam VVT CAM 2 e pulsos CAM 1; a Console só solicita as novas páginas quando o firmware as anuncia. Firmware anterior conserva o conjunto de páginas suportado.
 
-A soma final também respeita Min/Max solenoid DC. A integral tem proteção contra acumulação em saturação. Repetir a mesma aresta não integra novamente nem recalcula a derivada; pausas excessivas não viram saltos de integral.
+As consultas adicionais são TUNUINO:C para pulsos CAM 1, TUNUINO:G para fase CAM 2 e TUNUINO:X/11 para estado VVT CAM 2. Todas incluem proveniência de geração; respostas antigas/alteradas são recusadas.
 
-## CAM1 angle 1 e CAM1 angle 2
+A escrita verifica motor parado, saídas desarmadas, identidade/geração, base limpa, cópia anterior, preparação e releitura das **11 páginas**, um único Burn e releitura final. Não se repete automaticamente um Burn incerto. Os recursos de injetores, relés, auxiliares, VTEC e ambos os VVT são verificados contra conflitos.
 
-Cada tabela tem **16×16 células independentes**, tabela e gráfico 3D na mesma janela, separador ajustável, toolbar, edição por contexto e vistas só tabela / só gráfico / divisão horizontal ou vertical. RPM permanece em baixo e MAP kPa à esquerda, aumentando de baixo para cima, como pedido anteriormente. Tipografia e breakpoints acompanham a largura disponível.
+O projeto .tnproj e o comparador conservam os quatro mapas e os dois conjuntos de parâmetros. Projetos anteriores recebem apenas editores CAM 2 locais desativados; não se alteram as páginas antigas ou a cablagem guardada. A persistência nativa passa ao formato 10, com migração dos formatos 2–9 e preservação do banco anterior em escritas interrompidas.
 
-O gráfico usa os dados da tabela, pode rodar e ampliar e tem moldura/eixos identificados. O zero tem uma referência de cor estável nas tabelas CAM; não passa a valor máximo apenas por existir uma célula negativa.
+## Referências e limites
 
-As páginas nativas são 7 para angle 1 e 8 para angle 2: eixos RPM inteiros 0–20000, MAP 0–500 kPa com duas casas e células assinadas −90° a +90° com duas casas. A interpolação é bilinear; fora dos eixos usa a borda, sem extrapolar.
+Contactos e condicionamento confirmados no KiCad/PCB Proteus v0.7, revisão 383558bf7ca1c53ad8bbd8fdc9dd3a4187013c46. Referência de utilização: fotografias fornecidas e PDF EMU_PRO_Software_Guide.pdf, Appendix D, páginas 113–119, sobre posição relativa à cambota, janela, duty, ativação, PID e mapas interpolados.
 
-A seleção é explícita em Advanced → Target table: alvo fixo de calibração, CAM1 angle 1 ou CAM1 angle 2. Não há comutação automática inventada. Primeiro grava-se a tabela escolhida; todas as suas células devem estar dentro do curso configurado e o MAP deve estar calibrado. Abrir janelas/projetos não seleciona tabelas nem arma saídas.
+A implementação suporta uma aresta selecionada por came por ciclo de 720° e um solenoide por controlador. Não se apresentam controlos de duplo solenoide, temperatura do óleo sem aquisição nativa, multi-aresta ou afinador automático como funções disponíveis.
 
-## Overrides e proteções
+## Verificação
 
-Override DC aplica o duty solicitado dentro dos limites de solenoide. Override target substitui o alvo pedido dentro do curso. A inversão PWM aplica-se durante controlo ativo; quando inibido/desativado, o comando físico continua zero.
+- Compilação ARM STM32F427 e orçamento de stack de arranque aprovados.
+- 15 testes nativos locais com GCC, ASan/UBSan aprovados; deteção de fugas desativada apenas pelo ptrace do ambiente.
+- 17 testes locais da Console aprovados, incluindo gravação/releitura de 11 páginas contra o dispatcher C real, preservação VTEC/CAM 1, ambos os mapas CAM 2, projetos antigos e novos, configurações centralizadas e recusa por firmware anterior.
+- Integração da Console por porta série simulada aprovada com ECU só USB, sem perfil/sincronismo e com falhas de leitura injetadas.
+- Janelas CAM 2 Parameters, PID e tabela/gráfico verificadas por captura da interface.
 
-Os overrides não dispensam saídas armadas explicitamente, motor em funcionamento, gates de RPM/CLT/tempo/óleo e feedback CAM fresco e dentro do curso. Override DC suspende o temporizador de erro de seguimento, pois o PID deixa de comandar a posição; as restantes proteções permanecem.
+**São testes simulados e compilações, não validação elétrica na ECU.** A resposta física dos sensores, solenoides e motor continua pendente. A atualização da Console não grava firmware na Proteus; CAM 2 VVT e as novas leituras exigem o firmware correspondente.
 
-Sem alvo válido no modo de tabela, o comando é zero; não se usa silenciosamente o alvo fixo. Perda de alvo/feedback ou óleo enquanto ativo, curso excedido e erro persistente de seguimento retêm o corte até desarmar/rearmar. Override target, quando selecionado, é a fonte explícita do alvo.
-
-## Gravação e compatibilidade
-
-A extensão VVT da página 6 passa à versão 3; o prefixo VTEC mantém-se. Bytes 124–141 acrescentam inversão, overrides, limites PID e deadband. Uma capacidade própria anuncia estas funções e a página 8; firmware anterior mantém o conjunto de páginas que suporta.
-
-A escrita mantém motor parado, saídas desarmadas, alimentação válida, identidade/geração e base limpa atuais, cópia anterior, preparação/releitura das **oito páginas**, um Burn e releitura final. Não há repetição automática de Burn incerto. Saídas ocupadas por VTEC, injetores, bomba, ventoinha, relé, idle ou boost são rejeitadas.
-
-O projeto .tnproj e o comparador conservam os dois editores e páginas. Importar dados apenas altera edições locais. O registo de persistência é **9**, com leitura/migração dos formatos **2–8** e preservação do banco anterior em interrupções. Firmware antigo não lê os registos novos; conservar uma cópia compatível antes de um downgrade.
-
-## Referência e validação
-
-Referências: três fotografias fornecidas nesta correção (navegação, Parameters/tabelas e PID) e o PDF fornecido **EMU_PRO_Software_Guide.pdf**, Appendix D, páginas **113–119**: medição/janela, duty, ativação, PID e mapas interpolados. O guia público **EMU Black V3 Software Guide**, introdução, remete os detalhes das estratégias para o Help da aplicação; não descreve todos os campos das fotografias. Não se atribuem esses detalhes ao PDF.
-
-Foram comparadas as capturas nativas de Parameters, PID e tabela/gráfico, incluindo disposição, cores, toolbar e redimensionamento. Há diferenças explícitas de hardware: CAM 2 de fase, temperatura do óleo e duplo solenoide estão indisponíveis.
-
-- **17 testes locais da Console aprovados**. Incluem migração de projetos, preservação das edições, conflitos, dois mapas independentes, preservação VTEC e gravação/releitura de oito páginas contra o dispatcher C real no computador. Também se mantém a comunicação com os conjuntos anteriores de seis/sete páginas.
-- **14 testes nativos locais com ASan/UBSan aprovados**; a deteção de fugas só foi desativada localmente devido ao ptrace do ambiente. Verificados limites P/I, deadband, overrides, inversão/desligamento, perda de feedback, seleção da segunda tabela e migração/interrupção da persistência.
-- **GCC e Clang aprovados** no [workflow nativo](https://github.com/Tunuino/Tunuino_Firmware/actions/runs/42811200164).
-- **Compilação ARM STM32F427 aprovada** no [workflow](https://github.com/Tunuino/Tunuino_Firmware/actions/runs/42811200209).
-
-**Windows aprovado:** compilação, 17 testes, arranque automático, instalador e publicação **Beta 0.1.3.290** no [workflow](https://github.com/Tunuino/Tunuino/actions/runs/42811461825). A atualização da Console não grava o firmware na ECU; as novas funções exigem o firmware correspondente.
-
-**Validação física na Proteus/solenoide/motor pendente**. O monitor continua perto de 5 Hz; não é o registo de 100 Hz indicado para avaliar resposta rápida. Não foi demonstrada resposta de 200–300 ms num motor. Cames adicionais, CAM multi-aresta, afinador Relay/AMIGO e controlo do motor DBW continuam pendentes.
-
-Código: [Console](https://github.com/Tunuino/Tunuino/commit/1e8958fe59ec5aec2f714f966ee1e2a8f737328b) e [firmware](https://github.com/Tunuino/Tunuino_Firmware/commit/85e853741ba2382196e5c64a5242f9f3bff1ea1f).
+Código: [Console](https://github.com/Tunuino/Tunuino/commit/ac19f34b1023ac901ddc8d6c65468e898ff2fd3a) e [firmware](https://github.com/Tunuino/Tunuino_Firmware/commit/79b9eec35840751d0ac716606990187c26434b42). Compilação ARM [aprovada](https://github.com/Tunuino/Tunuino_Firmware/actions/runs/44180696305) e testes nativos GCC/Clang [aprovados](https://github.com/Tunuino/Tunuino_Firmware/actions/runs/44180696218).

@@ -19,7 +19,7 @@ A compilação local, os 17 testes da Console e os três cenários de ligação 
 | Tune Display | Disponível, F7 |
 | Customize keys | Edição das teclas dos menus, deteção de conflitos, reposição das teclas predefinidas e persistência no PC |
 | General options | Fonte da interface e modo claro/escuro; restantes opções do manual ainda não estão implementadas |
-| Available strategies | Mostrar/ocultar grupos na navegação, com persistência; não ativa estratégias da ECU |
+| Navigation sections... | Mostrar/ocultar grupos na navegação, com persistência; não ativa estratégias da ECU |
 | Vehicle VIN... | Leitura/gravação de VIN dedicado na ECU; resposta de VIN por CAN/OBD ainda não implementada |
 | Project comment... | Comentário de até 64 caracteres Unicode na ECU e exportação de snapshot .tnproj; restauração ainda não disponível |
 
@@ -31,7 +31,7 @@ A janela **Inputs and outputs** reúne os sensores e atuadores pelos nomes. Cada
 
 As funções incluem TPS, MAP, CLT, IAT, Lambda, tensão de bateria, pressões de combustível e óleo, flex fuel, velocidade, pulsos CAM 2, cambota, injetores, bobinas, VTEC, VVT CAM 1 e os relés da bomba, ventoinha e alimentação principal. Os injetores e bobinas aparecem após configurar os cilindros. As bobinas partilhadas seguem os pares definidos no perfil. As listas recusam uma ligação já escolhida por outra função visível, com validação adicional na gravação.
 
-Os filtros analógicos estão em **Sensors and inputs / Advanced / Analog input filters**. As atribuições dos três relés são incluídas no projeto através de um campo opcional do perfil. Os projetos anteriores continuam aceites e conservam os valores lidos da ECU.
+A navegação concentra calibrações em **Inputs and outputs**, leituras em **Diagnostics** e registos em **Logs**. Os acessos de configuração estão descritos em console-menus-modelos-testes.md. As atribuições dos três relés são incluídas no projeto através de um campo opcional do perfil. Os projetos anteriores continuam aceites e conservam os valores lidos da ECU.
 
 A organização segue o pedido do utilizador. Foram consultadas as secções de configuração de entradas e sensores do guia fornecido e os contactos J101/J102/J103 do KiCad Proteus v0.7 383558bf. O guia não define o protocolo da Tunuino. A compilação local, os 17 testes, o ensaio de compatibilidade do perfil e os três cenários série simulados passaram. Falta validação na placa física.
 

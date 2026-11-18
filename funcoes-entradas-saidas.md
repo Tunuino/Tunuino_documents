@@ -142,3 +142,11 @@ Estas verificações são execução em computador e análise dos ficheiros KiCa
 ![Pinout UAefi F3 com os conectores reais](images/console/uaefi-pinout.png)
 
 Capturas de teste em computador, sem ECU ligada. A seleção de contactos UAefi não altera os editores Proteus.
+
+## Instalador Windows verificado
+
+Versão **0.1.3.307**: compilação Windows, testes e publicação automática concluídos com sucesso no [workflow 44389252857](https://github.com/Tunuino/Tunuino/actions/runs/44389252857).
+
+[Descarregar Tunuino Console 0.1.3.307](https://tunuino.github.io/Tunuino/updates/Tunuino-Console-Setup-0.1.3.307.exe).
+
+Esta versão inclui o painel configurável da Proteus e a referência de pinout UAefi F3. Não acrescenta um alvo de firmware nativo UAefi.

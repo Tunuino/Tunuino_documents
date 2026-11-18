@@ -100,3 +100,10 @@ Testes adicionais da correção: Configure da cambota abre ECU pin mantendo a me
 
 Capturas locais de teste, sem ECU ligada. A primeira mostra a função dedicada desativada; a segunda mostra a escolha preparada antes de aplicar. Créditos e termos das fotografias integradas: [PHOTO-LICENSE.txt](https://github.com/Tunuino/Tunuino/blob/b2caf60b3773ac87cb47f7f778c683fc0ec17245/qt_console/assets/proteus/PHOTO-LICENSE.txt).
 
+
+## Versão Windows verificada
+
+**0.1.3.306**: compilação, 17 testes, verificação de arranque, criação/verificação do instalador e publicação Beta concluídos com sucesso.
+
+- [Instalar Tunuino Console 0.1.3.306](https://tunuino.github.io/Tunuino/updates/Tunuino-Console-Setup-0.1.3.306.exe).
+- [Execução Windows e publicação](https://github.com/Tunuino/Tunuino/actions/runs/44382300624).

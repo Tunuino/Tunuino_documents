@@ -69,3 +69,11 @@ Validação local: 17/17 testes aprovados e verificação visual dos três conec
 Testes adicionais da correção: Configure da cambota abre ECU pin mantendo a mesma janela MDI; os dois contactos dedicados continuam identificados com captura desativada; escolher sem aplicar e fechar preserva o projeto; Apply altera a ligação no editor sem gravação automática; restauração preserva os restantes campos. Verificação visual da janela com o tema da aplicação.
 
 [Compilação e testes Windows desta correção](https://github.com/Tunuino/Tunuino/actions/runs/44379756152).
+
+## Configuração do pino na interface
+
+![Pino dedicado da cambota identificado com a captura desativada](images/console/proteus-pinout-io.png)
+
+![Configure abre a ligação do pino da ECU](images/console/ecu-pin-configuration.png)
+
+Capturas locais de teste, sem ECU ligada. A primeira mostra a função dedicada desativada; a segunda mostra a escolha preparada antes de aplicar. Créditos e termos das fotografias integradas: [PHOTO-LICENSE.txt](https://github.com/Tunuino/Tunuino/blob/3310233196c776a7f92877443c40e00e8b2b75df/qt_console/assets/proteus/PHOTO-LICENSE.txt).

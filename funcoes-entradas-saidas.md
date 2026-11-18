@@ -1,6 +1,6 @@
 # Entradas, saídas e pinouts da Proteus
 
-A configuração física fica num único local: **Inputs and outputs**, na navegação principal. Na coluna **ECU connection**, selecionar a ligação pretendida para o sensor ou atuador. **Configure...** abre os parâmetros da função; **Write to ECU** grava através da transação existente.
+A configuração física fica num único local: **Inputs and outputs**, na navegação principal. Na coluna **ECU connection**, selecionar a ligação pretendida para o sensor ou atuador. **Configure...** abre a configuração da ligação física no próprio painel de I/O; **Write to ECU** grava através da transação existente.
 
 ## Conectores com fotografias
 
@@ -23,6 +23,27 @@ A vista é a **face de encaixe da ECU, com o fecho em cima**, conforme as fotogr
 
 O mapa foi confrontado com os **93 contactos do esquema e do PCB Proteus v0.7**, revisão `383558bf7ca1c53ad8bbd8fdc9dd3a4187013c46`. Inclui AV, AT, entradas digitais/VR, pontes H, LS, ignição, HS, CAN, knock, massas e alimentações. Mostrar uma ligação física não acrescenta um controlador de firmware para esse sinal.
 
+## Configure e estado dos pinos
+
+**Configure...** abre a janela **ECU pin** da função selecionada, com a ligação escolhida, os contactos e os seus sinais elétricos. Não abre Triggers nem os parâmetros de funcionamento da função.
+
+- **Apply connection** aplica apenas a ligação no editor local.
+- **Write to ECU** usa a gravação existente da função, com validação e releitura.
+- **Close** sem aplicar descarta a seleção preparada nessa janela. Uma ligação já aplicada permanece no editor até ser gravada ou descartada pelos mecanismos existentes.
+
+A seleção é a mesma da coluna ECU connection: não existe uma segunda configuração de cablagem nos parâmetros da função. Os tipos elétricos apresentados são informação do hardware; não foram acrescentados seletores fictícios de Hall/VR, pull-up ou limiares que o firmware não controla.
+
+| Texto apresentado | Significado |
+| --- | --- |
+| No pin selected | A função ainda não tem uma ligação de ECU selecionada. |
+| No function selected | O contacto configurável não tem uma função de software atribuída. Não indica se há um fio fisicamente ligado. |
+| Crankshaft sensor — disabled | J101/5 (+) e J101/13 (−) continuam a ser a entrada dedicada de cambota; a captura está desativada no editor. |
+| Função — disabled | Entrada digital dedicada de VSS ou CAM 2, com a função desativada. |
+| Fixed hardware connection | Alimentação, massa ou outra ligação física fixa apresentada como informação do conector. |
+| pending | Existe uma alteração local pendente de gravação. |
+
+Os contactos dedicados continuam identificados, selecionáveis e destacados com a função desativada. Não são transformados em contactos livres nem ativados automaticamente para preencher o pinout.
+
 ## Editar e gravar
 
 As listas de ligações podem ser usadas **offline** para preparar o projeto. A disponibilidade de gravação na ECU não desativa a edição local. Ligações fixas são apresentadas sem uma escolha fictícia de terminal.
@@ -40,17 +61,11 @@ Verificação automatizada com a janela real da Console: carregamento das três 
 Estes resultados são execução da interface em computador e inspeção dos ficheiros de hardware. Não constituem ensaio elétrico de uma cablagem física.
 
 
-[Código da Console](https://github.com/Tunuino/Tunuino/commit/a8808f914fe23eab170ce8469ad954633a4b83a5).
+[Código da Console](https://github.com/Tunuino/Tunuino/commit/3310233196c776a7f92877443c40e00e8b2b75df).
 
 Validação local: 17/17 testes aprovados e verificação visual dos três conectores com o tema da aplicação. A compilação e os testes Windows são executados pelo workflow automático da Console.
 
-## Versão Windows verificada
 
-**0.1.3.304**: compilação, 17 testes, arranque de verificação, criação/verificação do instalador e publicação Beta concluídos com sucesso.
+Testes adicionais da correção: Configure da cambota abre ECU pin mantendo a mesma janela MDI; os dois contactos dedicados continuam identificados com captura desativada; escolher sem aplicar e fechar preserva o projeto; Apply altera a ligação no editor sem gravação automática; restauração preserva os restantes campos. Verificação visual da janela com o tema da aplicação.
 
-- [Instalar Tunuino Console 0.1.3.304](https://tunuino.github.io/Tunuino/updates/Tunuino-Console-Setup-0.1.3.304.exe).
-- [Execução Windows e publicação](https://github.com/Tunuino/Tunuino/actions/runs/44366982175).
-
-![Painel de entradas e saídas com o injetor selecionado no conector Black35](images/console/proteus-pinout-io.png)
-
-Captura local de teste, sem ECU ligada. A seleção do injetor mostra o contacto J102/3. Os créditos e termos das fotografias integradas estão em [PHOTO-LICENSE.txt](https://github.com/Tunuino/Tunuino/blob/a8808f914fe23eab170ce8469ad954633a4b83a5/qt_console/assets/proteus/PHOTO-LICENSE.txt).
+[Compilação e testes Windows desta correção](https://github.com/Tunuino/Tunuino/actions/runs/44379756152).

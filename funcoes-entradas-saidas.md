@@ -134,3 +134,11 @@ A janela Proteus passa a chamar-se **Proteus Pinout** e conserva o identificador
 Verificação local: 17/17 testes aprovados. A janela real verifica a hierarquia por ECU, as cinco fotografias UAefi, as contagens 8/18/20/16/6, a seleção dos contactos e a preservação integral do projeto Proteus ao consultar a UAefi. As fotografias e a navegação foram inspecionadas com o tema da aplicação. O esquema e o PCB concordam nos 68 contactos; os ficheiros locais conferem com os blobs da revisão de origem.
 
 Estas verificações são execução em computador e análise dos ficheiros KiCad. Não foi gravada ou comandada uma ECU física. O suporte de configuração/atuação UAefi não é apresentado como validado.
+
+## Navegação por ECU na interface
+
+![Inputs and outputs organizado por ECU](images/console/ecu-navigation.png)
+
+![Pinout UAefi F3 com os conectores reais](images/console/uaefi-pinout.png)
+
+Capturas de teste em computador, sem ECU ligada. A seleção de contactos UAefi não altera os editores Proteus.

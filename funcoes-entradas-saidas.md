@@ -1,8 +1,13 @@
-# Entradas, saídas e pinouts da Proteus
+# Entradas, saídas e pinouts por ECU
 
-A configuração física fica num único local: **Inputs and outputs**, na navegação principal. Na coluna **ECU connection**, selecionar a ligação pretendida para o sensor ou atuador. **Configure...** abre a configuração da ligação física no próprio painel de I/O; **Write to ECU** grava através da transação existente.
+**Inputs and outputs** passa a ser um grupo de navegação com duas ECUs:
 
-## Conectores com fotografias
+- **ECU Proteus → Proteus Pinout**: painel completo de atribuições, configuração de pinos, gravação e fotografias dos três conectores.
+- **ECU UAefi → UAefi Pinout**: consulta do pinout real da UAefi F3, com fotografias e funções dos 68 contactos externos.
+
+A configuração física da Proteus fica no seu painel **Proteus Pinout**. Na coluna **ECU connection**, selecionar a ligação pretendida para o sensor ou atuador. **Configure...** abre a configuração da ligação física no próprio painel de I/O; **Write to ECU** grava através da transação existente.
+
+## ECU Proteus — conectores com fotografias
 
 O painel inclui as fotografias dos três conectores, com numeração sobreposta:
 
@@ -23,7 +28,27 @@ A vista é a **face de encaixe da ECU, com o fecho em cima**, conforme as fotogr
 
 O mapa foi confrontado com os **93 contactos do esquema e do PCB Proteus v0.7**, revisão `383558bf7ca1c53ad8bbd8fdc9dd3a4187013c46`. Inclui AV, AT, entradas digitais/VR, pontes H, LS, ignição, HS, CAN, knock, massas e alimentações. Mostrar uma ligação física não acrescenta um controlador de firmware para esse sinal.
 
-## Configure e estado dos pinos
+## ECU UAefi — pinout F3
+
+A página **UAefi Pinout** usa as ligações da revisão **F3** do projeto [Tunuino/uaefi](https://github.com/Tunuino/uaefi/tree/fefb25a22f8b1968a828ce377363717c529c712f). Não copia os contactos nem as atribuições da Proteus.
+
+| Conector | Referência PCB | Contactos |
+| --- | --- | --- |
+| A | J4 | 8 |
+| B | J5 | 18 |
+| C | J2 | 20 |
+| D | J10 | 16 |
+| E | J3 | 6 |
+
+As cinco fotografias originais apresentam os contactos identificados como A1…E6. Selecionar um contacto destaca-o e mostra **Pin**, **PCB contact**, **Signal** e **Function**. A fotografia mantém a proporção ao redimensionar e a tabela acompanha o conector selecionado.
+
+Os **68 contactos** foram comparados entre o esquema e o PCB da revisão F3. As posições sobre as fotografias correspondem ao mapa original dessas imagens. São usadas fotografias originais dos conectores, sem substituir a sua geometria por imagens geradas.
+
+A página UAefi é uma **referência de hardware**. O firmware nativo Tunuino atualmente integrado na Console suporta Proteus; ainda não existe um alvo UAefi nesse firmware. Por isso, a página UAefi não apresenta seletores de atribuição ou comandos Write to ECU sem suporte. Abrir ou consultar esta página não muda a ECU ligada, a comunicação, os mapas ou as atribuições da Proteus. Os controladores e componentes efetivamente montados dependem da variante física da UAefi.
+
+Referências congeladas: [esquema F3](https://github.com/Tunuino/uaefi/blob/fefb25a22f8b1968a828ce377363717c529c712f/uaefi.kicad_sch), [PCB F3](https://github.com/Tunuino/uaefi/blob/fefb25a22f8b1968a828ce377363717c529c712f/uaefi.kicad_pcb). Créditos e termos das fotografias estão incluídos no botão de licença da página e em assets/uaefi/PHOTO-LICENSE.txt no código da Console.
+
+## Configure e estado dos pinos da Proteus
 
 **Configure...** abre a janela **ECU pin** da função selecionada, com a ligação escolhida, os contactos e os seus sinais elétricos. Não abre Triggers nem os parâmetros de funcionamento da função.
 
@@ -83,7 +108,7 @@ Verificação automatizada com a janela real da Console: carregamento das três 
 Estes resultados são execução da interface em computador e inspeção dos ficheiros de hardware. Não constituem ensaio elétrico de uma cablagem física.
 
 
-[Código da Console](https://github.com/Tunuino/Tunuino/commit/b2caf60b3773ac87cb47f7f778c683fc0ec17245).
+[Código da Console](https://github.com/Tunuino/Tunuino/commit/d937497813db161e03ca6ca8c807d1072ce5a6a8).
 
 Validação local: 17/17 testes aprovados e verificação visual dos três conectores com o tema da aplicação. A compilação e os testes Windows são executados pelo workflow automático da Console.
 
@@ -98,12 +123,14 @@ Testes adicionais da correção: Configure da cambota abre ECU pin mantendo a me
 
 ![Configure abre a ligação do pino da ECU](images/console/ecu-pin-configuration.png)
 
-Capturas locais de teste, sem ECU ligada. A primeira mostra a função dedicada desativada; a segunda mostra a escolha preparada antes de aplicar. Créditos e termos das fotografias integradas: [PHOTO-LICENSE.txt](https://github.com/Tunuino/Tunuino/blob/b2caf60b3773ac87cb47f7f778c683fc0ec17245/qt_console/assets/proteus/PHOTO-LICENSE.txt).
+Capturas locais de teste, sem ECU ligada. A primeira mostra a função dedicada desativada; a segunda mostra a escolha preparada antes de aplicar. Créditos e termos das fotografias integradas: [PHOTO-LICENSE.txt](https://github.com/Tunuino/Tunuino/blob/d937497813db161e03ca6ca8c807d1072ce5a6a8/qt_console/assets/proteus/PHOTO-LICENSE.txt).
 
 
-## Versão Windows verificada
 
-**0.1.3.306**: compilação, 17 testes, verificação de arranque, criação/verificação do instalador e publicação Beta concluídos com sucesso.
+## Compatibilidade e verificação da organização
 
-- [Instalar Tunuino Console 0.1.3.306](https://tunuino.github.io/Tunuino/updates/Tunuino-Console-Setup-0.1.3.306.exe).
-- [Execução Windows e publicação](https://github.com/Tunuino/Tunuino/actions/runs/44382300624).
+A janela Proteus passa a chamar-se **Proteus Pinout** e conserva o identificador dos desktops anteriores. O atalho interno io.configuration continua a abrir o mesmo painel e os projetos existentes mantêm os seus dados.
+
+Verificação local: 17/17 testes aprovados. A janela real verifica a hierarquia por ECU, as cinco fotografias UAefi, as contagens 8/18/20/16/6, a seleção dos contactos e a preservação integral do projeto Proteus ao consultar a UAefi. As fotografias e a navegação foram inspecionadas com o tema da aplicação. O esquema e o PCB concordam nos 68 contactos; os ficheiros locais conferem com os blobs da revisão de origem.
+
+Estas verificações são execução em computador e análise dos ficheiros KiCad. Não foi gravada ou comandada uma ECU física. O suporte de configuração/atuação UAefi não é apresentado como validado.

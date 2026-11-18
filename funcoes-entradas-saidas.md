@@ -16,7 +16,7 @@ A vista é a **face de encaixe da ECU, com o fecho em cima**, conforme as fotogr
 
 - Selecionar uma função destaca os seus contactos e abre o conector correspondente. Motores ETB e sensores VR destacam os dois contactos.
 - Clicar num pino mostra o seu sinal e a função atribuída. Quando existe atribuição, seleciona a respetiva linha na lista de funções.
-- A tabela por baixo da fotografia lista todos os contactos do conector, o sinal elétrico e as funções atribuídas nos editores.
+- A tabela por baixo da fotografia apresenta **Pin**, **Signal**, **Function** e **Assigned / state**. **Function** explica para que serve o contacto; **Assigned / state** mostra a atribuição e o estado atuais do editor.
 - O amarelo assinala a ligação selecionada; um ponto azul identifica contactos com função atribuída. A cor do contorno distingue o tipo elétrico.
 - As alterações locais pendentes são identificadas como **pending**; a fotografia não é uma medição da cablagem instalada.
 - As fotografias e o mapa de contactos estão incluídos no executável: não exigem navegador ou ligação à Internet. Os créditos e a licença das fotografias podem ser consultados no próprio painel.
@@ -44,6 +44,28 @@ A seleção é a mesma da coluna ECU connection: não existe uma segunda configu
 
 Os contactos dedicados continuam identificados, selecionáveis e destacados com a função desativada. Não são transformados em contactos livres nem ativados automaticamente para preencher o pinout.
 
+## Function — finalidade do contacto
+
+A coluna **Function** fica visível no pinout e descreve os 93 contactos, mesmo sem atribuição de software. Inclui a função elétrica, a polaridade dos pares VR e ETB, a identificação High/Low dos barramentos CAN, os sinais lógicos de ignição, saídas de potência, sensores, massas e alimentações.
+
+Exemplos:
+
+| Sinal | Function |
+| --- | --- |
+| VR1+ | Crankshaft VR sensor — positive |
+| VR1− | Crankshaft VR sensor — negative |
+| ETB1− | ETB bridge 1 motor — negative |
+| IGN1 | Logic signal for smart ignition coil |
+| LS1 | Low-side injector / solenoid / relay output |
+| AV1 | Analog sensor input (TPS / MAP / pressure) |
+| AT1 | Temperature sensor input (CLT / IAT) |
+
+Os exemplos de sensores nas entradas AV/AT descrevem utilizações possíveis; não atribuem automaticamente TPS, MAP, CLT ou IAT a esses contactos. A finalidade apresentada não muda quando a função está desativada. A configuração efetiva continua indicada à parte, em **Assigned / state**.
+
+O texto tem quebra de linha e as linhas ajustam a altura à largura da coluna. Continua disponível também nas dicas e na configuração do pino. Nenhum número de contacto, coordenada da fotografia, tipo elétrico, calibração ou valor de configuração foi alterado por esta apresentação.
+
+Referências: fotografia fornecida pelo utilizador com **Typical Function**, mapa KiCad/PCB já verificado e secções de recursos do PDF, páginas 19–20. O PDF não descreve o pinout Proteus.
+
 ## Editar e gravar
 
 As listas de ligações podem ser usadas **offline** para preparar o projeto. A disponibilidade de gravação na ECU não desativa a edição local. Ligações fixas são apresentadas sem uma escolha fictícia de terminal.
@@ -61,14 +83,14 @@ Verificação automatizada com a janela real da Console: carregamento das três 
 Estes resultados são execução da interface em computador e inspeção dos ficheiros de hardware. Não constituem ensaio elétrico de uma cablagem física.
 
 
-[Código da Console](https://github.com/Tunuino/Tunuino/commit/3310233196c776a7f92877443c40e00e8b2b75df).
+[Código da Console](https://github.com/Tunuino/Tunuino/commit/b2caf60b3773ac87cb47f7f778c683fc0ec17245).
 
 Validação local: 17/17 testes aprovados e verificação visual dos três conectores com o tema da aplicação. A compilação e os testes Windows são executados pelo workflow automático da Console.
 
 
 Testes adicionais da correção: Configure da cambota abre ECU pin mantendo a mesma janela MDI; os dois contactos dedicados continuam identificados com captura desativada; escolher sem aplicar e fechar preserva o projeto; Apply altera a ligação no editor sem gravação automática; restauração preserva os restantes campos. Verificação visual da janela com o tema da aplicação.
 
-[Compilação e testes Windows desta correção](https://github.com/Tunuino/Tunuino/actions/runs/44379756152).
+[Compilação e testes Windows desta correção](https://github.com/Tunuino/Tunuino/actions/runs/44382300624).
 
 ## Configuração do pino na interface
 
@@ -76,11 +98,5 @@ Testes adicionais da correção: Configure da cambota abre ECU pin mantendo a me
 
 ![Configure abre a ligação do pino da ECU](images/console/ecu-pin-configuration.png)
 
-Capturas locais de teste, sem ECU ligada. A primeira mostra a função dedicada desativada; a segunda mostra a escolha preparada antes de aplicar. Créditos e termos das fotografias integradas: [PHOTO-LICENSE.txt](https://github.com/Tunuino/Tunuino/blob/3310233196c776a7f92877443c40e00e8b2b75df/qt_console/assets/proteus/PHOTO-LICENSE.txt).
+Capturas locais de teste, sem ECU ligada. A primeira mostra a função dedicada desativada; a segunda mostra a escolha preparada antes de aplicar. Créditos e termos das fotografias integradas: [PHOTO-LICENSE.txt](https://github.com/Tunuino/Tunuino/blob/b2caf60b3773ac87cb47f7f778c683fc0ec17245/qt_console/assets/proteus/PHOTO-LICENSE.txt).
 
-## Versão Windows verificada
-
-**0.1.3.305**: compilação, 17 testes, verificação de arranque, criação/verificação do instalador e publicação Beta concluídos com sucesso.
-
-- [Instalar Tunuino Console 0.1.3.305](https://tunuino.github.io/Tunuino/updates/Tunuino-Console-Setup-0.1.3.305.exe).
-- [Execução Windows e publicação](https://github.com/Tunuino/Tunuino/actions/runs/44379756152).

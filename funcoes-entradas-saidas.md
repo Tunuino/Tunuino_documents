@@ -43,3 +43,14 @@ Estes resultados são execução da interface em computador e inspeção dos fic
 [Código da Console](https://github.com/Tunuino/Tunuino/commit/a8808f914fe23eab170ce8469ad954633a4b83a5).
 
 Validação local: 17/17 testes aprovados e verificação visual dos três conectores com o tema da aplicação. A compilação e os testes Windows são executados pelo workflow automático da Console.
+
+## Versão Windows verificada
+
+**0.1.3.304**: compilação, 17 testes, arranque de verificação, criação/verificação do instalador e publicação Beta concluídos com sucesso.
+
+- [Instalar Tunuino Console 0.1.3.304](https://tunuino.github.io/Tunuino/updates/Tunuino-Console-Setup-0.1.3.304.exe).
+- [Execução Windows e publicação](https://github.com/Tunuino/Tunuino/actions/runs/44366982175).
+
+![Painel de entradas e saídas com o injetor selecionado no conector Black35](images/console/proteus-pinout-io.png)
+
+Captura local de teste, sem ECU ligada. A seleção do injetor mostra o contacto J102/3. Os créditos e termos das fotografias integradas estão em [PHOTO-LICENSE.txt](https://github.com/Tunuino/Tunuino/blob/a8808f914fe23eab170ce8469ad954633a4b83a5/qt_console/assets/proteus/PHOTO-LICENSE.txt).

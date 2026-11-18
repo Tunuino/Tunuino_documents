@@ -1,61 +1,45 @@
-> Console 1.0.103: [verificação completa das seleções e identificação do executável aberto](verificacao-completa-seletores.md).
+# Entradas, saídas e pinouts da Proteus
 
-> Atualização: [ligações rápidas da Proteus](ligacoes-rapidas-proteus.md). A matriz de terminais passa a ficar fechada em Avançado; as escolhas normais são curtas e mostram a recomendação por contacto.
+A configuração física fica num único local: **Inputs and outputs**, na navegação principal. Na coluna **ECU connection**, selecionar a ligação pretendida para o sensor ou atuador. **Configure...** abre os parâmetros da função; **Write to ECU** grava através da transação existente.
 
-# Escolher entradas e saídas pelo nome da função
+## Conectores com fotografias
 
-A Console passa a ter **Configuração → Funções de I/O**. Em vez de escolher códigos de pinos do microcontrolador, escolhe a função pelo nome. Cada ligação da ECU apresenta apenas as funções compatíveis com o seu tipo.
+O painel inclui as fotografias dos três conectores, com numeração sobreposta:
 
-| Ligação | Funções disponíveis |
-|---|---|
-| Entrada analógica | MAP — pressão do coletor; lambda; TPS — posição da borboleta; tensão da bateria; etanol analógico; comando de launch |
-| Entrada de temperatura | CLT — temperatura do motor; IAT — temperatura do ar |
-| Saída de potência | Injetor de cada cilindro; bomba de combustível; ventoinha; relé principal; válvula de ralenti; válvula de controlo do turbo |
-| Saída de ignição | Ignição de cada cilindro |
+| Separador | Conector da placa | Contactos |
+| --- | --- | --- |
+| Black23 | J101 | 23 |
+| Black35 | J102 | 35 |
+| White35 | J103 | 35 |
 
-As entradas dedicadas de cambota e cames mantêm as suas funções fixas. As saídas de ignição são sinais lógicos para etapas externas; não são saídas de potência para injetores ou relés. A lista respeita essas diferenças.
+A vista é a **face de encaixe da ECU, com o fecho em cima**, conforme as fotografias. Não é a vista traseira dos fios da ficha. A imagem mantém a proporção ao redimensionar; o divisor permite ajustar a área da lista e a do pinout.
 
-O quadro identifica **Entrada analógica 1**, **Saída de potência 1**, etc. Se precisares de localizar a ligação no conector, passa o rato sobre esse nome para consultar o terminal AV/AT/LS/IGN correspondente. Os códigos PA/PB/PC do MCU não são opções de configuração.
+- Selecionar uma função destaca os seus contactos e abre o conector correspondente. Motores ETB e sensores VR destacam os dois contactos.
+- Clicar num pino mostra o seu sinal e a função atribuída. Quando existe atribuição, seleciona a respetiva linha na lista de funções.
+- A tabela por baixo da fotografia lista todos os contactos do conector, o sinal elétrico e as funções atribuídas nos editores.
+- O amarelo assinala a ligação selecionada; um ponto azul identifica contactos com função atribuída. A cor do contorno distingue o tipo elétrico.
+- As alterações locais pendentes são identificadas como **pending**; a fotografia não é uma medição da cablagem instalada.
+- As fotografias e o mapa de contactos estão incluídos no executável: não exigem navegador ou ligação à Internet. Os créditos e a licença das fotografias podem ser consultados no próprio painel.
 
-## Configurar e guardar
+O mapa foi confrontado com os **93 contactos do esquema e do PCB Proteus v0.7**, revisão `383558bf7ca1c53ad8bbd8fdc9dd3a4187013c46`. Inclui AV, AT, entradas digitais/VR, pontes H, LS, ignição, HS, CAN, knock, massas e alimentações. Mostrar uma ligação física não acrescenta um controlador de firmware para esse sinal.
 
-1. Configura e guarda o perfil de cilindros em **Motor e saídas**. Sem perfil, a edição offline mostra o catálogo de funções até 12 cilindros; guardar funções de atuadores exige um perfil válido.
-2. Prepara as calibrações reais dos sensores em **Sensores e entradas**, **Ralenti e turbo** e **Combustível e proteções**, conforme a função. Atribuir uma função não inventa a curva de um sensor nem ativa um modo de controlo.
-3. Abre **Funções de I/O** e escolhe **Ler funções da ECU**.
-4. Em cada ligação, seleciona **Sem atribuição** ou a função pretendida. Se moveres uma função, a atribuição anterior é retirada. Se ocupares uma ligação que tinha outra função, essa outra função fica por atribuir; a validação impede guardar se faltar um injetor ou uma saída de ignição necessária.
-5. Revê a lista de alterações e escolhe **Guardar atribuições na ECU**, com as saídas desarmadas. A Console valida, guarda as páginas de sensores/motor e auxiliares numa única operação e confirma ambas por nova leitura. Guardar não arma as saídas.
+## Editar e gravar
 
-Referências de calibração sobrepostas que fossem permitidas com controlos desligados são assinaladas no quadro. Escolhe explicitamente a função a manter nessa ligação; não são silenciosamente transformadas noutra atribuição.
+As listas de ligações podem ser usadas **offline** para preparar o projeto. A disponibilidade de gravação na ECU não desativa a edição local. Ligações fixas são apresentadas sem uma escolha fictícia de terminal.
 
-As calibrações, PMS, tempos, modos e mapas mantêm os valores anteriores. Selecionar uma função numa lista altera apenas a edição. As funções de ralenti/turbo continuam a exigir que escolhas o modo apropriado na respetiva página.
+A gravação mantém as validações de compatibilidade e conflitos, a cópia anterior e a releitura. Não é feita qualquer gravação por selecionar um pino ou abrir uma fotografia. **Write to ECU** permanece dependente da disponibilidade e estado da ECU. O vermelho indica alterações locais pendentes.
 
-## Outras janelas
+As atribuições não se repetem nos parâmetros de Fueling, Ignition, VVT ou ETB. O TPS principal continua a ser a entrada única **TPS / ETB 1 main**. O pedal apresenta entradas principal e de verificação; cada motor ETB usa a ponte H escolhida no painel central. A nomenclatura dos sinais de verificação das borboletas identifica explicitamente **TPS**.
 
-Os seletores de sensores, cilindros, bomba, ventoinha, relé, TPS, ralenti, turbo, IAT, tensão, etanol, launch e testes também passam a mostrar nomes de funções. Os valores numéricos usados no protocolo permanecem internos. O INI TunerStudio revisão 10 apresenta nomes funcionais nas suas listas.
+## Referências e verificação
 
-Depois de uma alteração de atribuições, a Console invalida a cópia anterior das saídas usada para testes. Lê novamente o perfil em **Motor e saídas** antes de testar relés, para que «bomba» e «ventoinha» correspondam às ligações agora guardadas.
+Consultado o **EMU_PRO_Software_Guide.pdf**, páginas **10–11** (entradas/saídas atribuídas) e **19–20** (recursos por função), além das três fotografias fornecidas pelo utilizador. O PDF descreve organização e recursos; não contém o pinout Proteus. O pinout elétrico é fundamentado no KiCad/PCB da revisão indicada, e a posição dos números corresponde às fotografias originais dos conectores.
 
-## Verificação
+Verificação automatizada com a janela real da Console: carregamento das três fotografias incluídas, tabelas de 23/35/35 contactos, seleção por clique, destaque do injetor no contacto correto, edição offline com escrita indisponível e preservação do projeto ao consultar fotografias. A verificação dos 93 contactos compara as redes do esquema com as do PCB; as redes sem nome dos dois fusíveis são comparadas pela conectividade física.
 
-Os testes C/Java percorrem a alteração de MAP, injetor e IAT através do adaptador de firmware real, com hardware simulado. Verificam compatibilidade, retirada da atribuição anterior, uma única gravação/geração, preservação de calibrações, não armação, recusa de snapshots antigos e recusa de escritas com saídas armadas. A interface JavaFX verifica as listas funcionais e a manutenção dos valores enviados à ECU.
-
-Não foi realizado aqui ensaio elétrico das novas atribuições na ECU. Confirmar sempre que a função selecionada corresponde ao componente fisicamente ligado.
-
-## Imagens da interface
-
-Capturas do teste automático da Console, sem ECU ligada. O quadro começa sem atribuições até ler a configuração; o exemplo de cilindros usa um modelo local de quatro cilindros.
-
-![Atribuição por função nas entradas](images/console/funcoes-entradas.png)
-
-![Atribuição por função nas saídas de potência](images/console/funcoes-saidas.png)
-
-![Seletores de injeção e ignição com nomes funcionais](images/console/funcoes-cilindros.png)
-
-## Publicação verificada — Console 1.0.101
+Estes resultados são execução da interface em computador e inspeção dos ficheiros de hardware. Não constituem ensaio elétrico de uma cablagem física.
 
 
-- [Instalador Windows x64](https://github.com/Tunuino/Tunuino/releases/download/nightly-2026-10-27-40551966727/tunuino_setup_windows_x64.msi)
-- [Bundle portátil ZIP](https://github.com/Tunuino/Tunuino/releases/download/nightly-2026-10-27-40551966727/tunuino_bundle_proteus_v07_f427_usb_bench.zip)
-- [Release com componentes do mesmo commit](https://github.com/Tunuino/Tunuino/releases/tag/nightly-2026-10-27-40551966727)
+[Código da Console](https://github.com/Tunuino/Tunuino/commit/a8808f914fe23eab170ce8469ad954633a4b83a5).
 
-Esta publicação altera a apresentação e a atribuição de funções; não acrescenta controlo VVT, detonação, borboleta eletrónica nem Autotune. O estado dessas funções continua documentado em [Combustível e proteções](combustivel-protecoes.md).
+Validação local: 17/17 testes aprovados e verificação visual dos três conectores com o tema da aplicação. A compilação e os testes Windows são executados pelo workflow automático da Console.

@@ -63,7 +63,7 @@ A seleção é a mesma da coluna ECU connection: não existe uma segunda configu
 | No pin selected | A função ainda não tem uma ligação de ECU selecionada. |
 | No function selected | O contacto configurável não tem uma função de software atribuída. Não indica se há um fio fisicamente ligado. |
 | Crankshaft sensor — disabled | J101/5 (+) e J101/13 (−) continuam a ser a entrada dedicada de cambota; a captura está desativada no editor. |
-| Função — disabled | Entrada digital dedicada de VSS ou CAM 2, com a função desativada. |
+| Função — disabled | Entrada dedicada de cambota, CAM 1, VSS ou CAM 2, com a respetiva captura desativada. |
 | Fixed hardware connection | Alimentação, massa ou outra ligação física fixa apresentada como informação do conector. |
 | pending | Existe uma alteração local pendente de gravação. |
 
@@ -145,8 +145,28 @@ Capturas de teste em computador, sem ECU ligada. A seleção de contactos UAefi 
 
 ## Instalador Windows verificado
 
-Versão **0.1.3.307**: compilação Windows, testes e publicação automática concluídos com sucesso no [workflow 44389252857](https://github.com/Tunuino/Tunuino/actions/runs/44389252857).
+Versão **0.1.3.308**: compilação Windows, testes e publicação automática concluídos com sucesso no [workflow 44401684610](https://github.com/Tunuino/Tunuino/actions/runs/44401684610).
 
-[Descarregar Tunuino Console 0.1.3.307](https://tunuino.github.io/Tunuino/updates/Tunuino-Console-Setup-0.1.3.307.exe).
+[Descarregar Tunuino Console 0.1.3.308](https://tunuino.github.io/Tunuino/updates/Tunuino-Console-Setup-0.1.3.308.exe).
 
 Esta versão inclui o painel configurável da Proteus e a referência de pinout UAefi F3. Não acrescenta um alvo de firmware nativo UAefi.
+
+## Seletor de pinout e estado CAM 1
+
+O botão **ECU pinout: Proteus / UAefi**, no topo de ambos os painéis, abre a seleção do pinout. Escolher outra placa apresenta a respetiva janela e seleciona a entrada correspondente na navegação. O painel anterior é ocultado sem destruir os seus editores. Esta escolha serve para consultar o pinout: não troca a ligação série, não altera o alvo de firmware, não modifica os mapas nem grava atribuições. A UAefi continua a ser uma referência de hardware, sem firmware nativo integrado.
+
+**CAM 1 sensor** deixa de apresentar permanentemente uma ligação fixa ativa. Com a captura desligada mostra **Disabled**; com captura ativa apresenta **J101 / 4 (+), 12 (-)**. Os dois contactos dedicados continuam identificados no pinout, incluindo a indicação de desativado.
+
+A ativação da captura CAM 1 e cambota usa o mesmo campo nativo, byte 2 do cabeçalho. O firmware configura os dois eventos em conjunto. Não existe neste protocolo um comando independente de ativação de CAM 1. A lista, a janela ECU pin e o botão de escrita usam o mesmo editor de captura existente; desativar um destes dois sensores desativa a captura de ambos. Esta relação é explicada na configuração do CAM 1 e na dica da lista. Alterar o estado prepara apenas uma edição local e exige **Write to ECU** para gravar; não arma saídas.
+
+A edição anterior do CAM 1 era uma ligação constante sem consulta do estado, com gravação associada ao perfil de cilindros. Agora consulta e edita o bloco real de captura, mantendo as restantes configurações. A releitura e a identificação de alterações pendentes seguem o fluxo existente.
+
+Referências consultadas: fotografia enviada nesta correção; **EMU PRO Software Guide**, página **9** (Device selector) e páginas **19–20** (recursos). O PDF não define a ativação dos pinos Proteus. A relação CAM 1/cambota foi confirmada em `configure_capture`, no código de placa do firmware Tunuino, e no campo `capture` da Console. O seletor implementado nesta correção seleciona a vista de pinout.
+
+Validação local: **17/17 testes aprovados**. A janela real verifica alternância através dos botões, preservação integral do projeto, CAM 1 inicialmente Disabled, identificação de ambos os contactos, escolha sem aplicar, aplicação local, sincronização com a cambota e restauração sem alterar o restante projeto. Inspeção visual com o tema da aplicação. Não houve gravação nem ensaio numa ECU física.
+
+![Seletor de pinout e CAM 1 desativado](images/console/ecu-pinout-selector.png)
+
+[Código da correção](https://github.com/Tunuino/Tunuino/commit/497774ce3e17d3bdc60e25f16733df1c77c36202).
+
+A versão **0.1.3.308** foi compilada e testada no Windows e o instalador foi publicado automaticamente com sucesso. [Workflow de verificação](https://github.com/Tunuino/Tunuino/actions/runs/44401684610).

@@ -1,5 +1,23 @@
 # Entradas, saídas e pinouts por ECU
 
+## Primeiro passo — selecionar a ECU do projeto
+
+No topo da navegação, escolher **Proteus** ou **UAefi** e carregar em **Use selected ECU**. Antes dessa escolha, as configurações e a comunicação com a ECU permanecem bloqueadas. Há um único seletor para o projeto; os antigos seletores de visualização dentro dos painéis foram removidos.
+
+- **Proteus selecionada:** configurações Proteus disponíveis, ligação automática e leitura contínua pelo fluxo existente; ECU UAefi e UAefi Pinout bloqueados.
+- **UAefi selecionada:** ECU Proteus, os seus mapas, parâmetros e ferramentas ficam bloqueados. A sessão Proteus é fechada e a descoberta automática fica suspensa. Só o pinout UAefi F3 está disponível, porque o firmware nativo UAefi ainda não foi implementado.
+- Os itens bloqueados aparecem a cinzento. Os painéis inativos ficam desativados e ocultos. Atalhos, navegação interna e edição das ligações também respeitam a escolha.
+- Abrir ou enviar pedidos pela sessão série é recusado enquanto não estiver selecionada Proteus. Não basta ocultar um painel para permitir comandos de outra placa.
+- Uma operação de gravação, leitura de configuração ou ferramenta em curso impede mudar de ECU até terminar. A seleção atual é preservada.
+
+A seleção é guardada no projeto. Projetos Proteus antigos, sem o novo campo, são identificados pelo alvo Proteus já existente. Abrir um projeto Proteus seleciona Proteus; abrir uma referência UAefi seleciona UAefi. Ficheiros inválidos são rejeitados antes de mudar a seleção ou os editores.
+
+Uma referência UAefi guardada contém apenas a identificação da placa/revisão e o modo de consulta do pinout. Não recebe páginas, mapas ou parâmetros Proteus. O formato rejeita esses dados misturados. Mudar para UAefi e voltar a Proteus preserva os ajustes Proteus na sessão; guardar a referência UAefi não guarda os ajustes Proteus. Cada projeto deve ser guardado no seu próprio ficheiro.
+
+![Proteus selecionada e UAefi bloqueada](images/console/ecu-pinout-selector.png)
+
+![UAefi selecionada e configurações Proteus bloqueadas](images/console/ecu-project-uaefi-locked.png)
+
 **Inputs and outputs** passa a ser um grupo de navegação com duas ECUs:
 
 - **ECU Proteus → Proteus Pinout**: painel completo de atribuições, configuração de pinos, gravação e fotografias dos três conectores.
@@ -44,7 +62,7 @@ As cinco fotografias originais apresentam os contactos identificados como A1…E
 
 Os **68 contactos** foram comparados entre o esquema e o PCB da revisão F3. As posições sobre as fotografias correspondem ao mapa original dessas imagens. São usadas fotografias originais dos conectores, sem substituir a sua geometria por imagens geradas.
 
-A página UAefi é uma **referência de hardware**. O firmware nativo Tunuino atualmente integrado na Console suporta Proteus; ainda não existe um alvo UAefi nesse firmware. Por isso, a página UAefi não apresenta seletores de atribuição ou comandos Write to ECU sem suporte. Abrir ou consultar esta página não muda a ECU ligada, a comunicação, os mapas ou as atribuições da Proteus. Os controladores e componentes efetivamente montados dependem da variante física da UAefi.
+A página UAefi é uma **referência de hardware**. O firmware nativo Tunuino atualmente integrado na Console suporta Proteus; ainda não existe um alvo UAefi nesse firmware. Por isso, a página UAefi não apresenta seletores de atribuição ou comandos Write to ECU sem suporte. Selecionar UAefi bloqueia a configuração e a comunicação Proteus, sem converter nem copiar os seus mapas ou atribuições. A página só abre quando UAefi está selecionada. Os controladores e componentes efetivamente montados dependem da variante física da UAefi.
 
 Referências congeladas: [esquema F3](https://github.com/Tunuino/uaefi/blob/fefb25a22f8b1968a828ce377363717c529c712f/uaefi.kicad_sch), [PCB F3](https://github.com/Tunuino/uaefi/blob/fefb25a22f8b1968a828ce377363717c529c712f/uaefi.kicad_pcb). Créditos e termos das fotografias estão incluídos no botão de licença da página e em assets/uaefi/PHOTO-LICENSE.txt no código da Console.
 
@@ -129,7 +147,7 @@ Capturas locais de teste, sem ECU ligada. A primeira mostra a função dedicada 
 
 ## Compatibilidade e verificação da organização
 
-A janela Proteus passa a chamar-se **Proteus Pinout** e conserva o identificador dos desktops anteriores. O atalho interno io.configuration continua a abrir o mesmo painel e os projetos existentes mantêm os seus dados.
+A janela Proteus passa a chamar-se **Proteus Pinout** e conserva o identificador dos desktops anteriores. O atalho interno io.configuration continua a abrir o mesmo painel quando Proteus está selecionada; com outra ECU ou sem seleção, o acesso fica bloqueado. Os projetos existentes mantêm os seus dados.
 
 Verificação local: 17/17 testes aprovados. A janela real verifica a hierarquia por ECU, as cinco fotografias UAefi, as contagens 8/18/20/16/6, a seleção dos contactos e a preservação integral do projeto Proteus ao consultar a UAefi. As fotografias e a navegação foram inspecionadas com o tema da aplicação. O esquema e o PCB concordam nos 68 contactos; os ficheiros locais conferem com os blobs da revisão de origem.
 
@@ -145,15 +163,13 @@ Capturas de teste em computador, sem ECU ligada. A seleção de contactos UAefi 
 
 ## Instalador Windows verificado
 
-Versão **0.1.3.308**: compilação Windows, testes e publicação automática concluídos com sucesso no [workflow 44401684610](https://github.com/Tunuino/Tunuino/actions/runs/44401684610).
+Versão **0.1.3.309**: compilação Windows, testes e publicação automática concluídos com sucesso no [workflow 44604913154](https://github.com/Tunuino/Tunuino/actions/runs/44604913154).
 
-[Descarregar Tunuino Console 0.1.3.308](https://tunuino.github.io/Tunuino/updates/Tunuino-Console-Setup-0.1.3.308.exe).
+[Descarregar Tunuino Console 0.1.3.309](https://tunuino.github.io/Tunuino/updates/Tunuino-Console-Setup-0.1.3.309.exe).
 
 Esta versão inclui o painel configurável da Proteus e a referência de pinout UAefi F3. Não acrescenta um alvo de firmware nativo UAefi.
 
-## Seletor de pinout e estado CAM 1
-
-O botão **ECU pinout: Proteus / UAefi**, no topo de ambos os painéis, abre a seleção do pinout. Escolher outra placa apresenta a respetiva janela e seleciona a entrada correspondente na navegação. O painel anterior é ocultado sem destruir os seus editores. Esta escolha serve para consultar o pinout: não troca a ligação série, não altera o alvo de firmware, não modifica os mapas nem grava atribuições. A UAefi continua a ser uma referência de hardware, sem firmware nativo integrado.
+## Estado CAM 1
 
 **CAM 1 sensor** deixa de apresentar permanentemente uma ligação fixa ativa. Com a captura desligada mostra **Disabled**; com captura ativa apresenta **J101 / 4 (+), 12 (-)**. Os dois contactos dedicados continuam identificados no pinout, incluindo a indicação de desativado.
 
@@ -161,12 +177,15 @@ A ativação da captura CAM 1 e cambota usa o mesmo campo nativo, byte 2 do cabe
 
 A edição anterior do CAM 1 era uma ligação constante sem consulta do estado, com gravação associada ao perfil de cilindros. Agora consulta e edita o bloco real de captura, mantendo as restantes configurações. A releitura e a identificação de alterações pendentes seguem o fluxo existente.
 
-Referências consultadas: fotografia enviada nesta correção; **EMU PRO Software Guide**, página **9** (Device selector) e páginas **19–20** (recursos). O PDF não define a ativação dos pinos Proteus. A relação CAM 1/cambota foi confirmada em `configure_capture`, no código de placa do firmware Tunuino, e no campo `capture` da Console. O seletor implementado nesta correção seleciona a vista de pinout.
 
-Validação local: **17/17 testes aprovados**. A janela real verifica alternância através dos botões, preservação integral do projeto, CAM 1 inicialmente Disabled, identificação de ambos os contactos, escolha sem aplicar, aplicação local, sincronização com a cambota e restauração sem alterar o restante projeto. Inspeção visual com o tema da aplicação. Não houve gravação nem ensaio numa ECU física.
+## Verificação da escolha exclusiva
 
-![Seletor de pinout e CAM 1 desativado](images/console/ecu-pinout-selector.png)
+Consultados o **EMU PRO Software Guide**, página **9** (Device selector) e páginas **164–165** (seleção de dispositivos e projeto), além da fotografia e da instrução do utilizador nesta correção. O PDF descreve seleção de dispositivos, mas não os alvos e o protocolo Proteus/UAefi da Tunuino. O comportamento de bloqueio é definido pelo pedido do utilizador e pelo suporte real de cada alvo.
 
-[Código da correção](https://github.com/Tunuino/Tunuino/commit/497774ce3e17d3bdc60e25f16733df1c77c36202).
+Validação local: **17/17 testes aprovados** e verificação adicional da janela real com o tema final. Verificados: arranque sem ECU selecionada, recusa de comunicação, escolha pelo botão, bloqueio dos ramos e painéis inativos, rejeição de troca durante operação, atalhos para a ECU errada, recusa de edição de I/O inativo, preservação dos ajustes ao alternar, gravação/reabertura da referência UAefi, rejeição de dados misturados e compatibilidade com projetos Proteus anteriores. As verificações existentes de CAM 1, mapas, gravação e releitura simulada continuam aprovadas.
 
-A versão **0.1.3.308** foi compilada e testada no Windows e o instalador foi publicado automaticamente com sucesso. [Workflow de verificação](https://github.com/Tunuino/Tunuino/actions/runs/44401684610).
+As duas capturas mostram a interface executada em computador. Não foi gravada, comandada ou ensaiada uma ECU física nesta correção. O firmware UAefi permanece por implementar.
+
+[Código da correção](https://github.com/Tunuino/Tunuino/commit/2cdc4673392fe6e4a880359519e974ac5531f293).
+
+Versão **0.1.3.309**: compilação e testes Windows aprovados; instalador publicado automaticamente. [Verificação Windows](https://github.com/Tunuino/Tunuino/actions/runs/44604913154).
